@@ -9,7 +9,7 @@ using System.Data.Common;
 
 namespace PetProject.Core.Data
 {
-    public abstract class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private DbContext _dataContext { get; }
         private bool _disposed;
@@ -59,8 +59,8 @@ namespace PetProject.Core.Data
             }
 
             var repositoryType = typeof(Repository<>);
-            var valueOject = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(TEntity)), _dataContext);        
-            
+            var valueOject = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(TEntity)), _dataContext);
+
             _repositories.Add(type, valueOject);
             return _repositories[type];
         }

@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace PetProject.Core.Data
 {
-    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
     {
         private DbContext _context { get; }
         private readonly DbSet<TEntity> _dbSet;

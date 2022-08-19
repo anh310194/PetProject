@@ -12,7 +12,7 @@ namespace PetProject.Infacstructure
         {
             services.AddDbContext<PetProjectContext>(
                 options => options.UseSqlServer(
-                    configuration.GetConnectionString("PetProjectConnection"),
+                    configuration.GetConnectionString("SQLConnection"),
                     providerOptions => providerOptions.EnableRetryOnFailure()));
 
             services.AddScoped<IUnitOfWork, PetProjectUnitOfWork>();
