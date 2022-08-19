@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetProject.Business.Interfaces;
 using PetProject.Business.Model;
+using PetProject.Core.Exceptions;
 
 namespace PetProject.WebAPI.Controllers
 {
@@ -22,7 +23,12 @@ namespace PetProject.WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CountryModel>> GetCountryById(int id)
         {
-            return await _countryService.GetCountryById(id);
+            var result = await _countryService.GetCountryById(id);
+            if (result == null)
+            {
+                return BadRequest();
+            }
+            return result;
         }
 
         [HttpPost()]
@@ -36,7 +42,7 @@ namespace PetProject.WebAPI.Controllers
         public async Task<ActionResult<CountryModel>> UpdateCountryById(int id, CountryModel model)
         {
             model.Id = id;
-            var result =  await _countryService.UpsertCountryById(model);
+            var result = await _countryService.UpsertCountryById(model);
             return result;
         }
 
@@ -46,7 +52,7 @@ namespace PetProject.WebAPI.Controllers
         /// <param name="id">Identity of Country</param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public  ActionResult DeleteCountryById(int id)
+        public ActionResult DeleteCountryById(int id)
         {
             _countryService.DeleteCountryById(id);
             return NoContent();
