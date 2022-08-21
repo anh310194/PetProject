@@ -15,6 +15,10 @@ namespace PetProject.WebAPI.Filters
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
+            if (!context.ExceptionHandled)
+            {
+                return;
+            }
             ObjectResult objectResult;
             if (context.Exception is PetProjectException httpResponseException)
             {
