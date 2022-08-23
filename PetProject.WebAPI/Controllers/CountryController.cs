@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetProject.Business.Interfaces;
 using PetProject.Business.Model;
-using PetProject.Core.Exceptions;
 
 namespace PetProject.WebAPI.Controllers
 {
@@ -9,14 +8,23 @@ namespace PetProject.WebAPI.Controllers
     [ApiController]
     public class CountryController : Controller
     {
+        private readonly ILogger _logger;
         private readonly ICountryService _countryService;
-        public CountryController(ICountryService countryService)
+        public CountryController(ICountryService countryService, ILogger<CountryController> logger)
         {
             _countryService = countryService;
+            this._logger = logger;
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CountryModel>>> GetCountries()
         {
+            _logger.LogInformation("Get All Countries");
+
+            int? i = null;
+            if (i.Value == 0)
+            {
+
+            }
             return await _countryService.GetCountries();
         }
 
