@@ -19,12 +19,6 @@ namespace PetProject.WebAPI.Controllers
         public async Task<ActionResult<IEnumerable<CountryModel>>> GetCountries()
         {
             _logger.LogInformation("Get All Countries");
-
-            int? i = null;
-            if (i.Value == 0)
-            {
-
-            }
             return await _countryService.GetCountries();
         }
 
