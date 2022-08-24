@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace PetProject.Core.Entities
 {
-    public class UserRole: BaseEntity
+    public class UserRole : BaseEntity
     {
         public long UserId { get; set; }
         public long RoleId { get; set; }
         public byte Status { get; set; }
-
+        public User? User { get; set; }
+        public Role? Role { get; set; }
     }
 }

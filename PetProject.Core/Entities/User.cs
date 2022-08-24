@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PetProject.Core.Entities
 {
-    public class User
+    public class User : BaseEntity
     {
         public string? UserName { get; set; }
         public string? Password { get; set; }
@@ -30,5 +30,7 @@ namespace PetProject.Core.Entities
         public string? PasswordExpiredDate { get; set; }
         public string? ImagePath { get; set; }
 
+        public Country? Country { get; set; }
+        public IEnumerable<UserRole>? UserRoles { get; set; }
     }
 }

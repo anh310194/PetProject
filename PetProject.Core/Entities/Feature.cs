@@ -15,5 +15,6 @@ namespace PetProject.Core.Entities
         public byte Status { get; set; }
         public int Sequence { get; set; }
         public int? ParentId { get; set; }
+        public IEnumerable<RoleFeature>? RoleFeatures { get; set; }
     }
 }
