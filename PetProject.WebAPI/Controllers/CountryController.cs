@@ -25,6 +25,7 @@ namespace PetProject.WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CountryModel>> GetCountryById(int id)
         {
+            _logger.LogInformation("Get a Country by " + id);
             var result = await _countryService.GetCountryById(id);
             if (result == null)
             {
