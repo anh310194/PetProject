@@ -4,9 +4,12 @@ using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
 using PetProject.Business;
+using PetProject.Core.Enums;
+using PetProject.Core.Helper;
 using PetProject.Infacstructure;
 using PetProject.WebAPI.Filters;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
@@ -40,6 +43,16 @@ try
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
+    });
+
+    //Add Authorization Service
+    builder.Services.AddAuthorization(options =>
+    {
+        foreach (var name in EnumHelper.GetNames<FeatureEnum>())
+        {
+            var role = EnumHelper.GetValue<FeatureEnum>(name);
+            options.AddPolicy(name, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, role.ToString()));
+        }
     });
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -100,7 +113,6 @@ try
     app.UseHttpsRedirection();
     app.UseAuthentication();
     app.UseAuthorization();
-
     app.MapControllers();
 
     app.Run();
