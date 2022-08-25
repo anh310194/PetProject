@@ -9,10 +9,10 @@ namespace PetProject.Core.Interfaces
         int SaveChanges();
         IQueryable<TEntity> AsQuery<TEntity>() where TEntity : BaseEntity;
         IQueryable<TEntity> AsQuery<TEntity>(Expression<Func<TEntity, bool>> match) where TEntity : BaseEntity;
-        TEntity Insert<TEntity>(TEntity entity) where TEntity : BaseEntity;
-        void InsertRange<TEntity>(ICollection<TEntity> entities) where TEntity : BaseEntity;
-        TEntity Update<TEntity>(TEntity entity) where TEntity : BaseEntity;
-        void UpdateRange<TEntity>(ICollection<TEntity> entities) where TEntity : BaseEntity;
+        TEntity Insert<TEntity>(TEntity entity, long userId) where TEntity : BaseEntity;
+        void InsertRange<TEntity>(ICollection<TEntity> entities, long userId) where TEntity : BaseEntity;
+        TEntity Update<TEntity>(TEntity entity, long userId) where TEntity : BaseEntity;
+        void UpdateRange<TEntity>(ICollection<TEntity> entities, long userId) where TEntity : BaseEntity;
         void Delete<TEntity>(object id) where TEntity : BaseEntity;
         void Delete<TEntity>(TEntity entity) where TEntity : BaseEntity;
         void DeleteRange<TEntity>(ICollection<TEntity> entities) where TEntity : BaseEntity;

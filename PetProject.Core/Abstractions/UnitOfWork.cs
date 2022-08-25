@@ -122,20 +122,34 @@ namespace PetProject.Core.Data
                 }
             });
         }
-        public virtual TEntity Insert<TEntity>(TEntity entity) where TEntity : BaseEntity
+        public virtual TEntity Insert<TEntity>(TEntity entity, long userId) where TEntity : BaseEntity
         {
+            entity.CreatedTime = DateTime.UtcNow;
+            entity.CreatedBy = userId;
             return GetRepository<TEntity>().Insert(entity);
         }
-        public virtual void InsertRange<TEntity>(ICollection<TEntity> entities) where TEntity : BaseEntity
+        public virtual void InsertRange<TEntity>(ICollection<TEntity> entities, long userId) where TEntity : BaseEntity
         {
+            foreach (var entity in entities)
+            {
+                entity.CreatedTime = DateTime.UtcNow;
+                entity.CreatedBy = userId;
+            }
             GetRepository<TEntity>().InsertRange(entities);
         }
-        public virtual TEntity Update<TEntity>(TEntity entity) where TEntity : BaseEntity
+        public virtual TEntity Update<TEntity>(TEntity entity, long userId) where TEntity : BaseEntity
         {
+            entity.UpdatedTime = DateTime.UtcNow;
+            entity.UpdatedBy = userId;
             return GetRepository<TEntity>().Update(entity);
         }
-        public virtual void UpdateRange<TEntity>(ICollection<TEntity> entities) where TEntity : BaseEntity
+        public virtual void UpdateRange<TEntity>(ICollection<TEntity> entities, long userId) where TEntity : BaseEntity
         {
+            foreach (var entity in entities)
+            {
+                entity.UpdatedTime = DateTime.UtcNow;
+                entity.UpdatedBy = userId;
+            }
             GetRepository<TEntity>().UpdateRange(entities);
         }
         public virtual void Delete<TEntity>(object id) where TEntity : BaseEntity

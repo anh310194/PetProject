@@ -166,6 +166,36 @@ namespace PetProject.Infacstructure.Database
                     .HasConstraintName("FK_UserRole_User");
             });
 
+            modelBuilder.Entity<DateTimeFormat>(entity =>
+            {
+                entity.Property(e => e.FormatType)
+                    .IsRequired();
+
+                entity.Property(e => e.Format)
+                    .HasMaxLength(25);
+
+                entity.Property(e => e.RowVersion)
+                    .IsRequired()
+                    .IsRowVersion()
+                    .IsConcurrencyToken();
+            });
+
+
+            modelBuilder.Entity<Core.Entities.TimeZone>(entity =>
+            {
+                entity.Property(e => e.TimeZoneId)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.TimeZoneName)
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.RowVersion)
+                    .IsRequired()
+                    .IsRowVersion()
+                    .IsConcurrencyToken();
+            });
+
             OnModelCreatingPartial(modelBuilder);
         }
 
