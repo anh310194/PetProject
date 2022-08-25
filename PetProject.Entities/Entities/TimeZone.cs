@@ -1,10 +1,11 @@
-﻿using System;
+﻿using PetProject.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetProject.Core.Entities
+namespace PetProject.Entities
 {
     public class TimeZone: BaseEntity
     {

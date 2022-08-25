@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
@@ -5,6 +7,7 @@ using PetProject.Business;
 using PetProject.Infacstructure;
 using PetProject.WebAPI.Filters;
 using System.Reflection;
+using System.Text;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 try
@@ -24,6 +27,21 @@ try
         options.Filters.Add<HttpResponseExceptionFilter>();
     });
 
+    //Add Authentication Service
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
+
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen(options =>
@@ -40,6 +58,27 @@ try
                 Url = new Uri("https://example.com/contact")
             },
         });
+        // Include 'SecurityScheme' to use JWT Authentication
+        var jwtSecurityScheme = new OpenApiSecurityScheme
+        {
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            Name = "JWT Authentication",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.Http,
+            Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
+
+            Reference = new OpenApiReference
+            {
+                Id = JwtBearerDefaults.AuthenticationScheme,
+                Type = ReferenceType.SecurityScheme
+            }
+        };
+
+        options.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement { { jwtSecurityScheme, Array.Empty<string>() } });
+
 
         var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
@@ -59,7 +98,7 @@ try
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseHttpsRedirection();
-
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();

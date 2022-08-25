@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-using PetProject.Core.Entities;
+using PetProject.Entities;
 
 namespace PetProject.Core.Interfaces
 {

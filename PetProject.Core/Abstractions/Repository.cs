@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using PetProject.Core.Entities;
 using PetProject.Core.Interfaces;
+using PetProject.Entities;
 using System.Linq.Expressions;
 
 namespace PetProject.Core.Data

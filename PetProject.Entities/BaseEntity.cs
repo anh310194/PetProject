@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetProject.Core.Entities
+namespace PetProject.Entities
 {
     public class BaseEntity
     {
@@ -13,6 +13,6 @@ namespace PetProject.Core.Entities
         public long CreatedBy { get; set; }
         public DateTime? UpdatedTime { get; set; }
         public long? UpdatedBy { get; set; }
-        public byte[] RowVersion { get; set; }
+        public byte[]? RowVersion { get; set; }
     }
 }

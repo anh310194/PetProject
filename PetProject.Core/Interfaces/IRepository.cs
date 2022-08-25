@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
-using PetProject.Core.Entities;
+using PetProject.Entities;
 using System.Linq.Expressions;
 
 namespace PetProject.Core.Interfaces

@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PetProject.Business.Interfaces;
 using PetProject.Business.Model;
 
 namespace PetProject.WebAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CountryController : Controller
@@ -13,7 +15,7 @@ namespace PetProject.WebAPI.Controllers
         public CountryController(ICountryService countryService, ILogger<CountryController> logger)
         {
             _countryService = countryService;
-            this._logger = logger;
+            _logger = logger;
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CountryModel>>> GetCountries()

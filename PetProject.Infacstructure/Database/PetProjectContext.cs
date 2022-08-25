@@ -4,7 +4,8 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using PetProject.Core.Entities;
+using PetProject.Entities;
+
 namespace PetProject.Infacstructure.Database
 {
     public partial class PetProjectContext : DbContext
@@ -17,13 +18,6 @@ namespace PetProject.Infacstructure.Database
             : base(options)
         {
         }
-
-        public virtual DbSet<Country> Country { get; set; }
-        public virtual DbSet<Feature> Feature { get; set; }
-        public virtual DbSet<Role> Role { get; set; }
-        public virtual DbSet<RoleFeature> RoleFeature { get; set; }
-        public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<UserRole> UserRole { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -180,8 +174,7 @@ namespace PetProject.Infacstructure.Database
                     .IsConcurrencyToken();
             });
 
-
-            modelBuilder.Entity<Core.Entities.TimeZone>(entity =>
+            modelBuilder.Entity<Entities.TimeZone>(entity =>
             {
                 entity.Property(e => e.TimeZoneId)
                     .IsRequired()
