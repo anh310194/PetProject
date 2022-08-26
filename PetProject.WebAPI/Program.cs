@@ -96,6 +96,8 @@ try
         var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
     });
+
+    //Add Petproject Services
     builder.Services.AddInfacstructure(builder.Configuration);
     builder.Services.AddBusiness();
 

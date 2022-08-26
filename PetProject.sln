@@ -19,7 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{A248B83E-8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetProject.UnitTest", "PetProject.Test\PetProject.UnitTest\PetProject.UnitTest.csproj", "{446B705F-16BB-4091-A4CC-AAA40EE9D18E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetProject.Entities", "PetProject.Entities\PetProject.Entities.csproj", "{AF86AF06-F7AF-47DF-8CD4-9A4CAFA63BCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetProject.Entities", "PetProject.Entities\PetProject.Entities.csproj", "{AF86AF06-F7AF-47DF-8CD4-9A4CAFA63BCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetProject.Console", "PetProject.Console\PetProject.Console.csproj", "{1C573C23-98D1-4DD6-A7D3-686610B2CF47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{AF86AF06-F7AF-47DF-8CD4-9A4CAFA63BCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF86AF06-F7AF-47DF-8CD4-9A4CAFA63BCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF86AF06-F7AF-47DF-8CD4-9A4CAFA63BCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C573C23-98D1-4DD6-A7D3-686610B2CF47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C573C23-98D1-4DD6-A7D3-686610B2CF47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C573C23-98D1-4DD6-A7D3-686610B2CF47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C573C23-98D1-4DD6-A7D3-686610B2CF47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
