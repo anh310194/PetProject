@@ -21,12 +21,12 @@ namespace PetProject.Entities
         public string? City { get; set; }
         public long? StateId { get; set; }
         public string? ZipCode { get; set; }
-        public string? TimeZoneId { get; set; }
+        public long? TimeZoneId { get; set; }
         public int? DateFormatId { get; set; }
         public int? TimeFormatId { get; set; }
         public int UserType { get; set; }
         public byte Status { get; set; }
-        public string? IsLock { get; set; }
+        public bool? IsLock { get; set; }
         public int? CountFailSignIn { get; set; }
         public string? PasswordExpiredDate { get; set; }
         public string? ImagePath { get; set; }

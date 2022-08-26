@@ -1,12 +1,9 @@
 ﻿
 namespace PetProject.Core.Exceptions
 {
-    public class PetProjectException: Exception
+    public class PetProjectException : Exception
     {
-        public string Message;
-        public PetProjectException(string message)
-        {
-            this.Message = message;
-        }
+        public PetProjectException(string message, Exception inner) : base(message, inner) { }
+        public PetProjectException(string message) : base(message) { }
     }
 }

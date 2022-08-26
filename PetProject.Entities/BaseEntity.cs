@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PetProject.Entities
 {
-    public class BaseEntity
+    public abstract class BaseEntity
     {
         public long Id { get; set; }
         public DateTime CreatedTime { get; set; }

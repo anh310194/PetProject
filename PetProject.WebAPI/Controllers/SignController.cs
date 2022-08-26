@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using PetProject.Business.Interfaces;
 using PetProject.WebAPI.Models.Requestes;
 using PetProject.WebAPI.Models.Responses;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,14 +15,16 @@ namespace PetProject.WebAPI.Controllers
     {
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
-        public SignController(ILogger<SignController> logger, IConfiguration configuration) 
+        private readonly IUserService _userService;
+        public SignController(ILogger<SignController> logger, IConfiguration configuration, IUserService userService)
         {
             _configuration = configuration;
             _logger = logger;
+            _userService = userService;
         }
 
         [HttpPost]
-        public ActionResult<TokenModel> Index(SignInModel model)
+        public async Task<ActionResult<TokenModel>> Index(SignInRequestModel model)
         {
             if (model == null)
             {
@@ -32,7 +35,10 @@ namespace PetProject.WebAPI.Controllers
                 return BadRequest("the User Name or password don't not empty");
             }
 
-            var tokenModel = new TokenModel() { 
+            var user = await _userService.SignIn(model.UserName, model.Password);
+
+            var tokenModel = new TokenModel()
+            {
                 Type = "Bearer",
                 ExpiredTime = 36000
             };
@@ -40,9 +46,9 @@ namespace PetProject.WebAPI.Controllers
                         new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                        new Claim("UserId", 1.ToString()),
-                        new Claim("DisplayName", "System Administrator"),
-                        new Claim("UserName", "sysadmin"),
+                        new Claim("UserId", user.Id.ToString()),
+                        new Claim("DisplayName", user.FirstName +" " + user.LastName),
+                        new Claim("UserName", user.UserName),
                     };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

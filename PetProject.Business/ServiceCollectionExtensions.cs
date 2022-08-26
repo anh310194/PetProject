@@ -9,6 +9,7 @@ namespace PetProject.Business
         public static void AddBusiness(this IServiceCollection services)
         {
             services.AddScoped<ICountryService, CountryService>();
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }

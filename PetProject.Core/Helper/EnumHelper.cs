@@ -16,21 +16,21 @@ namespace PetProject.Core.Helper
             return Enum.GetNames(typeof(TEnum));
         }
 
-        public static string GetName<TEnum>(int value) where TEnum : Enum
+        public static string? GetName<TEnum>(int value) where TEnum : Enum
         {
             Type typeModel = typeof(TEnum);
             var result = Enum.GetName(typeModel, value);
             return result;
         }
 
-        public static string GetName<TEnum>(object value) where TEnum : Enum
+        public static string? GetName<TEnum>(object value) where TEnum : Enum
         {
             Type typeModel = typeof(TEnum);
             var result = Enum.GetName(typeModel, value);
             return result;
         }
 
-        public static IEnumerable<string> GetDisplayNames<TEnum>() where TEnum : Enum
+        public static IEnumerable<string?> GetDisplayNames<TEnum>() where TEnum : Enum
         {
             foreach (var value in Enum.GetValues(typeof(TEnum)))
             {
@@ -38,7 +38,7 @@ namespace PetProject.Core.Helper
             }
         }
 
-        public static string GetDisplayName(Enum value)
+        public static string? GetDisplayName(Enum value)
         {
             if (value == null)
             {
@@ -59,7 +59,7 @@ namespace PetProject.Core.Helper
             {
                 return null;
             }
-            string displayName = null;
+            string displayName = value.ToString();
             //if (displayAttribute.ResourceType != null)
             //{
             //    displayName = ResourceHelper.GetDisplay(displayAttribute.ResourceType, displayAttribute.Name);
@@ -69,7 +69,7 @@ namespace PetProject.Core.Helper
             //    displayName = ResourceHelper.GetDisplayEnum(displayAttribute.Name);
             //}
 
-            return string.IsNullOrEmpty(displayName) ? value.ToString() : displayName;
+            return displayName;
         }
 
         public static T ParseEnum<T>(string value) where T : Enum

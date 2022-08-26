@@ -105,7 +105,7 @@ namespace PetProject.Infacstructure.Database
 
                 entity.Property(e => e.Password)
                     .IsRequired()
-                    .HasMaxLength(20);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.PasswordExpiredDate).HasPrecision(3);
 
@@ -118,7 +118,7 @@ namespace PetProject.Infacstructure.Database
 
                 entity.Property(e => e.SaltPassword)
                     .IsRequired()
-                    .HasMaxLength(20)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.TimeZoneId)
