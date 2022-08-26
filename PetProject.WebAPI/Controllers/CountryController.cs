@@ -37,14 +37,14 @@ namespace PetProject.WebAPI.Controllers
         }
 
         [HttpPost()]
-        public async Task<ActionResult<CountryModel>> InsertCountry(CountryModel model)
+        public async Task<ActionResult<CountryModel?>> InsertCountry(CountryModel model)
         {
             var result = await _countryService.UpsertCountryById(model);
             return result;
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<CountryModel>> UpdateCountryById(int id, CountryModel model)
+        public async Task<ActionResult<CountryModel?>> UpdateCountryById(int id, CountryModel model)
         {
             model.Id = id;
             var result = await _countryService.UpsertCountryById(model);

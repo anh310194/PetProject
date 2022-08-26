@@ -22,12 +22,12 @@ namespace PetProject.Business.Implements
             return _unitOfWork.AsQuery<Country>().Select(s => new CountryModel() { Id = s.Id, CountryCode = s.CountryCode, CountryName = s.CountryName }).ToListAsync();
         }
 
-        public Task<CountryModel> GetCountryById(long id)
+        public Task<CountryModel?> GetCountryById(long id)
         {
             return _unitOfWork.AsQuery<Country>().Select(s => new CountryModel() { Id = s.Id, CountryCode = s.CountryCode, CountryName = s.CountryName }).FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public Task<CountryModel> UpsertCountryById(CountryModel model)
+        public Task<CountryModel?> UpsertCountryById(CountryModel model)
         {
             return _unitOfWork.AsQuery<Country>().Select(s => new CountryModel() { Id = s.Id, CountryCode = s.CountryCode, CountryName = s.CountryName }).FirstOrDefaultAsync();
         }
