@@ -15,7 +15,7 @@ namespace PetProject.WebAPI.Filters
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            if (!context.ExceptionHandled)
+            if (context.Exception == null)
             {
                 return;
             }

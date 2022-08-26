@@ -11,12 +11,12 @@ namespace PetProject.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SignController : Controller
+    public class LoginController : Controller
     {
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
-        public SignController(ILogger<SignController> logger, IConfiguration configuration, IUserService userService)
+        public LoginController(ILogger<LoginController> logger, IConfiguration configuration, IUserService userService)
         {
             _configuration = configuration;
             _logger = logger;
@@ -35,14 +35,9 @@ namespace PetProject.WebAPI.Controllers
                 return BadRequest("the User Name or password don't not empty");
             }
 
-            var user = await _userService.SignIn(model.UserName, model.Password);
+            var user = await _userService.Authenticate(model.UserName, model.Password);
 
-            var tokenModel = new TokenModel()
-            {
-                Type = "Bearer",
-                ExpiredTime = 36000
-            };
-            var claims = new[] {
+            var claims = new List<Claim> {
                         new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
@@ -51,6 +46,16 @@ namespace PetProject.WebAPI.Controllers
                         new Claim("UserName", user.UserName),
                     };
 
+            foreach (var role in user.Roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+            }
+
+            var tokenModel = new TokenModel()
+            {
+                Type = "Bearer",
+                ExpiredTime = 36000
+            };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var jwtSecurityToken = new JwtSecurityToken(

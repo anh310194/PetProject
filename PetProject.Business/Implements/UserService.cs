@@ -14,12 +14,12 @@ namespace PetProject.Business.Implements
     {
         public UserService(IUnitOfWork unitOfWork, ILogger<CountryService> logger) : base(unitOfWork, logger) { }
 
-        public async Task<SignInModel> SignIn(string userName, string password)
+        public async Task<SignInModel> Authenticate(string userName, string password)
         {
             var user = await Queryable<User>(p => p.UserName == userName).FirstOrDefaultAsync();
             if (user == null)
             {
-                throw new PetProjectException($"{userName} could not be found!");
+                throw new PetProjectException("the userName could not be found!");
             }
             if (!SecurityHelper.VerifyHashedPassword(user.Password, password, user.SaltPassword))
             {
@@ -31,7 +31,7 @@ namespace PetProject.Business.Implements
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Id = user.Id,
-                Role = new long[] { 1, 2, 3, 4 },
+                Roles = new long[] { 2, 4 },
                 UserType = "sysadmin"
             };
         }

@@ -9,6 +9,6 @@ namespace PetProject.Business.Interfaces
 {
     public interface IUserService
     {
-        Task<SignInModel> SignIn(string userName, string password);
+        Task<SignInModel> Authenticate(string userName, string password);
     }
 }
