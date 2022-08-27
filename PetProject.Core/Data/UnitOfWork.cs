@@ -9,7 +9,7 @@ using PetProject.Entities;
 
 namespace PetProject.Core.Data
 {
-    public abstract class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private DbContext _context { get; }
 
@@ -18,9 +18,9 @@ namespace PetProject.Core.Data
         private bool _disposed;
         //private Dictionary<string, dynamic> _repositories;
         private Dictionary<string, dynamic> _repositories;
-        public UnitOfWork(DbContext context)
+        public UnitOfWork(IDbContext dbContext)
         {
-            _context = context;
+            _context = dbContext.Instance;
             if (_repositories == null)
             {
                 _repositories = new Dictionary<string, dynamic>();

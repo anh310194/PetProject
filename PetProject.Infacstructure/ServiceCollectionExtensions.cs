@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PetProject.Core.Data;
 using PetProject.Core.Interfaces;
 using PetProject.Infacstructure.Database;
 
@@ -15,7 +16,7 @@ namespace PetProject.Infacstructure
                     configuration.GetConnectionString("SQLConnection"),
                     providerOptions => providerOptions.EnableRetryOnFailure()));
 
-            services.AddScoped<IUnitOfWork, PetProjectUnitOfWork>();
+            services.AddScoped<IDbContext, PetProjectContext>();
         }
     }
 }

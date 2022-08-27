@@ -9,6 +9,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Factories\**" />
+	  <Content Remove="Factories\**" />
+	  <EmbeddedResource Remove="Factories\**" />
+	  <None Remove="Factories\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Remove="Controllers\ApiController.cs" />
 	</ItemGroup>
 
@@ -23,10 +30,6 @@
 		<ProjectReference Include="..\PetProject.Business\PetProject.Business.csproj" />
 		<ProjectReference Include="..\PetProject.Core\PetProject.Core.csproj" />
 		<ProjectReference Include="..\PetProject.Infacstructure\PetProject.Infacstructure.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Factories\" />
 	</ItemGroup>
 
 </Project>
