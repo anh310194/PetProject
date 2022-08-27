@@ -25,15 +25,21 @@ namespace PetProject.Business.Implements
             {
                 throw new PetProjectException($"login fail!");
             }
-            return new SignInModel()
+            var result = new SignInModel()
             {
                 UserName = userName,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Id = user.Id,
-                Roles = new long[] { 2, 4 },
                 UserType = "sysadmin"
             };
+            var paremeter = new Microsoft.Data.SqlClient.SqlParameter("@UserId", System.Data.SqlDbType.BigInt) { Value = result.Id };
+            var roleIds = (await _unitOfWork.ExecStoreProcedureAsync("GetFeaturesByUser", paremeter));
+            if (roleIds != null)
+            {
+                result.Roles = roleIds.Select(s => (long)s.FirstOrDefault().Value).ToArray();
+            }
+            return result;
         }
     }
 }

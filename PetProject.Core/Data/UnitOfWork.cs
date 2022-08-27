@@ -9,15 +9,18 @@ using PetProject.Entities;
 
 namespace PetProject.Core.Data
 {
-    public class UnitOfWork : IUnitOfWork
+    public abstract class UnitOfWork : IUnitOfWork
     {
-        private DbContext _dataContext { get; }
+        private DbContext _context { get; }
+
+        public DbContext Context { get { return _context; } }
+
         private bool _disposed;
         //private Dictionary<string, dynamic> _repositories;
         private Dictionary<string, dynamic> _repositories;
-        public UnitOfWork(DbContext dataContext)
+        public UnitOfWork(DbContext context)
         {
-            _dataContext = dataContext;
+            _context = context;
             if (_repositories == null)
             {
                 _repositories = new Dictionary<string, dynamic>();
@@ -37,7 +40,7 @@ namespace PetProject.Core.Data
             {
                 if (disposing)
                 {
-                    _dataContext.Dispose();
+                    _context.Dispose();
                 }
             }
             this._disposed = true;
@@ -46,9 +49,8 @@ namespace PetProject.Core.Data
 
         public virtual int SaveChanges()
         {
-            return _dataContext.SaveChanges();
+            return _context.SaveChanges();
         }
-
         private IRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity
         {
             string type = typeof(TEntity).Name;
@@ -59,14 +61,14 @@ namespace PetProject.Core.Data
             }
 
             var repositoryType = typeof(Repository<>);
-            var valueOject = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(TEntity)), _dataContext);
+            var valueOject = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(TEntity)), _context);
 
             _repositories.Add(type, valueOject);
             return _repositories[type];
         }
         public virtual Task<int> SaveChangesAsync()
         {
-            return _dataContext.SaveChangesAsync();
+            return _context.SaveChangesAsync();
         }
         public virtual IQueryable<TEntity> AsQuery<TEntity>() where TEntity : BaseEntity
         {
@@ -78,7 +80,7 @@ namespace PetProject.Core.Data
         }
         public virtual TResult ExecuteTransaction<TResult>(Func<TResult> func) where TResult : class
         {
-            var strategy = _dataContext.Database.CreateExecutionStrategy();
+            var strategy = _context.Database.CreateExecutionStrategy();
             return strategy.Execute(() =>
             {
                 using var transaction = new TransactionScope();
@@ -89,7 +91,7 @@ namespace PetProject.Core.Data
         }
         public virtual void ExecuteTransaction(Action action)
         {
-            var strategy = _dataContext.Database.CreateExecutionStrategy();
+            var strategy = _context.Database.CreateExecutionStrategy();
             strategy.Execute(() =>
             {
                 using var transaction = new TransactionScope();
@@ -99,7 +101,7 @@ namespace PetProject.Core.Data
         }
         public virtual Task<TResult> ExecuteTransactionAsync<TResult>(Func<Task<TResult>> func) where TResult : class
         {
-            var strategy = _dataContext.Database.CreateExecutionStrategy();
+            var strategy = _context.Database.CreateExecutionStrategy();
             return strategy.ExecuteAsync(async () =>
             {
                 using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
@@ -112,7 +114,7 @@ namespace PetProject.Core.Data
         }
         public virtual Task ExecuteTransactionAsync(Func<Task> action)
         {
-            var strategy = _dataContext.Database.CreateExecutionStrategy();
+            var strategy = _context.Database.CreateExecutionStrategy();
             return strategy.ExecuteAsync(async () =>
             {
                 using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
@@ -176,18 +178,18 @@ namespace PetProject.Core.Data
         {
             return GetRepository<TEntity>().FindAsync(keyValues, cancellationToken);
         }
-
         private DbCommand ExecCommandText(string query, CommandType commandType, params SqlParameter[] parameters)
         {
-            var command = _dataContext.Database.GetDbConnection().CreateCommand();
-
+            var command = _context.Database.GetDbConnection().CreateCommand();
             command.CommandText = query;
             command.CommandType = commandType;
+
             if (parameters != null && parameters.Length > 0)
             {
                 command.Parameters.AddRange(parameters);
             }
-            _dataContext.Database.OpenConnection();
+
+            _context.Database.OpenConnection();
             return command;
         }
         public virtual async Task<List<IEnumerable<IDictionary<string, object>>>> ExecCommandTextAsync(string query, CommandType commandType, params SqlParameter[] parameters)
@@ -217,6 +219,16 @@ namespace PetProject.Core.Data
             }
             return result;
         }
+        public Task<List<IEnumerable<IDictionary<string, object>>>> ExecStoreProcedureReturnMutipleAsync(string query, params SqlParameter[] parameters)
+        {
+            return ExecCommandTextAsync(query, CommandType.StoredProcedure, parameters);
+        }
+        public Task<IEnumerable<IDictionary<string, object>>> ExecStoreProcedureAsync(string query, params SqlParameter[] parameters)
+        {
+            return ExecCommandTextAsync(query, CommandType.StoredProcedure, parameters).ContinueWith<IEnumerable<IDictionary<string, object>>>(c => { 
+                return c.Result?.FirstOrDefault();
+            });
+        }   
     }
 }
 

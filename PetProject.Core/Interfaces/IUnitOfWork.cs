@@ -1,10 +1,14 @@
-﻿using System.Linq.Expressions;
+﻿using System.Data;
+using System.Linq.Expressions;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using PetProject.Entities;
 
 namespace PetProject.Core.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
+        abstract DbContext Context { get; }
         Task<int> SaveChangesAsync();
         int SaveChanges();
         IQueryable<TEntity> AsQuery<TEntity>() where TEntity : BaseEntity;
@@ -19,11 +23,13 @@ namespace PetProject.Core.Interfaces
         TEntity? Find<TEntity>(params object[] keyValues) where TEntity : BaseEntity;
         ValueTask<TEntity?> FindAsync<TEntity>(params object[] keyValues) where TEntity : BaseEntity;
         ValueTask<TEntity?> FindAsync<TEntity>(object[] keyValues, CancellationToken cancellationToken) where TEntity : BaseEntity;
-
+        Task<List<IEnumerable<IDictionary<string, object>>>> ExecCommandTextAsync(string query, CommandType commandType, params SqlParameter[] parameters);
         TResult ExecuteTransaction<TResult>(Func<TResult> func) where TResult : class;
         Task<TResult> ExecuteTransactionAsync<TResult>(Func<Task<TResult>> func) where TResult : class;
         void ExecuteTransaction(Action action);
         Task ExecuteTransactionAsync(Func<Task> action);
+        Task<List<IEnumerable<IDictionary<string, object>>>> ExecStoreProcedureReturnMutipleAsync(string query, params SqlParameter[] parameters);
+        Task<IEnumerable<IDictionary<string, object>>> ExecStoreProcedureAsync(string query, params SqlParameter[] parameters);
     }
 
 }
