@@ -36,7 +36,7 @@ namespace PetProject.UnitTest.Controller_Test
             countryController = new CountryController(countryServerMock.Object, logger);
 
             // Act
-            var response = await countryController.GetCountries();
+            var response = await countryController.GetAll();
 
             // Assert
             var result = response.Value;
