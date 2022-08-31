@@ -24,6 +24,7 @@ try
     builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
     builder.Host.UseNLog();
 
+    builder.Services.AddCors();
     // Add services to the container.
     builder.Services.AddControllers(options =>
     {
@@ -110,6 +111,7 @@ try
     }
 
     // Configure the HTTP request pipeline.
+    app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseHttpsRedirection();
