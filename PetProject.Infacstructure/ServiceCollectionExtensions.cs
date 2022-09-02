@@ -17,6 +17,7 @@ namespace PetProject.Infacstructure
                     providerOptions => providerOptions.EnableRetryOnFailure()));
 
             services.AddScoped<IDbContext, PetProjectContext>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
     }
 }

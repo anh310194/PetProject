@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using PetProject.Entities;
+using PetProject.Core.Data;
 
 namespace PetProject.Core.Interfaces
 {

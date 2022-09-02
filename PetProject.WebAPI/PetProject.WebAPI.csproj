@@ -29,8 +29,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\PetProject.Business\PetProject.Business.csproj" />
-		<ProjectReference Include="..\PetProject.Core\PetProject.Core.csproj" />
 		<ProjectReference Include="..\PetProject.Infacstructure\PetProject.Infacstructure.csproj" />
+		<ProjectReference Include="..\PetProject.Shared\PetProject.Shared.csproj" />
 	</ItemGroup>
 
 </Project>

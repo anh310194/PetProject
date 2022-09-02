@@ -5,7 +5,6 @@ using PetProject.Core.Interfaces;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Data.Common;
-using PetProject.Entities;
 
 namespace PetProject.Core.Data
 {
@@ -126,24 +125,15 @@ namespace PetProject.Core.Data
         }
         public virtual TEntity Insert<TEntity>(TEntity entity, long userId) where TEntity : BaseEntity
         {
-            entity.CreatedTime = DateTime.UtcNow;
-            entity.CreatedBy = userId;
-            return GetRepository<TEntity>().Insert(entity);
+            return GetRepository<TEntity>().Insert(entity, userId);
         }
         public virtual void InsertRange<TEntity>(ICollection<TEntity> entities, long userId) where TEntity : BaseEntity
         {
-            foreach (var entity in entities)
-            {
-                entity.CreatedTime = DateTime.UtcNow;
-                entity.CreatedBy = userId;
-            }
-            GetRepository<TEntity>().InsertRange(entities);
+            GetRepository<TEntity>().InsertRange(entities, userId);
         }
         public virtual TEntity Update<TEntity>(TEntity entity, long userId) where TEntity : BaseEntity
         {
-            entity.UpdatedTime = DateTime.UtcNow;
-            entity.UpdatedBy = userId;
-            return GetRepository<TEntity>().Update(entity);
+            return GetRepository<TEntity>().Update(entity, userId);
         }
         public virtual void UpdateRange<TEntity>(ICollection<TEntity> entities, long userId) where TEntity : BaseEntity
         {
@@ -152,7 +142,7 @@ namespace PetProject.Core.Data
                 entity.UpdatedTime = DateTime.UtcNow;
                 entity.UpdatedBy = userId;
             }
-            GetRepository<TEntity>().UpdateRange(entities);
+            GetRepository<TEntity>().UpdateRange(entities, userId);
         }
         public virtual void Delete<TEntity>(object id) where TEntity : BaseEntity
         {

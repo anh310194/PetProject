@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
-using System.Text;
+﻿using System.Text;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
-namespace PetProject.Core.Helper
+namespace PetProject.Shared.Helper
 {
     public static class SecurityHelper
     {

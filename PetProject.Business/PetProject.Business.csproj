@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PetProject.Core\PetProject.Core.csproj" />
+    <ProjectReference Include="..\PetProject.Entities\PetProject.Entities.csproj" />
+    <ProjectReference Include="..\PetProject.Shared\PetProject.Shared.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PetProject.Core.Interfaces;
-using PetProject.Entities;
 using System.Linq.Expressions;
 
 namespace PetProject.Core.Data
@@ -31,21 +30,27 @@ namespace PetProject.Core.Data
             return _dbSet.FindAsync(cancellationToken, keyValues);
         }
 
-        public virtual ValueTask<EntityEntry<TEntity>> InsertAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual ValueTask<EntityEntry<TEntity>> InsertAsync(TEntity entity, long userId, CancellationToken cancellationToken = default)
         {
             entity.CreatedTime = DateTime.UtcNow;
+            entity.CreatedBy = userId;
             return _dbSet.AddAsync(entity, cancellationToken);
         }
 
-        public virtual Task InsertRangeAsync(ICollection<TEntity> entities, CancellationToken cancellationToken = default)
+        public virtual Task InsertRangeAsync(ICollection<TEntity> entities, long userId, CancellationToken cancellationToken = default)
         {
-            var enumerable = entities.AsEnumerable().Select(s => { s.CreatedTime = DateTime.UtcNow; return s; });
+            var enumerable = entities.AsEnumerable().Select(s => { 
+                s.CreatedTime = DateTime.UtcNow;
+                s.UpdatedBy = userId;
+                return s; 
+            });
             return _dbSet.AddRangeAsync(enumerable, cancellationToken);
         }
 
-        public virtual TEntity Update(TEntity entity)
+        public virtual TEntity Update(TEntity entity, long userId)
         {
             entity.UpdatedTime = DateTime.UtcNow;
+            entity.UpdatedBy = userId;
             return _dbSet.Update(entity).Entity;
         }
 
@@ -60,20 +65,31 @@ namespace PetProject.Core.Data
             return _dbSet.Find(keyValues);
         }
 
-        public virtual TEntity Insert(TEntity entity)
+        public virtual TEntity Insert(TEntity entity, long userId)
         {
+            entity.CreatedBy = userId;
+            entity.CreatedTime = DateTime.UtcNow;
             return _dbSet.Add(entity).Entity;
         }
 
-        public virtual void InsertRange(ICollection<TEntity> entities)
+        public virtual void InsertRange(ICollection<TEntity> entities, long userId)
         {
-            var enumerable = entities.AsEnumerable();
+            var enumerable = entities.Select(entity =>
+            {
+                entity.CreatedBy = userId;
+                entity.CreatedTime = DateTime.UtcNow;
+                return entity;
+            }).AsEnumerable();
             _dbSet.AddRange(enumerable);
         }
 
-        public virtual void UpdateRange(ICollection<TEntity> entities)
+        public virtual void UpdateRange(ICollection<TEntity> entities, long userId)
         {
-            var enumerable = entities.AsEnumerable().Select(s => { s.UpdatedTime = DateTime.UtcNow; return s; });
+            var enumerable = entities.AsEnumerable().Select(s => { 
+                s.UpdatedTime = DateTime.UtcNow;
+                s.UpdatedBy = userId;
+                return s; 
+            });
             _dbSet.UpdateRange(enumerable);
         }
 

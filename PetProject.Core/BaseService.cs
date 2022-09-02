@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using PetProject.Core.Interfaces;
-using PetProject.Entities;
+using PetProject.Core.Data;
 using System.Linq.Expressions;
 
 namespace PetProject.Core

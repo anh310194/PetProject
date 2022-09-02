@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PetProject.Entities
+﻿
+namespace PetProject.Core.Data
 {
     public abstract class BaseEntity
     {
