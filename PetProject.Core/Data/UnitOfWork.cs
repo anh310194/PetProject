@@ -16,14 +16,10 @@ namespace PetProject.Core.Data
 
         private bool _disposed;
         //private Dictionary<string, dynamic> _repositories;
-        private Dictionary<string, dynamic> _repositories;
+        private IDictionary<string, object?>? _repositories;
         public UnitOfWork(IDbContext dbContext)
         {
             _context = dbContext.Instance;
-            if (_repositories == null)
-            {
-                _repositories = new Dictionary<string, dynamic>();
-            }
         }
 
         #region Dispose        
@@ -52,18 +48,19 @@ namespace PetProject.Core.Data
         }
         private IRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity
         {
-            string type = typeof(TEntity).Name;
-
-            if (_repositories.ContainsKey(type))
+            if (_repositories == null)
             {
-                return (IRepository<TEntity>)_repositories[type];
+                _repositories = new Dictionary<string, object?>();
             }
 
-            var repositoryType = typeof(Repository<>);
-            var valueOject = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(TEntity)), _context);
+            string type = typeof(TEntity).Name;
+            if (!_repositories.TryGetValue(type, out object? value))
+            {
+                value = Activator.CreateInstance(typeof(Repository<>).MakeGenericType(typeof(TEntity)), _context);
+                _repositories.Add(type, value);
+            }
 
-            _repositories.Add(type, valueOject);
-            return _repositories[type];
+            return (IRepository<TEntity>)value;
         }
         public virtual Task<int> SaveChangesAsync()
         {
@@ -216,7 +213,7 @@ namespace PetProject.Core.Data
         public Task<IEnumerable<IDictionary<string, object>>> ExecStoreProcedureAsync(string query, params SqlParameter[] parameters)
         {
             return ExecCommandTextAsync(query, CommandType.StoredProcedure, parameters).ContinueWith<IEnumerable<IDictionary<string, object>>>(c => { 
-                return c.Result?.FirstOrDefault();
+                return c.Result.FirstOrDefault();
             });
         }   
     }
