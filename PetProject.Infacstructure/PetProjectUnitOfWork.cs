@@ -24,7 +24,6 @@ namespace PetProject.Infacstructure
             if (type != null)
             {
                 var typeEntity = typeof(TEntity);
-                //var entity = Activator.CreateInstance(typeEntity);
                 var value = Activator.CreateInstance(type, _dbContext);
                 SetRepository(typeEntity.Name, value);
             }
