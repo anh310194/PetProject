@@ -7,12 +7,10 @@ namespace PetProject.Core.Data
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
     {
-        private DbContext _context { get; }
-        private readonly DbSet<TEntity> _dbSet;
-        public Repository(DbContext context)
+        protected readonly DbSet<TEntity> _dbSet;
+        public Repository(IDbContext context)
         {
-            _context = context;
-            _dbSet = _context.Set<TEntity>();
+            _dbSet = context.Instance.Set<TEntity>();
         }
 
         public virtual Task<TEntity?> GetByAsync(Expression<Func<TEntity, bool>> match)
