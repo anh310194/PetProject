@@ -46,6 +46,7 @@ namespace PetProject.Core.Data
         {
             return Context.SaveChanges();
         }
+
         public virtual IRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity
         {
             string type = typeof(TEntity).Name;
@@ -57,6 +58,15 @@ namespace PetProject.Core.Data
             value = Activator.CreateInstance(typeof(Repository<>).MakeGenericType(typeof(TEntity)), _dbContext);
             SetRepository(type, value);
             return (IRepository<TEntity>)value;
+        }
+        public object? GetRepositoryByTypeName<TEntity>(string typeName) where TEntity : BaseEntity
+        {
+            if (_repositories != null && _repositories.TryGetValue(typeName, out object? value))
+            {
+                return value;
+            }
+
+            return null;
         }
 
         public virtual void SetRepository(string typeName, object? value)

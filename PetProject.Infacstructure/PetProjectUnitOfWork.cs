@@ -16,6 +16,12 @@ namespace PetProject.Infacstructure
 
         public override IRepository<TEntity> GetRepository<TEntity>()
         {
+            var typeEntity = typeof(TEntity);
+            var result = GetRepositoryByTypeName<TEntity>(typeEntity.Name);
+            if (result !=null)
+            {
+                return (IRepository<TEntity>)result;
+            }
             var typeIRepository = typeof(IRepository<TEntity>);
             var type = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
@@ -23,7 +29,6 @@ namespace PetProject.Infacstructure
                 );
             if (type != null)
             {
-                var typeEntity = typeof(TEntity);
                 var value = Activator.CreateInstance(type, _dbContext);
                 SetRepository(typeEntity.Name, value);
             }
