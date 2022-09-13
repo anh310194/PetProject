@@ -17,6 +17,12 @@ namespace PetProject.Shared.Helper
             var result = Enum.GetName(typeModel, value);
             return result;
         }
+        public static string? GetName<TEnum>(long value) where TEnum : Enum
+        {
+            Type typeModel = typeof(TEnum);
+            var result = Enum.GetName(typeModel, value);
+            return result;
+        }
 
         public static string? GetName<TEnum>(object value) where TEnum : Enum
         {

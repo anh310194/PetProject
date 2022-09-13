@@ -24,7 +24,7 @@ namespace PetProject.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<TokenModel>> Index(SignInRequestModel model)
+        public async Task<ActionResult<UserTokenModel>> Index(SignInRequestModel model)
         {
             if (model == null)
             {
@@ -37,35 +37,10 @@ namespace PetProject.WebAPI.Controllers
 
             var user = await _userService.Authenticate(model.UserName, model.Password);
 
-            var claims = new List<Claim> {
-                        new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                        new Claim("UserId", user.Id.ToString()),
-                        new Claim("DisplayName", user.FirstName +" " + user.LastName),
-                        new Claim("UserName", user.UserName),
-                    };
+            var userToken = new UserTokenModel(user);
+            userToken.SetTokenModel(_configuration);
 
-            foreach (var role in user.Roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
-            }
-
-            var tokenModel = new TokenModel()
-            {
-                Type = "Bearer",
-                ExpiredTime = 36000
-            };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-            var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var jwtSecurityToken = new JwtSecurityToken(
-                _configuration["Jwt:Issuer"],
-                _configuration["Jwt:Audience"],
-                claims,
-                expires: DateTime.UtcNow.AddSeconds(tokenModel.ExpiredTime),
-                signingCredentials: signIn);
-            tokenModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            return tokenModel;
+            return userToken;
         }
     }
 }
