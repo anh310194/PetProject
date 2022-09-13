@@ -101,6 +101,7 @@ try
     //Add Petproject Services
     builder.Services.AddInfacstructure(builder.Configuration);
     builder.Services.AddBusiness();
+    builder.Services.AddHttpContextAccessor();
 
 
     // Config services in the container.

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -9,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace PetProject.UnitTest.Controller_Test
@@ -30,10 +32,11 @@ namespace PetProject.UnitTest.Controller_Test
             // Arrange
             var mockLog = new Mock<ILogger<CountryController>>();
             ILogger<CountryController> logger = mockLog.Object;
+            var mockIdentity = new Mock<IHttpContextAccessor>();
 
             Mock<ICountryService> countryServerMock = new Mock<ICountryService>();
             countryServerMock.Setup(x => x.GetCountries()).ReturnsAsync(new List<CountryModel>() { resultCountry });
-            countryController = new CountryController(countryServerMock.Object, logger);
+            countryController = new CountryController(countryServerMock.Object, logger, mockIdentity.Object);
 
             // Act
             var response = await countryController.GetAll();
@@ -49,12 +52,13 @@ namespace PetProject.UnitTest.Controller_Test
         {
             // Arrange
             var mockLog = new Mock<ILogger<CountryController>>();
+            var mockIdentity = new Mock<IHttpContextAccessor>();
             ILogger<CountryController> logger = mockLog.Object;
 
             CountryModel countryModel = new CountryModel();
             Mock<ICountryService> countryServerMock = new Mock<ICountryService>();
             countryServerMock.Setup(x => x.GetCountryById(2)).ReturnsAsync(countryModel);
-            countryController = new CountryController(countryServerMock.Object, logger);
+            countryController = new CountryController(countryServerMock.Object, logger, mockIdentity.Object);
 
             // Act
             var response = await countryController.GetCountryById(2);
@@ -69,10 +73,11 @@ namespace PetProject.UnitTest.Controller_Test
             // Arrange
             var mockLog = new Mock<ILogger<CountryController>>();
             ILogger<CountryController> logger = mockLog.Object;
+            var mockIdentity = new Mock<IHttpContextAccessor>();
 
             Mock<ICountryService> countryServerMock = new Mock<ICountryService>();
             countryServerMock.Setup(x => x.GetCountryById(1)).ReturnsAsync(resultCountry);
-            countryController = new CountryController(countryServerMock.Object, logger);
+            countryController = new CountryController(countryServerMock.Object, logger, mockIdentity.Object);
 
             // Act
             var response = await countryController.GetCountryById(1);

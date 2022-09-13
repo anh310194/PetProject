@@ -4,17 +4,20 @@ using PetProject.Business.Interfaces;
 using PetProject.Business.Model;
 using PetProject.WebAPI.Attributes;
 using PetProject.WebAPI.Enums;
+using PetProject.WebAPI.Models.Responses;
+using System.Security.Principal;
 
 namespace PetProject.WebAPI.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class CountryController : Controller
+    public class CountryController : BaseController
     {
+        protected readonly UserTokenModel CurrentUser;
         private readonly ILogger _logger;
         private readonly ICountryService _countryService;
-        public CountryController(ICountryService countryService, ILogger<CountryController> logger)
+        public CountryController(ICountryService countryService, ILogger<CountryController> logger, IHttpContextAccessor accessor): base(accessor)
         {
             _countryService = countryService;
             _logger = logger;

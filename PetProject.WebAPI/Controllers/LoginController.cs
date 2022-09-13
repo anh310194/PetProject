@@ -24,7 +24,7 @@ namespace PetProject.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserTokenModel>> Index(SignInRequestModel model)
+        public async Task<ActionResult<TokenModel>> Index(SignInRequestModel model)
         {
             if (model == null)
             {
@@ -38,9 +38,8 @@ namespace PetProject.WebAPI.Controllers
             var user = await _userService.Authenticate(model.UserName, model.Password);
 
             var userToken = new UserTokenModel(user);
-            userToken.SetTokenModel(_configuration);
 
-            return userToken;
+            return userToken.SetTokenModel(_configuration);
         }
     }
 }

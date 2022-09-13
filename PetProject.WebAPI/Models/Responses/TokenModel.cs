@@ -67,17 +67,17 @@ namespace PetProject.WebAPI.Models.Responses
 
             IsAutheticated = true;
             long userId;
-            if (!long.TryParse(user.FindFirst(JwtRegisteredClaimNames.NameId)?.Value, out userId))
+            if (!long.TryParse(user.FindFirst(nameof(Id))?.Value, out userId))
             {
                 IsAutheticated = false;
                 return;
             }
             Id = userId;
-            CacheIdentity = user.FindFirst(JwtRegisteredClaimNames.Jti).ToString();
-            FirstName = user.FindFirst(JwtRegisteredClaimNames.Name)?.ToString();
-            LastName = user.FindFirst(JwtRegisteredClaimNames.GivenName)?.ToString();
-            UserName = user.FindFirst(JwtRegisteredClaimNames.UniqueName)?.ToString();
-            UserType = user.FindFirst(JwtRegisteredClaimNames.Typ)?.ToString();
+            CacheIdentity = user.FindFirst(JwtRegisteredClaimNames.Jti).Value.ToString();
+            FirstName = user.FindFirst(nameof(FirstName)).Value.ToString();
+            LastName = user.FindFirst(nameof(LastName)).Value.ToString();
+            UserName = user.FindFirst(nameof(UserName)).Value.ToString();
+            UserType = user.FindFirst(nameof(UserType)).Value.ToString();
 
             var permissions = user.FindAll(ClaimTypes.Role);
 
@@ -95,7 +95,7 @@ namespace PetProject.WebAPI.Models.Responses
 
         }
 
-        public TokenModel TokenModel { get; set; }
+        private TokenModel TokenModel { get; set; }
 
         public TokenModel SetTokenModel(IConfiguration configuration)
         {
@@ -103,11 +103,11 @@ namespace PetProject.WebAPI.Models.Responses
                         new Claim(JwtRegisteredClaimNames.Sub, configuration["Jwt:Subject"]),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                        new Claim(JwtRegisteredClaimNames.NameId, Id.ToString()),
-                        new Claim(JwtRegisteredClaimNames.Name, FirstName),
-                        new Claim(JwtRegisteredClaimNames.GivenName, LastName),
-                        new Claim(JwtRegisteredClaimNames.UniqueName, UserName),
-                        new Claim(JwtRegisteredClaimNames.Typ, UserType),
+                        new Claim(nameof(Id), Id.ToString()),
+                        new Claim(nameof(FirstName), FirstName),
+                        new Claim(nameof(LastName), LastName),
+                        new Claim(nameof(UserName), UserName),
+                        new Claim(nameof(UserType), UserType),
                     };
 
             foreach (var role in Roles)
