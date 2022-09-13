@@ -14,7 +14,6 @@ namespace PetProject.WebAPI.Controllers
     [ApiController]
     public class CountryController : BaseController
     {
-        protected readonly UserTokenModel CurrentUser;
         private readonly ILogger _logger;
         private readonly ICountryService _countryService;
         public CountryController(ICountryService countryService, ILogger<CountryController> logger, IHttpContextAccessor accessor): base(accessor)

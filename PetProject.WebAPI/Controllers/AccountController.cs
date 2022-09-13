@@ -9,7 +9,6 @@ namespace PetProject.WebAPI.Controllers
     [ApiController]
     public class AccountController : BaseController
     {
-        protected readonly UserTokenModel CurrentUser;
         public AccountController(IHttpContextAccessor accessor) : base(accessor)
         {
         }
