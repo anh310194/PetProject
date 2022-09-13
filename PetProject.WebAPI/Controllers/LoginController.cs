@@ -39,7 +39,7 @@ namespace PetProject.WebAPI.Controllers
 
             var userToken = new UserTokenModel(user);
 
-            return userToken.SetTokenModel(_configuration);
+            return userToken.GetTokenModel(_configuration);
         }
     }
 }

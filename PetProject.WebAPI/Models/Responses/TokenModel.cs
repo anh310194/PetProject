@@ -95,9 +95,7 @@ namespace PetProject.WebAPI.Models.Responses
 
         }
 
-        private TokenModel TokenModel { get; set; }
-
-        public TokenModel SetTokenModel(IConfiguration configuration)
+        public TokenModel GetTokenModel(IConfiguration configuration)
         {
             var claims = new List<Claim> {
                         new Claim(JwtRegisteredClaimNames.Sub, configuration["Jwt:Subject"]),
@@ -115,7 +113,7 @@ namespace PetProject.WebAPI.Models.Responses
                 claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
             }
 
-            TokenModel = new TokenModel()
+            var TokenModel = new TokenModel()
             {
                 Type = "Bearer",
                 ExpiredTime = 36000
