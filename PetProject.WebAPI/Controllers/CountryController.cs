@@ -22,7 +22,7 @@ namespace PetProject.WebAPI.Controllers
             _logger = logger;
         }
         [HttpGet]
-        [RoleAuthorize(FeatureEnum.ManagementCountries)]
+        [FeatureAuthorize(FeatureEnum.ReadCountry)]
         public async Task<ActionResult<IEnumerable<CountryModel>>> GetAll()
         {
             _logger.LogInformation("Get All Countries");
@@ -30,7 +30,7 @@ namespace PetProject.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        [RoleAuthorize(FeatureEnum.UpdateCountry, FeatureEnum.InsertCountry)]
+        [FeatureAuthorize(FeatureEnum.UpdateCountry)]
         public async Task<ActionResult<CountryModel>> GetCountryById(long id)
         {
             _logger.LogInformation("Get a Country by " + id);
@@ -43,7 +43,7 @@ namespace PetProject.WebAPI.Controllers
         }
 
         [HttpPost()]
-        [RoleAuthorize(FeatureEnum.InsertCountry)]
+        [FeatureAuthorize(FeatureEnum.AddCountry)]
         public async Task<ActionResult<CountryModel?>> InsertCountry(CountryModel model)
         {
             var result = await _countryService.UpsertCountryById(model);
@@ -51,7 +51,7 @@ namespace PetProject.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        [RoleAuthorize(FeatureEnum.UpdateCountry)]
+        [FeatureAuthorize(FeatureEnum.UpdateCountry)]
         public async Task<ActionResult<CountryModel?>> UpdateCountry(int id, CountryModel model)
         {
             model.Id = id;
@@ -64,7 +64,7 @@ namespace PetProject.WebAPI.Controllers
         /// </summary>
         /// <param name="id">Identity of Country</param>
         /// <returns></returns>
-        [RoleAuthorize(FeatureEnum.DeleteCountry)]
+        [FeatureAuthorize(FeatureEnum.DeleteCountry)]
         [HttpDelete("{id}")]
         public ActionResult DeleteCountry(long id)
         {

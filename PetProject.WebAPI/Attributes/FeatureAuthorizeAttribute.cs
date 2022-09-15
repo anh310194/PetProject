@@ -5,9 +5,9 @@ using PetProject.WebAPI.Enums;
 namespace PetProject.WebAPI.Attributes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-    public class RoleAuthorizeAttribute : AuthorizeAttribute
+    public class FeatureAuthorizeAttribute : AuthorizeAttribute
     {
-        public RoleAuthorizeAttribute(params FeatureEnum[] features)
+        public FeatureAuthorizeAttribute(params FeatureEnum[] features)
         {
             if (features == null || features.Length == 0)
             {

@@ -3,9 +3,9 @@ namespace PetProject.WebAPI.Enums
 {
     public enum FeatureEnum
     {
-        InsertCountry = 1,
+        AddCountry = 1,
         UpdateCountry = 2,
         DeleteCountry = 3,
-        ManagementCountries = 4
+        ReadCountry = 4
     }
 }

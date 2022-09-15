@@ -56,7 +56,7 @@ namespace PetProject.Shared.Helper
                 return null;
             }
             var displayAttribute = members.First().GetCustomAttribute<DisplayAttribute>();
-            if (displayAttribute == null)
+            if (displayAttribute != null)
             {
                 return null;
             }
