@@ -99,7 +99,7 @@ try
     });
 
     //Add Petproject Services
-    builder.Services.AddInfacstructure(builder.Configuration);
+    builder.Services.AddInfacstructure(builder.Configuration.GetConnectionString("SQLConnection"));
     builder.Services.AddBusiness();
     builder.Services.AddHttpContextAccessor();
 

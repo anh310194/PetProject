@@ -21,6 +21,6 @@ await host.RunAsync();
 static void AddServices(HostBuilderContext context, IServiceCollection services)
 {
     IConfiguration configuration = context.Configuration;
-    services.AddInfacstructure(configuration);
+    services.AddInfacstructure(configuration.GetConnectionString("SQLConnection"));
     services.AddBusiness();
 }

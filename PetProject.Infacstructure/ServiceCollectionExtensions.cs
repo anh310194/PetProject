@@ -9,12 +9,11 @@ namespace PetProject.Infacstructure
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddInfacstructure(this IServiceCollection services, IConfiguration configuration)
+        public static void AddInfacstructure(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<PetProjectContext>(
-                options => options.UseSqlServer(
-                    configuration.GetConnectionString("SQLConnection"),
-                    providerOptions => providerOptions.EnableRetryOnFailure()));
+            services.AddDbContext<PetProjectContext>(options =>
+                options.UseSqlServer(connectionString, providerOptions => providerOptions.EnableRetryOnFailure())
+            );
 
             services.AddScoped<IDbContext, PetProjectContext>();
             services.AddScoped<IUnitOfWork, PetProjectUnitOfWork>();
