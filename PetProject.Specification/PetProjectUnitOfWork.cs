@@ -12,7 +12,7 @@ namespace PetProject.Specification
         {
             var typeEntity = typeof(TEntity);
             var result = GetRepositoryByTypeName<TEntity>(typeEntity.Name);
-            if (result !=null)
+            if (result != null)
             {
                 return (IGenericRepository<TEntity>)result;
             }
@@ -24,7 +24,8 @@ namespace PetProject.Specification
             if (type != null)
             {
                 var value = Activator.CreateInstance(type, _dbContext);
-                SetRepository(typeEntity.Name, value);
+                SetRepository<TEntity>(typeEntity.Name, value);
+                return (IGenericRepository<TEntity>)value;
             }
             return base.GetRepository<TEntity>();
         }

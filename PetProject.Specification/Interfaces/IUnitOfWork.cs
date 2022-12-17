@@ -27,7 +27,7 @@ namespace PetProject.Specification.Interfaces
         void ExecuteTransaction(Action action);
         Task ExecuteTransactionAsync(Func<Task> action);
         Task<List<IEnumerable<IDictionary<string, object>>>> ExecStoreProcedureReturnMutipleAsync(string query, params SqlParameter[] parameters);
-        Task<IEnumerable<IDictionary<string, object>>> ExecStoreProcedureAsync(string query, params SqlParameter[] parameters);
+        Task<IEnumerable<IDictionary<string, object>>?> ExecStoreProcedureAsync(string query, params SqlParameter[] parameters);
     }
 
 }

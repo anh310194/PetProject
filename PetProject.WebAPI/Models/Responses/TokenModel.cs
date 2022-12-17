@@ -18,34 +18,6 @@ namespace PetProject.WebAPI.Models.Responses
 
     public class UserTokenModel
     {
-        public long UserId()
-        {
-            return Id;
-        }
-        long Id { get; set; }
-        public string? UserName { get; set; }
-        private long[]? Roles
-        {
-            get;
-            set;
-        }
-        public string[] Permissions
-        {
-            get {
-                var result  = new string[Roles.Length];
-                for (int i = 0; i < Roles.Length; i++)
-                {
-                    result[i] = EnumHelper.GetName<FeatureEnum>(Roles[i]);
-                }
-                return result;
-            }
-        }
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public string? UserType { get; set; }
-        string CacheIdentity { get; set; }
-        private string GetCacheIdentity() { return CacheIdentity; }
-        bool IsAutheticated { get; set; }
         public UserTokenModel(SignInModel signInModel)
         {
             Id = signInModel.Id;
@@ -94,6 +66,44 @@ namespace PetProject.WebAPI.Models.Responses
             Roles = userPermissions.ToArray();
 
         }
+        public long UserId()
+        {
+            return Id;
+        }
+        long Id { get; set; }
+        public string? UserName { get; set; }
+        private long[]? Roles
+        {
+            get;
+            set;
+        }
+        public string[]? Permissions
+        {
+            get
+            {
+                if (Roles == null)
+                {
+                    return null;
+                }
+                var result = new string[Roles.Length];
+                for (int i = 0; i < Roles.Length; i++)
+                {
+                    var enumName = EnumHelper.GetName<FeatureEnum>(Roles[i]);
+                    if (string.IsNullOrEmpty(enumName))
+                    {
+                        continue;
+                    }
+                    result[i] = enumName;
+                }
+                return result;
+            }
+        }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? UserType { get; set; }
+        string CacheIdentity { get; set; }
+        private string GetCacheIdentity() { return CacheIdentity; }
+        bool IsAutheticated { get; set; }
 
         public TokenModel GetTokenModel(IConfiguration configuration)
         {

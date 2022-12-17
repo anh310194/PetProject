@@ -6,6 +6,7 @@ using Microsoft.Data.SqlClient;
 using System.Data.Common;
 using PetProject.Domain;
 using PetProject.Specification.Interfaces;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace PetProject.Specification.Common
 {
@@ -14,10 +15,13 @@ namespace PetProject.Specification.Common
         protected DbContext _dbContext { get; private set; }
 
         private bool _disposed;
-        //private Dictionary<string, dynamic> _repositories;
-        private IDictionary<string, object?>? _repositories;
+        private IDictionary<string, object> _repositories;
         public UnitOfWork(DbContext dbContext)
         {
+            if (_repositories == null)
+            {
+                _repositories = new Dictionary<string, object>();
+            }
             _dbContext = dbContext;
         }
 
@@ -27,6 +31,7 @@ namespace PetProject.Specification.Common
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
         // The bulk of the clean-up code is implemented in Dispose(bool)
         protected virtual void Dispose(bool disposing)
         {
@@ -53,11 +58,13 @@ namespace PetProject.Specification.Common
             {
                 return (IGenericRepository<TEntity>)value;
             }
-
-            value = Activator.CreateInstance(typeof(GenericRepository<>).MakeGenericType(typeof(TEntity)), _dbContext);
-            SetRepository(type, value);
+            var typeEntity = typeof(TEntity);
+            value = Activator.CreateInstance(typeof(GenericRepository<>).MakeGenericType(typeEntity), _dbContext);
+           
+            SetRepository<TEntity>(type, value);
             return (IGenericRepository<TEntity>)value;
         }
+
         public object? GetRepositoryByTypeName<TEntity>(string typeName) where TEntity : BaseEntity
         {
             if (_repositories != null && _repositories.TryGetValue(typeName, out object? value))
@@ -68,13 +75,12 @@ namespace PetProject.Specification.Common
             return null;
         }
 
-        public virtual void SetRepository(string typeName, object? value)
-        {
-            if (_repositories == null)
+        protected virtual void SetRepository<TEntity>(string typeName, object? value) where TEntity : BaseEntity
+        {        
+            if (value == null)
             {
-                _repositories = new Dictionary<string, object?>();
+                throw new SpecificationException("The system Can't not found Repository with " + typeof(TEntity).Name);
             }
-
             _repositories?.Add(typeName, value);
         }
 
@@ -226,11 +232,13 @@ namespace PetProject.Specification.Common
         {
             return ExecCommandTextAsync(query, CommandType.StoredProcedure, parameters);
         }
-        public Task<IEnumerable<IDictionary<string, object>>> ExecStoreProcedureAsync(string query, params SqlParameter[] parameters)
+        public Task<IEnumerable<IDictionary<string, object>>?> ExecStoreProcedureAsync(string query, params SqlParameter[] parameters)
         {
-            return ExecCommandTextAsync(query, CommandType.StoredProcedure, parameters).ContinueWith<IEnumerable<IDictionary<string, object>>>(c =>
+            return ExecCommandTextAsync(query, CommandType.StoredProcedure, parameters).ContinueWith<IEnumerable<IDictionary<string, object>>?>(c =>
             {
-                return c.Result.FirstOrDefault();
+                var result = c.Result.FirstOrDefault();
+
+                return result;
             });
         }
     }
