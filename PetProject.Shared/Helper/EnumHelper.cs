@@ -93,7 +93,7 @@ namespace PetProject.Shared.Helper
             }
         }
 
-        public static string GetDisplayName<TEnum>(int value) where TEnum : Enum
+        public static string? GetDisplayName<TEnum>(int value) where TEnum : Enum
         {
             var castEnum = ParseEnum<TEnum>(value.ToString());
             return GetDisplayName(castEnum);

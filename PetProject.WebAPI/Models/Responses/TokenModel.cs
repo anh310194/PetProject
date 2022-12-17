@@ -45,11 +45,11 @@ namespace PetProject.WebAPI.Models.Responses
                 return;
             }
             Id = userId;
-            CacheIdentity = user.FindFirst(JwtRegisteredClaimNames.Jti).Value.ToString();
-            FirstName = user.FindFirst(nameof(FirstName)).Value.ToString();
-            LastName = user.FindFirst(nameof(LastName)).Value.ToString();
-            UserName = user.FindFirst(nameof(UserName)).Value.ToString();
-            UserType = user.FindFirst(nameof(UserType)).Value.ToString();
+            CacheIdentity = user.FindFirst(JwtRegisteredClaimNames.Jti)?.Value.ToString();
+            FirstName = user.FindFirst(nameof(FirstName))?.Value.ToString();
+            LastName = user.FindFirst(nameof(LastName))?.Value.ToString();
+            UserName = user.FindFirst(nameof(UserName))?.Value.ToString();
+            UserType = user.FindFirst(nameof(UserType))?.Value.ToString();
 
             var permissions = user.FindAll(ClaimTypes.Role);
 
@@ -108,7 +108,7 @@ namespace PetProject.WebAPI.Models.Responses
         public TokenModel GetTokenModel(IConfiguration configuration)
         {
             var claims = new List<Claim> {
-                        new Claim(JwtRegisteredClaimNames.Sub, configuration["Jwt:Subject"]),
+                        new Claim(JwtRegisteredClaimNames.Sub, configuration["Jwt:Subject"].ToString()),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                         new Claim(nameof(Id), Id.ToString()),
