@@ -1,6 +1,6 @@
 ﻿using PetProject.Shared;
 
-namespace PetProject.Entities
+namespace PetProject.Domain.Entities
 {
     public class RoleFeature : BaseEntity
     {

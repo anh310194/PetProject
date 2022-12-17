@@ -1,19 +1,15 @@
-﻿using Microsoft.Extensions.Logging;
-using PetProject.Core.Interfaces;
-using PetProject.Core.Data;
-using System.Linq.Expressions;
-using PetProject.Shared;
+﻿using System.Linq.Expressions;
+using PetProject.Domain;
+using PetProject.Domain.Interfaces;
 
-namespace PetProject.Core
+namespace PetProject.Specification.Common
 {
     public abstract class BaseService
     {
         protected readonly IUnitOfWork _unitOfWork;
-        protected readonly ILogger _logger;
-        public BaseService(IUnitOfWork unitOfWork, ILogger logger)
+        public BaseService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _logger = logger;
         }
 
         public virtual IQueryable<TEntity> Queryable<TEntity>() where TEntity : BaseEntity
@@ -23,7 +19,7 @@ namespace PetProject.Core
 
         public virtual IQueryable<TEntity> Queryable<TEntity>(Expression<Func<TEntity, bool>> match) where TEntity : BaseEntity
         {
-            return _unitOfWork.AsQuery<TEntity>(match);
+            return _unitOfWork.AsQuery(match);
         }
     }
 }

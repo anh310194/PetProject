@@ -26,8 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,7 +36,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PetProject.Business\PetProject.Business.csproj" />
-    <ProjectReference Include="..\PetProject.Core\PetProject.Core.csproj" />
     <ProjectReference Include="..\PetProject.Infacstructure\PetProject.Infacstructure.csproj" />
   </ItemGroup>
 

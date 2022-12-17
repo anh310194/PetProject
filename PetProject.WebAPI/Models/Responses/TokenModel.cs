@@ -57,7 +57,7 @@ namespace PetProject.WebAPI.Models.Responses
 
 
         }
-        public UserTokenModel(IIdentity identity)
+        public UserTokenModel(IIdentity? identity)
         {
             if (identity == null)
             {

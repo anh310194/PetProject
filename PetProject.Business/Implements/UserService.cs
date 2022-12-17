@@ -2,17 +2,17 @@
 using Microsoft.Extensions.Logging;
 using PetProject.Business.Interfaces;
 using PetProject.Business.Model;
-using PetProject.Core;
+using PetProject.Domain.Entities;
+using PetProject.Domain.Interfaces;
 using PetProject.Shared.Exceptions;
 using PetProject.Shared.Helper;
-using PetProject.Core.Interfaces;
-using PetProject.Entities;
+using PetProject.Specification.Common;
 
 namespace PetProject.Business.Implements
 {
     public class UserService : BaseService, IUserService
     {
-        public UserService(IUnitOfWork unitOfWork, ILogger<CountryService> logger) : base(unitOfWork, logger) { }
+        public UserService(IUnitOfWork unitOfWork) : base(unitOfWork) { }
 
         public async Task<SignInModel> Authenticate(string userName, string password)
         {

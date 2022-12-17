@@ -1,28 +1,22 @@
-﻿using PetProject.Core.Data;
-using PetProject.Core.Interfaces;
-using PetProject.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using PetProject.Domain.Interfaces;
+using PetProject.Specification.Common;
 
-namespace PetProject.Infacstructure
+namespace PetProject.Specification
 {
     public class PetProjectUnitOfWork : UnitOfWork
     {
-        public PetProjectUnitOfWork(IDbContext dbContext) : base(dbContext) { }
+        public PetProjectUnitOfWork(DbContext dbContext) : base(dbContext) { }
 
-        public override IRepository<TEntity> GetRepository<TEntity>()
+        public override IBaseRepository<TEntity> GetRepository<TEntity>()
         {
             var typeEntity = typeof(TEntity);
             var result = GetRepositoryByTypeName<TEntity>(typeEntity.Name);
             if (result !=null)
             {
-                return (IRepository<TEntity>)result;
+                return (IBaseRepository<TEntity>)result;
             }
-            var typeIRepository = typeof(IRepository<TEntity>);
+            var typeIRepository = typeof(IBaseRepository<TEntity>);
             var type = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .FirstOrDefault(t => typeIRepository.IsAssignableFrom(t)

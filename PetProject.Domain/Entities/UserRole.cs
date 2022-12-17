@@ -1,13 +1,13 @@
 ﻿using PetProject.Shared;
 
-namespace PetProject.Entities
+namespace PetProject.Domain.Entities
 {
-    public class RoleFeature : BaseEntity
+    public class UserRole : BaseEntity
     {
+        public long UserId { get; set; }
         public long RoleId { get; set; }
-        public long FeatureId { get; set; }
         public byte Status { get; set; }
+        public User? User { get; set; }
         public Role? Role { get; set; }
-        public Feature? Feature { get; set; }
     }
 }

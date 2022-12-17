@@ -1,16 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using PetProject.Core.Interfaces;
+using PetProject.Domain;
+using PetProject.Domain.Interfaces;
 using System.Linq.Expressions;
 
-namespace PetProject.Core.Data
+namespace PetProject.Specification.Common
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
+    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
     {
         protected readonly DbSet<TEntity> _dbSet;
-        public Repository(IDbContext context)
+        public BaseRepository(DbContext context)
         {
-            _dbSet = context.Instance.Set<TEntity>();
+            _dbSet = context.Set<TEntity>();
         }
 
         public virtual Task<TEntity?> GetByAsync(Expression<Func<TEntity, bool>> match)
@@ -37,10 +38,11 @@ namespace PetProject.Core.Data
 
         public virtual Task InsertRangeAsync(ICollection<TEntity> entities, long userId, CancellationToken cancellationToken = default)
         {
-            var enumerable = entities.AsEnumerable().Select(s => { 
+            var enumerable = entities.AsEnumerable().Select(s =>
+            {
                 s.CreatedTime = DateTime.UtcNow;
                 s.UpdatedBy = userId;
-                return s; 
+                return s;
             });
             return _dbSet.AddRangeAsync(enumerable, cancellationToken);
         }
@@ -83,10 +85,11 @@ namespace PetProject.Core.Data
 
         public virtual void UpdateRange(ICollection<TEntity> entities, long userId)
         {
-            var enumerable = entities.AsEnumerable().Select(s => { 
+            var enumerable = entities.AsEnumerable().Select(s =>
+            {
                 s.UpdatedTime = DateTime.UtcNow;
                 s.UpdatedBy = userId;
-                return s; 
+                return s;
             });
             _dbSet.UpdateRange(enumerable);
         }

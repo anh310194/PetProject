@@ -1,16 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using PetProject.Business.Interfaces;
 using PetProject.Business.Model;
-using PetProject.Core;
-using PetProject.Core.Interfaces;
-using PetProject.Entities;
+using PetProject.Domain.Entities;
+using PetProject.Specification.Common;
+using PetProject.Domain.Interfaces;
 
 namespace PetProject.Business.Implements
 {
     public class CountryService : BaseService, ICountryService
     {
-        public CountryService(IUnitOfWork unitOfWork, ILogger<CountryService> logger) : base(unitOfWork, logger) { }
+        public CountryService(IUnitOfWork unitOfWork) : base(unitOfWork) { }
 
         public void DeleteCountryById(long id)
         {

@@ -1,23 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Transactions;
-using PetProject.Core.Interfaces;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Data.Common;
+using PetProject.Domain;
+using PetProject.Domain.Interfaces;
 
-namespace PetProject.Core.Data
+namespace PetProject.Specification.Common
 {
     public class UnitOfWork : IUnitOfWork
     {
-        protected readonly IDbContext _dbContext;
-
-        public DbContext Context { get { return _dbContext.Instance; } }
+        protected DbContext _dbContext { get; private set; }
 
         private bool _disposed;
         //private Dictionary<string, dynamic> _repositories;
         private IDictionary<string, object?>? _repositories;
-        public UnitOfWork(IDbContext dbContext)
+        public UnitOfWork(DbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -31,33 +30,33 @@ namespace PetProject.Core.Data
         // The bulk of the clean-up code is implemented in Dispose(bool)
         protected virtual void Dispose(bool disposing)
         {
-            if (!this._disposed)
+            if (!_disposed)
             {
                 if (disposing)
                 {
-                    Context.Dispose();
+                    _dbContext.Dispose();
                 }
             }
-            this._disposed = true;
+            _disposed = true;
         }
         #endregion
 
         public virtual int SaveChanges()
         {
-            return Context.SaveChanges();
+            return _dbContext.SaveChanges();
         }
 
-        public virtual IRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity
+        public virtual IBaseRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity
         {
             string type = typeof(TEntity).Name;
             if (_repositories != null && _repositories.TryGetValue(type, out object? value))
             {
-                return (IRepository<TEntity>)value;
+                return (IBaseRepository<TEntity>)value;
             }
 
-            value = Activator.CreateInstance(typeof(Repository<>).MakeGenericType(typeof(TEntity)), _dbContext);
+            value = Activator.CreateInstance(typeof(BaseRepository<>).MakeGenericType(typeof(TEntity)), _dbContext);
             SetRepository(type, value);
-            return (IRepository<TEntity>)value;
+            return (IBaseRepository<TEntity>)value;
         }
         public object? GetRepositoryByTypeName<TEntity>(string typeName) where TEntity : BaseEntity
         {
@@ -81,7 +80,7 @@ namespace PetProject.Core.Data
 
         public virtual Task<int> SaveChangesAsync()
         {
-            return Context.SaveChangesAsync();
+            return _dbContext.SaveChangesAsync();
         }
         public virtual IQueryable<TEntity> AsQuery<TEntity>() where TEntity : BaseEntity
         {
@@ -93,7 +92,7 @@ namespace PetProject.Core.Data
         }
         public virtual TResult ExecuteTransaction<TResult>(Func<TResult> func) where TResult : class
         {
-            var strategy = Context.Database.CreateExecutionStrategy();
+            var strategy = _dbContext.Database.CreateExecutionStrategy();
             return strategy.Execute(() =>
             {
                 using var transaction = new TransactionScope();
@@ -104,7 +103,7 @@ namespace PetProject.Core.Data
         }
         public virtual void ExecuteTransaction(Action action)
         {
-            var strategy = Context.Database.CreateExecutionStrategy();
+            var strategy = _dbContext.Database.CreateExecutionStrategy();
             strategy.Execute(() =>
             {
                 using var transaction = new TransactionScope();
@@ -114,7 +113,7 @@ namespace PetProject.Core.Data
         }
         public virtual Task<TResult> ExecuteTransactionAsync<TResult>(Func<Task<TResult>> func) where TResult : class
         {
-            var strategy = Context.Database.CreateExecutionStrategy();
+            var strategy = _dbContext.Database.CreateExecutionStrategy();
             return strategy.ExecuteAsync(async () =>
             {
                 using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
@@ -127,7 +126,7 @@ namespace PetProject.Core.Data
         }
         public virtual Task ExecuteTransactionAsync(Func<Task> action)
         {
-            var strategy = Context.Database.CreateExecutionStrategy();
+            var strategy = _dbContext.Database.CreateExecutionStrategy();
             return strategy.ExecuteAsync(async () =>
             {
                 using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
@@ -184,7 +183,7 @@ namespace PetProject.Core.Data
         }
         private DbCommand ExecCommandText(string query, CommandType commandType, params SqlParameter[] parameters)
         {
-            var command = Context.Database.GetDbConnection().CreateCommand();
+            var command = _dbContext.Database.GetDbConnection().CreateCommand();
             command.CommandText = query;
             command.CommandType = commandType;
 
@@ -193,7 +192,7 @@ namespace PetProject.Core.Data
                 command.Parameters.AddRange(parameters);
             }
 
-            Context.Database.OpenConnection();
+            _dbContext.Database.OpenConnection();
             return command;
         }
         public virtual async Task<List<IEnumerable<IDictionary<string, object>>>> ExecCommandTextAsync(string query, CommandType commandType, params SqlParameter[] parameters)

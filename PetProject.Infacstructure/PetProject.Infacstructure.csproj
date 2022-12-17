@@ -11,19 +11,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.8" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PetProject.Core\PetProject.Core.csproj" />
-    <ProjectReference Include="..\PetProject.Entities\PetProject.Entities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <Folder Include="Repositories\" />
     <Folder Include="Script\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PetProject.Domain\PetProject.Domain.csproj" />
+    <ProjectReference Include="..\PetProject.Specification\PetProject.Specification.csproj" />
   </ItemGroup>
 
 </Project>

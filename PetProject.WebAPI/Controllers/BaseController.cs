@@ -9,7 +9,7 @@ namespace PetProject.WebAPI.Controllers
         protected readonly UserTokenModel CurrentUser;
         public BaseController(IHttpContextAccessor accessor)
         {
-            CurrentUser = new UserTokenModel(accessor.HttpContext.User.Identity);
+            CurrentUser = new UserTokenModel(accessor.HttpContext?.User.Identity);
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
-using PetProject.Core.Data;
+using PetProject.Shared;
 using System.Linq.Expressions;
 
-namespace PetProject.Core.Interfaces
+namespace PetProject.Domain.Interfaces
 {
-    public interface IRepository<TEntity> where TEntity : BaseEntity
+    public interface IBaseRepository<TEntity> where TEntity : BaseEntity
     {
         Task<TEntity?> GetByAsync(Expression<Func<TEntity, bool>> match);
         TEntity Insert(TEntity entity, long userId);

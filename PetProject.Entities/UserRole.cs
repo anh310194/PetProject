@@ -1,4 +1,4 @@
-﻿using PetProject.Core.Data;
+﻿using PetProject.Shared;
 
 namespace PetProject.Entities
 {

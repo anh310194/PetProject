@@ -1,14 +1,12 @@
 ﻿using System.Data;
 using System.Linq.Expressions;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using PetProject.Core.Data;
+using PetProject.Shared;
 
-namespace PetProject.Core.Interfaces
+namespace PetProject.Domain.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        abstract DbContext Context { get; }
         Task<int> SaveChangesAsync();
         int SaveChanges();
         IQueryable<TEntity> AsQuery<TEntity>() where TEntity : BaseEntity;
