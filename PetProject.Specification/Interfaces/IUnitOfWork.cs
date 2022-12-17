@@ -1,9 +1,9 @@
 ﻿using System.Data;
 using System.Linq.Expressions;
 using Microsoft.Data.SqlClient;
-using PetProject.Shared;
+using PetProject.Domain;
 
-namespace PetProject.Domain.Interfaces
+namespace PetProject.Specification.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {

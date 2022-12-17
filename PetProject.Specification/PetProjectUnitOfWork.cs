@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PetProject.Domain.Interfaces;
+using PetProject.Specification.Interfaces;
 using PetProject.Specification.Common;
 
 namespace PetProject.Specification
@@ -8,15 +8,15 @@ namespace PetProject.Specification
     {
         public PetProjectUnitOfWork(DbContext dbContext) : base(dbContext) { }
 
-        public override IBaseRepository<TEntity> GetRepository<TEntity>()
+        public override IGenericRepository<TEntity> GetRepository<TEntity>()
         {
             var typeEntity = typeof(TEntity);
             var result = GetRepositoryByTypeName<TEntity>(typeEntity.Name);
             if (result !=null)
             {
-                return (IBaseRepository<TEntity>)result;
+                return (IGenericRepository<TEntity>)result;
             }
-            var typeIRepository = typeof(IBaseRepository<TEntity>);
+            var typeIRepository = typeof(IGenericRepository<TEntity>);
             var type = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .FirstOrDefault(t => typeIRepository.IsAssignableFrom(t)

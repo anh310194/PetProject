@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using PetProject.Domain.Interfaces;
+using PetProject.Specification.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

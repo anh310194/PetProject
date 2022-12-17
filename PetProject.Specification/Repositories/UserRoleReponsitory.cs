@@ -4,7 +4,7 @@ using PetProject.Specification.Common;
 
 namespace PetProject.Specification.Repositories
 {
-    public class UserRoleReponsitory : BaseRepository<UserRole>
+    public class UserRoleReponsitory : GenericRepository<UserRole>
     {
         public UserRoleReponsitory(DbContext context) : base(context) { }
 

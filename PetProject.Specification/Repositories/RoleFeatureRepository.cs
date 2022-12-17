@@ -4,7 +4,7 @@ using PetProject.Specification.Common;
 
 namespace PetProject.Specification.Repositories
 {
-    public class RoleFeatureRepository : BaseRepository<RoleFeature>
+    public class RoleFeatureRepository : GenericRepository<RoleFeature>
     {
         public RoleFeatureRepository(DbContext context) : base(context) { }
 

@@ -5,7 +5,7 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Data.Common;
 using PetProject.Domain;
-using PetProject.Domain.Interfaces;
+using PetProject.Specification.Interfaces;
 
 namespace PetProject.Specification.Common
 {
@@ -46,17 +46,17 @@ namespace PetProject.Specification.Common
             return _dbContext.SaveChanges();
         }
 
-        public virtual IBaseRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity
+        public virtual IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity
         {
             string type = typeof(TEntity).Name;
             if (_repositories != null && _repositories.TryGetValue(type, out object? value))
             {
-                return (IBaseRepository<TEntity>)value;
+                return (IGenericRepository<TEntity>)value;
             }
 
-            value = Activator.CreateInstance(typeof(BaseRepository<>).MakeGenericType(typeof(TEntity)), _dbContext);
+            value = Activator.CreateInstance(typeof(GenericRepository<>).MakeGenericType(typeof(TEntity)), _dbContext);
             SetRepository(type, value);
-            return (IBaseRepository<TEntity>)value;
+            return (IGenericRepository<TEntity>)value;
         }
         public object? GetRepositoryByTypeName<TEntity>(string typeName) where TEntity : BaseEntity
         {

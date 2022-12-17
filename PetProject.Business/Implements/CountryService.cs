@@ -3,7 +3,7 @@ using PetProject.Business.Interfaces;
 using PetProject.Business.Model;
 using PetProject.Domain.Entities;
 using PetProject.Specification.Common;
-using PetProject.Domain.Interfaces;
+using PetProject.Specification.Interfaces;
 
 namespace PetProject.Business.Implements
 {

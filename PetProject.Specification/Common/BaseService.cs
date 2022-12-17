@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 using PetProject.Domain;
-using PetProject.Domain.Interfaces;
+using PetProject.Specification.Interfaces;
 
 namespace PetProject.Specification.Common
 {

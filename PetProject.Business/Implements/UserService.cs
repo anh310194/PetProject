@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using PetProject.Business.Interfaces;
 using PetProject.Business.Model;
 using PetProject.Domain.Entities;
-using PetProject.Domain.Interfaces;
+using PetProject.Specification.Interfaces;
 using PetProject.Shared.Exceptions;
 using PetProject.Shared.Helper;
 using PetProject.Specification.Common;
