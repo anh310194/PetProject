@@ -5,9 +5,8 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Data.Common;
 using PetProject.Specification.Interfaces;
-using PetProject.Shared.Common;
 using PetProject.Specification.Exception;
-using PetProject.Shared.Interfaces;
+using PetProject.Entities.Common;
 
 namespace PetProject.Specification.Common
 {

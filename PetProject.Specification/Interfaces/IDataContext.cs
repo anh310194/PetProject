@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetProject.Shared.Interfaces
+namespace PetProject.Specification.Interfaces
 {
     public interface IDataContext
     {

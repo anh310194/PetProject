@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
-using PetProject.Entities;
-using PetProject.Shared.Common;
+using PetProject.Entities.Common;
 using PetProject.Specification.Interfaces;
 
 namespace PetProject.Specification.Common

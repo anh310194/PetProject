@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PetProject.Infacstructure.Database;
-using PetProject.Shared.Interfaces;
+using PetProject.Specification.Interfaces;
 
 namespace PetProject.Infacstructure
 {

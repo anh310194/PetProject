@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Linq.Expressions;
 using Microsoft.Data.SqlClient;
-using PetProject.Shared.Common;
+using PetProject.Entities.Common;
 
 namespace PetProject.Specification.Interfaces
 {

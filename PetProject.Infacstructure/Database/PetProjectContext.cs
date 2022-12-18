@@ -2,7 +2,7 @@
 #nullable disable
 using Microsoft.EntityFrameworkCore;
 using PetProject.Entities;
-using PetProject.Shared.Interfaces;
+using PetProject.Specification.Interfaces;
 
 namespace PetProject.Infacstructure.Database
 {
