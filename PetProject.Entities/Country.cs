@@ -1,4 +1,4 @@
-﻿using PetProject.Shared;
+﻿using PetProject.Shared.Common;
 
 namespace PetProject.Entities
 {

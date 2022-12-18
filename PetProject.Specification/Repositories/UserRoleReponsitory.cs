@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PetProject.Domain.Entities;
+﻿using PetProject.Entities;
 using PetProject.Shared.Interfaces;
 using PetProject.Specification.Common;
-using PetProject.Specification.Interfaces;
 
 namespace PetProject.Specification.Repositories
 {

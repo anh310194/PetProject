@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PetProject.Domain\PetProject.Domain.csproj" />
+    <ProjectReference Include="..\PetProject.Entities\PetProject.Entities.csproj" />
     <ProjectReference Include="..\PetProject.Shared\PetProject.Shared.csproj" />
   </ItemGroup>
 

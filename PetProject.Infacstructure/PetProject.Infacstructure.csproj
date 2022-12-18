@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PetProject.Domain\PetProject.Domain.csproj" />
     <ProjectReference Include="..\PetProject.Specification\PetProject.Specification.csproj" />
   </ItemGroup>
 
