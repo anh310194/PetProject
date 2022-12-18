@@ -2,15 +2,18 @@
 #nullable disable
 using Microsoft.EntityFrameworkCore;
 using PetProject.Domain.Entities;
+using PetProject.Shared.Interfaces;
 
 namespace PetProject.Infacstructure.Database
 {
-    public partial class PetProjectContext : DbContext
+    public partial class PetProjectContext : DbContext, IDataContext
     {
         public PetProjectContext(DbContextOptions<PetProjectContext> options)
             : base(options)
         {
         }
+
+        public DbContext Context { get { return this; } }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

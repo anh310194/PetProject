@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PetProject.Domain;
+using PetProject.Shared.Common;
+using PetProject.Shared.Interfaces;
 using PetProject.Specification.Interfaces;
 using System.Linq.Expressions;
 
@@ -9,9 +11,9 @@ namespace PetProject.Specification.Common
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
         protected readonly DbSet<TEntity> _dbSet;
-        public GenericRepository(DbContext context)
+        public GenericRepository(IDataContext dataContext)
         {
-            _dbSet = context.Set<TEntity>();
+            _dbSet = dataContext.Context.Set<TEntity>();
         }
 
         public virtual Task<TEntity?> GetByAsync(Expression<Func<TEntity, bool>> match)
