@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace PetProject.Shared.Helper
+namespace PetProject.Utilities.Helper
 {
 
     public static class EnumHelper

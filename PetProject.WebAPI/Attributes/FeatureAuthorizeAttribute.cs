@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using PetProject.Shared.Helper;
+using PetProject.Utilities.Helper;
 using PetProject.WebAPI.Enums;
 
 namespace PetProject.WebAPI.Attributes

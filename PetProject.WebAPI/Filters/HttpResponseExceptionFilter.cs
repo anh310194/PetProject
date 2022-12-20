@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using PetProject.Shared.Exceptions;
+using PetProject.Utilities.Exceptions;
 
 namespace PetProject.WebAPI.Filters
 {

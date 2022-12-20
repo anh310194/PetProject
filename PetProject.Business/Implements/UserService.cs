@@ -3,8 +3,8 @@ using PetProject.Business.Interfaces;
 using PetProject.Business.Model;
 using PetProject.Entities;
 using PetProject.Specification.Interfaces;
-using PetProject.Shared.Exceptions;
-using PetProject.Shared.Helper;
+using PetProject.Utilities.Exceptions;
+using PetProject.Utilities.Helper;
 using PetProject.Specification.Common;
 
 namespace PetProject.Business.Implements

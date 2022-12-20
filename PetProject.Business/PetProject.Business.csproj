@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PetProject.Shared\PetProject.Shared.csproj" />
     <ProjectReference Include="..\PetProject.Specification\PetProject.Specification.csproj" />
+    <ProjectReference Include="..\PetProject.Utilities\PetProject.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,5 @@
 ﻿
-namespace PetProject.Shared.Exceptions
+namespace PetProject.Utilities.Exceptions
 {
     public class PetProjectException : Exception
     {

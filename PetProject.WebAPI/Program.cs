@@ -4,7 +4,7 @@ using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
 using PetProject.Business;
-using PetProject.Shared.Helper;
+using PetProject.Utilities.Helper;
 using PetProject.Infacstructure;
 using PetProject.WebAPI.Enums;
 using PetProject.WebAPI.Filters;

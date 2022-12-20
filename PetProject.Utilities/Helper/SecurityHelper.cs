@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
-namespace PetProject.Shared.Helper
+namespace PetProject.Utilities.Helper
 {
     public static class SecurityHelper
     {
