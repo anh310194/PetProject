@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetProject.Business.Interfaces;
 using PetProject.Business.Model;
+using PetProject.Domain.Interfaces;
 using PetProject.Entities;
-using PetProject.Specification.Common;
-using PetProject.Specification.Interfaces;
+using PetProject.Business.Common;
 
 namespace PetProject.Business.Implements
 {

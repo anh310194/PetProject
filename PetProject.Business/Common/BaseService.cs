@@ -1,8 +1,8 @@
 ﻿using System.Linq.Expressions;
-using PetProject.Entities.Common;
-using PetProject.Specification.Interfaces;
+using PetProject.Domain;
+using PetProject.Domain.Interfaces;
 
-namespace PetProject.Specification.Common
+namespace PetProject.Business.Common
 {
     public abstract class BaseService
     {

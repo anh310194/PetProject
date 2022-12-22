@@ -2,10 +2,10 @@
 using PetProject.Business.Interfaces;
 using PetProject.Business.Model;
 using PetProject.Entities;
-using PetProject.Specification.Interfaces;
 using PetProject.Utilities.Exceptions;
 using PetProject.Utilities.Helper;
-using PetProject.Specification.Common;
+using PetProject.Business.Common;
+using PetProject.Domain.Interfaces;
 
 namespace PetProject.Business.Implements
 {
