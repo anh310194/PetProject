@@ -44,11 +44,6 @@ namespace PetProject.Infacstructure.Database
         }
         #endregion
 
-        public virtual int SaveChanges()
-        {
-            return _dbContext.SaveChanges();
-        }
-
         public virtual IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity
         {
             var typeEntity = typeof(TEntity);
@@ -83,30 +78,14 @@ namespace PetProject.Infacstructure.Database
             }
         }
 
-        public object? GetRepositoryByTypeName<TEntity>(string typeName) where TEntity : BaseEntity
+        public virtual int SaveChanges()
         {
-            if (_repositories != null && _repositories.TryGetValue(typeName, out object? value))
-            {
-                return value;
-            }
-
-            return null;
+            return _dbContext.SaveChanges();
         }
-
 
         public virtual Task<int> SaveChangesAsync()
         {
             return _dbContext.SaveChangesAsync();
-        }
-
-        public virtual IQueryable<TEntity> AsQuery<TEntity>() where TEntity : BaseEntity
-        {
-            return GetRepository<TEntity>().Queryable();
-        }
-
-        public virtual IQueryable<TEntity> AsQuery<TEntity>(Expression<Func<TEntity, bool>> match) where TEntity : BaseEntity
-        {
-            return GetRepository<TEntity>().Queryable(match);
         }
 
         public virtual TResult ExecuteTransaction<TResult>(Func<TResult> func) where TResult : class
@@ -157,61 +136,6 @@ namespace PetProject.Infacstructure.Database
                     transaction.Complete();
                 }
             });
-        }
-
-        public virtual TEntity Insert<TEntity>(TEntity entity, long userId) where TEntity : BaseEntity
-        {
-            return GetRepository<TEntity>().Insert(entity, userId);
-        }
-
-        public virtual void InsertRange<TEntity>(ICollection<TEntity> entities, long userId) where TEntity : BaseEntity
-        {
-            GetRepository<TEntity>().InsertRange(entities, userId);
-        }
-
-        public virtual TEntity Update<TEntity>(TEntity entity, long userId) where TEntity : BaseEntity
-        {
-            return GetRepository<TEntity>().Update(entity, userId);
-        }
-
-        public virtual void UpdateRange<TEntity>(ICollection<TEntity> entities, long userId) where TEntity : BaseEntity
-        {
-            foreach (var entity in entities)
-            {
-                entity.UpdatedTime = DateTime.UtcNow;
-                entity.UpdatedBy = userId;
-            }
-            GetRepository<TEntity>().UpdateRange(entities, userId);
-        }
-
-        public virtual void Delete<TEntity>(object id) where TEntity : BaseEntity
-        {
-            GetRepository<TEntity>().Delete(id);
-        }
-
-        public virtual void Delete<TEntity>(TEntity entity) where TEntity : BaseEntity
-        {
-            GetRepository<TEntity>().Delete(entity);
-        }
-
-        public virtual void DeleteRange<TEntity>(ICollection<TEntity> entities) where TEntity : BaseEntity
-        {
-            GetRepository<TEntity>().DeleteRange(entities);
-        }
-
-        public virtual TEntity? Find<TEntity>(params object[] keyValues) where TEntity : BaseEntity
-        {
-            return GetRepository<TEntity>().Find(keyValues);
-        }
-
-        public virtual ValueTask<TEntity?> FindAsync<TEntity>(params object[] keyValues) where TEntity : BaseEntity
-        {
-            return GetRepository<TEntity>().FindAsync(keyValues);
-        }
-
-        public virtual ValueTask<TEntity?> FindAsync<TEntity>(object[] keyValues, CancellationToken cancellationToken) where TEntity : BaseEntity
-        {
-            return GetRepository<TEntity>().FindAsync(keyValues, cancellationToken);
         }
 
         public virtual async Task<List<IEnumerable<IDictionary<string, object>>>> ExecCommandTextAsync(string query, CommandType commandType, params SqlParameter[] parameters)

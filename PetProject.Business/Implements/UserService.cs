@@ -39,7 +39,7 @@ namespace PetProject.Business.Implements
                 result.Roles = roleIds.Select(s => (long)s.FirstOrDefault().Value).ToArray();
             }
 
-            var roleFeature = await _unitOfWork.AsQuery<RoleFeature>().ToListAsync();
+            var roleFeature = await Queryable<RoleFeature>().ToListAsync();
 
             return result;
         }
