@@ -107,19 +107,19 @@ namespace PetProject.Infacstructure.Repositories
             return _dbSet.AsQueryable();
         }
 
-        public virtual IQueryable<TEntity> Queryable(Expression<Func<TEntity, bool>> query)
+        public virtual IQueryable<TEntity> Queryable(Expression<Func<TEntity, bool>> match)
         {
-            return Queryable().Where(query);
+            return Queryable(match);
         }
 
-        public virtual IQueryable<TEntity> Queryable(Expression<Func<TEntity, bool>> query, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy)
+        public virtual IQueryable<TEntity> Queryable(Expression<Func<TEntity, bool>> match, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy)
         {
-            return orderBy(Queryable(query));
+            return orderBy(Queryable(match));
         }
 
-        public virtual IQueryable<TEntity> Queryable(Expression<Func<TEntity, bool>> query, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, string includeProperties)
+        public virtual IQueryable<TEntity> Queryable(Expression<Func<TEntity, bool>> match, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, string includeProperties)
         {
-            var result = Queryable(query, orderBy);
+            var result = Queryable(match, orderBy);
 
             foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
