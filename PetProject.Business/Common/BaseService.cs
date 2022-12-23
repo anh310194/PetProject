@@ -17,9 +17,9 @@ namespace PetProject.Business.Common
             return _unitOfWork.GetRepository<TEntity>().Queryable();
         }
 
-        public virtual IQueryable<TEntity> Queryable<TEntity>(Expression<Func<TEntity, bool>> match) where TEntity : BaseEntity
+        public virtual IQueryable<TEntity> Queryable<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : BaseEntity
         {
-            return _unitOfWork.GetRepository<TEntity>().Queryable(match);
+            return _unitOfWork.GetRepository<TEntity>().Queryable(predicate);
         }
         
         public virtual TEntity Insert<TEntity>(TEntity entity, long userId) where TEntity : BaseEntity

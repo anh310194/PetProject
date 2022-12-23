@@ -18,8 +18,8 @@ namespace PetProject.Domain.Interfaces
         ValueTask<TEntity?> FindAsync(params object[] keyValues);
         ValueTask<TEntity?> FindAsync(object[] keyValues, CancellationToken cancellationToken);
         IQueryable<TEntity> Queryable();
-        IQueryable<TEntity> Queryable(Expression<Func<TEntity, bool>> match);
-        IQueryable<TEntity> Queryable(Expression<Func<TEntity, bool>> match, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy);
-        IQueryable<TEntity> Queryable(Expression<Func<TEntity, bool>> match, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, string includeProperties);
+        IQueryable<TEntity> Queryable(Expression<Func<TEntity, bool>> predicate);
+        IQueryable<TEntity> Queryable(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy);
+        IQueryable<TEntity> Queryable(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, string includeProperties);
     }
 }
