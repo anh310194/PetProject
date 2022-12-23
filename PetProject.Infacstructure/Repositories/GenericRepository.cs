@@ -15,9 +15,27 @@ namespace PetProject.Infacstructure.Repositories
             _dbSet = dataContext.Set<TEntity>();
         }
 
-        public virtual Task<TEntity?> GetByAsync(Expression<Func<TEntity, bool>> match)
+        public virtual TEntity Update(TEntity entity, long userId)
         {
-            return _dbSet.FirstOrDefaultAsync(match);
+            entity.UpdatedTime = DateTime.UtcNow;
+            entity.UpdatedBy = userId;
+            return _dbSet.Update(entity).Entity;
+        }
+        
+        public virtual void UpdateRange(ICollection<TEntity> entities, long userId)
+        {
+            var enumerable = entities.AsEnumerable().Select(s =>
+            {
+                s.UpdatedTime = DateTime.UtcNow;
+                s.UpdatedBy = userId;
+                return s;
+            });
+            _dbSet.UpdateRange(enumerable);
+        }
+
+        public virtual TEntity? Find(params object[] keyValues)
+        {
+            return _dbSet.Find(keyValues);
         }
 
         public virtual ValueTask<TEntity?> FindAsync(params object[] keyValues)
@@ -28,42 +46,6 @@ namespace PetProject.Infacstructure.Repositories
         public virtual ValueTask<TEntity?> FindAsync(object[] keyValues, CancellationToken cancellationToken)
         {
             return _dbSet.FindAsync(cancellationToken, keyValues);
-        }
-
-        public virtual ValueTask<EntityEntry<TEntity>> InsertAsync(TEntity entity, long userId, CancellationToken cancellationToken = default)
-        {
-            entity.CreatedTime = DateTime.UtcNow;
-            entity.CreatedBy = userId;
-            return _dbSet.AddAsync(entity, cancellationToken);
-        }
-
-        public virtual Task InsertRangeAsync(ICollection<TEntity> entities, long userId, CancellationToken cancellationToken = default)
-        {
-            var enumerable = entities.AsEnumerable().Select(s =>
-            {
-                s.CreatedTime = DateTime.UtcNow;
-                s.UpdatedBy = userId;
-                return s;
-            });
-            return _dbSet.AddRangeAsync(enumerable, cancellationToken);
-        }
-
-        public virtual TEntity Update(TEntity entity, long userId)
-        {
-            entity.UpdatedTime = DateTime.UtcNow;
-            entity.UpdatedBy = userId;
-            return _dbSet.Update(entity).Entity;
-        }
-
-        public virtual void DeleteRange(ICollection<TEntity> entities)
-        {
-            var enumerable = entities.AsEnumerable();
-            _dbSet.RemoveRange(enumerable);
-        }
-
-        public virtual TEntity? Find(params object[] keyValues)
-        {
-            return _dbSet.Find(keyValues);
         }
 
         public virtual TEntity Insert(TEntity entity, long userId)
@@ -84,15 +66,22 @@ namespace PetProject.Infacstructure.Repositories
             _dbSet.AddRange(enumerable);
         }
 
-        public virtual void UpdateRange(ICollection<TEntity> entities, long userId)
+        public virtual ValueTask<EntityEntry<TEntity>> InsertAsync(TEntity entity, long userId, CancellationToken cancellationToken = default)
+        {
+            entity.CreatedTime = DateTime.UtcNow;
+            entity.CreatedBy = userId;
+            return _dbSet.AddAsync(entity, cancellationToken);
+        }
+
+        public virtual Task InsertRangeAsync(ICollection<TEntity> entities, long userId, CancellationToken cancellationToken = default)
         {
             var enumerable = entities.AsEnumerable().Select(s =>
             {
-                s.UpdatedTime = DateTime.UtcNow;
+                s.CreatedTime = DateTime.UtcNow;
                 s.UpdatedBy = userId;
                 return s;
             });
-            _dbSet.UpdateRange(enumerable);
+            return _dbSet.AddRangeAsync(enumerable, cancellationToken);
         }
 
         public virtual void Delete(object id)
@@ -105,6 +94,12 @@ namespace PetProject.Infacstructure.Repositories
         public virtual void Delete(TEntity entity)
         {
             _dbSet.Remove(entity);
+        }
+
+        public virtual void DeleteRange(ICollection<TEntity> entities)
+        {
+            var enumerable = entities.AsEnumerable();
+            _dbSet.RemoveRange(enumerable);
         }
 
         public virtual IQueryable<TEntity> Queryable()

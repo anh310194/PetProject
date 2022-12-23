@@ -5,7 +5,6 @@ namespace PetProject.Domain.Interfaces
 {
     public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     {
-        Task<TEntity?> GetByAsync(Expression<Func<TEntity, bool>> match);
         TEntity Insert(TEntity entity, long userId);
         void InsertRange(ICollection<TEntity> entities, long userId);
         ValueTask<EntityEntry<TEntity>> InsertAsync(TEntity entity, long userId, CancellationToken cancellationToken = default);
