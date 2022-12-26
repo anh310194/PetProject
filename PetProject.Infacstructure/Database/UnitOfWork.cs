@@ -44,7 +44,7 @@ namespace PetProject.Infacstructure.Database
         }
         #endregion
 
-        public virtual IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity
+        private IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity
         {
             var typeEntity = typeof(TEntity);
             if (_repositories != null && _repositories.TryGetValue(typeEntity.Name, out object? value))
@@ -194,6 +194,72 @@ namespace PetProject.Infacstructure.Database
                 return result;
             });
         }
+
+        public virtual IQueryable<TEntity> Queryable<TEntity>() where TEntity : BaseEntity
+        {
+            return GetRepository<TEntity>().Queryable();
+        }
+
+        public virtual IQueryable<TEntity> Queryable<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : BaseEntity
+        {
+            return GetRepository<TEntity>().Queryable(predicate);
+        }
+        
+        public virtual TEntity Insert<TEntity>(TEntity entity, long userId) where TEntity : BaseEntity
+        {
+            return GetRepository<TEntity>().Insert(entity, userId);
+        }
+
+        public virtual void InsertRange<TEntity>(ICollection<TEntity> entities, long userId) where TEntity : BaseEntity
+        {
+            GetRepository<TEntity>().InsertRange(entities, userId);
+        }
+
+        public virtual TEntity Update<TEntity>(TEntity entity, long userId) where TEntity : BaseEntity
+        {
+            return GetRepository<TEntity>().Update(entity, userId);
+        }
+
+        public virtual void UpdateRange<TEntity>(ICollection<TEntity> entities, long userId) where TEntity : BaseEntity
+        {
+            foreach (var entity in entities)
+            {
+                entity.UpdatedTime = DateTime.UtcNow;
+                entity.UpdatedBy = userId;
+            }
+            GetRepository<TEntity>().UpdateRange(entities, userId);
+        }
+
+        public virtual void Delete<TEntity>(object id) where TEntity : BaseEntity
+        {
+            GetRepository<TEntity>().Delete(id);
+        }
+
+        public virtual void Delete<TEntity>(TEntity entity) where TEntity : BaseEntity
+        {
+            GetRepository<TEntity>().Delete(entity);
+        }
+
+        public virtual void DeleteRange<TEntity>(ICollection<TEntity> entities) where TEntity : BaseEntity
+        {
+            GetRepository<TEntity>().DeleteRange(entities);
+        }
+
+        public virtual TEntity? Find<TEntity>(params object[] keyValues) where TEntity : BaseEntity
+        {
+            return GetRepository<TEntity>().Find(keyValues);
+        }
+
+        public virtual ValueTask<TEntity?> FindAsync<TEntity>(params object[] keyValues) where TEntity : BaseEntity
+        {
+            return GetRepository<TEntity>().FindAsync(keyValues);
+        }
+
+        public virtual ValueTask<TEntity?> FindAsync<TEntity>(object[] keyValues, CancellationToken cancellationToken) where TEntity : BaseEntity
+        {
+            return GetRepository<TEntity>().FindAsync(keyValues, cancellationToken);
+        }
+
     }
 }
 
