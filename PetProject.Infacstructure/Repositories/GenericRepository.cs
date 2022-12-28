@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PetProject.Domain;
+using PetProject.Domain.Interfaces;
 using System.Linq.Expressions;
 
 namespace PetProject.Infacstructure.Repositories
 {
-    public abstract class GenericRepository<TEntity> where TEntity : BaseEntity
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
         protected readonly DbSet<TEntity> _dbSet;
         public GenericRepository(DbSet<TEntity> dbSet)

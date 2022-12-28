@@ -45,7 +45,7 @@ namespace PetProject.Infacstructure.Database
         }
         #endregion
 
-        private GenericRepository<TEntity> GetOrCreateGenericRepository<TEntity>() where TEntity : BaseEntity
+        private IGenericRepository<TEntity> GetOrCreateGenericRepository<TEntity>() where TEntity : BaseEntity
         {
             var genericRepository = GetGenericRepository<TEntity>();            
             if(genericRepository == null)
@@ -58,7 +58,7 @@ namespace PetProject.Infacstructure.Database
                 _repositories?.Add(typeof(TEntity).Name, genericRepository);
             }
 
-            return (GenericRepository<TEntity>)genericRepository;
+            return (IGenericRepository<TEntity>)genericRepository;
         }
         private object? GetGenericRepository<TEntity>() where TEntity : BaseEntity
         {
@@ -72,14 +72,14 @@ namespace PetProject.Infacstructure.Database
             {
                 return assignedRepository;
             }
-            
-            return Activator.CreateInstance(TypeOfGenericRepository<TEntity>(), _dbContext.Set<TEntity>());            
+
+            return Activator.CreateInstance(TypeOfGenericRepository<TEntity>(), _dbContext.Set<TEntity>());
         }
         private object? CreateAssignedGenericRepository<TEntity>() where TEntity : BaseEntity
         {
             var typeAssignabledRepository = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
-                .FirstOrDefault(type => typeof(GenericRepository<TEntity>).IsAssignableFrom(type));
+                .FirstOrDefault(type => typeof(IGenericRepository<TEntity>).IsAssignableFrom(type));
             if (typeAssignabledRepository == null)
             {
                 return null;
@@ -89,7 +89,12 @@ namespace PetProject.Infacstructure.Database
         }
         private Type TypeOfGenericRepository<TEntity>() where TEntity : BaseEntity
         {
-            return typeof(GenericRepository<TEntity>).MakeGenericType(typeof(TEntity));
+            var typeAssignabledRepository = System.Reflection.Assembly.GetExecutingAssembly()
+            .GetTypes()
+            .Where(item => item.GetInterfaces()
+            .Where(i => i.IsGenericType).Any(i => i.GetGenericTypeDefinition() == typeof(IGenericRepository<>)) && !item.IsAbstract && !item.IsInterface)
+            .ToList();
+            return typeof(GenericRepository<>).MakeGenericType(typeof(TEntity));
         }
 
         public virtual int SaveChanges()
