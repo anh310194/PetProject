@@ -89,11 +89,6 @@ namespace PetProject.Infacstructure.Database
         }
         private Type TypeOfGenericRepository<TEntity>() where TEntity : BaseEntity
         {
-            var typeAssignabledRepository = System.Reflection.Assembly.GetExecutingAssembly()
-            .GetTypes()
-            .Where(item => item.GetInterfaces()
-            .Where(i => i.IsGenericType).Any(i => i.GetGenericTypeDefinition() == typeof(IGenericRepository<>)) && !item.IsAbstract && !item.IsInterface)
-            .ToList();
             return typeof(GenericRepository<>).MakeGenericType(typeof(TEntity));
         }
 
