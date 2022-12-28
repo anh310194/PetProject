@@ -67,25 +67,19 @@ namespace PetProject.Infacstructure.Database
         }
         private object? CreateGenericRepository<TEntity>() where TEntity : BaseEntity
         {
-            var typeAssignabledRepository = CreateAssignedGenericRepository<TEntity>();
-            if (typeAssignabledRepository != null)
+            var assignedRepository = CreateAssignedGenericRepository<TEntity>();
+            if (assignedRepository != null)
             {
-                return typeAssignabledRepository;
+                return assignedRepository;
             }
             
-            return Activator.CreateInstance(GenericRepositoryType<TEntity>(), _dbContext.Set<TEntity>());            
-        }
-        private Type GenericRepositoryType<TEntity>() where TEntity : BaseEntity
-        {
-            return typeof(GenericRepository<TEntity>).MakeGenericType(typeof(TEntity));
+            return Activator.CreateInstance(TypeOfGenericRepository<TEntity>(), _dbContext.Set<TEntity>());            
         }
         private object? CreateAssignedGenericRepository<TEntity>() where TEntity : BaseEntity
         {
             var typeAssignabledRepository = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
-                .FirstOrDefault(type => 
-                    typeof(GenericRepository<TEntity>).IsAssignableFrom(type)
-                );
+                .FirstOrDefault(type => typeof(GenericRepository<TEntity>).IsAssignableFrom(type));
             if (typeAssignabledRepository == null)
             {
                 return null;
@@ -93,7 +87,10 @@ namespace PetProject.Infacstructure.Database
 
             return Activator.CreateInstance(typeAssignabledRepository, _dbContext.Set<TEntity>());
         }
-
+        private Type TypeOfGenericRepository<TEntity>() where TEntity : BaseEntity
+        {
+            return typeof(GenericRepository<TEntity>).MakeGenericType(typeof(TEntity));
+        }
 
         public virtual int SaveChanges()
         {
