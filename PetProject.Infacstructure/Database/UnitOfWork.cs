@@ -63,18 +63,18 @@ namespace PetProject.Infacstructure.Database
         private object? CreateOrignalOrAssignedRepository<TEntity>() where TEntity : BaseEntity
         {
             var typeRepository = typeof(IGenericRepository<TEntity>);
+
             var typeAssignabledRepository = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .FirstOrDefault(t => typeRepository.IsAssignableFrom(t)
                 );
-
-            if (typeAssignabledRepository != null)
+            if (typeAssignabledRepository == null)
             {
-                return Activator.CreateInstance(typeAssignabledRepository, _dbContext);
+                return Activator.CreateInstance(typeof(GenericRepository<>).MakeGenericType(typeof(TEntity)), _dbContext);
             }
             else
             {
-                return Activator.CreateInstance(typeof(GenericRepository<>).MakeGenericType(typeof(TEntity)), _dbContext);
+                return Activator.CreateInstance(typeAssignabledRepository, _dbContext);
             }
         }
 

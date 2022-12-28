@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PetProject.Entities;
+﻿using PetProject.Entities;
 using PetProject.Infacstructure.Database;
 
 namespace PetProject.Infacstructure.Repositories
