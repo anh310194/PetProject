@@ -203,9 +203,7 @@ namespace PetProject.Infacstructure.Database
         {
             return ExecCommandTextAsync(query, CommandType.StoredProcedure, parameters).ContinueWith<IEnumerable<IDictionary<string, object>>?>(c =>
             {
-                var result = c.Result.FirstOrDefault();
-
-                return result;
+                return c.Result.FirstOrDefault();;
             });
         }
 
@@ -236,11 +234,6 @@ namespace PetProject.Infacstructure.Database
 
         public virtual void UpdateRange<TEntity>(ICollection<TEntity> entities, long userId) where TEntity : BaseEntity
         {
-            foreach (var entity in entities)
-            {
-                entity.UpdatedTime = DateTime.UtcNow;
-                entity.UpdatedBy = userId;
-            }
             GetOrCreateGenericRepository<TEntity>().UpdateRange(entities, userId);
         }
 
