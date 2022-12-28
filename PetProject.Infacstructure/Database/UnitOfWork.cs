@@ -15,8 +15,6 @@ namespace PetProject.Infacstructure.Database
     public class UnitOfWork : IUnitOfWork
     {
         protected DbContext _dbContext { get; private set; }
-        protected IDataContext _dataContext { get; private set; }
-
         private bool _disposed;
         private IDictionary<string, object> _repositories;
 
@@ -24,7 +22,6 @@ namespace PetProject.Infacstructure.Database
         {
             _repositories = new Dictionary<string, object>();
             _dbContext = dataContext.GetDbContext();
-            _dataContext = dataContext;
         }
 
         #region Dispose        
@@ -48,12 +45,12 @@ namespace PetProject.Infacstructure.Database
         }
         #endregion
 
-        private IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity
+        private GenericRepository<TEntity> GetOrCreateRepository<TEntity>() where TEntity : BaseEntity
         {
             var typeEntity = typeof(TEntity);
             if (_repositories != null && _repositories.TryGetValue(typeEntity.Name, out object? value))
             {
-                return (IGenericRepository<TEntity>)value;
+                return (GenericRepository<TEntity>)value;
             }
 
             value = CreateOrignalOrAssignedRepository<TEntity>();
@@ -62,23 +59,26 @@ namespace PetProject.Infacstructure.Database
                 throw new PetProjectException("The system Can't not found Repository with " + typeof(TEntity).Name);
             }
             _repositories?.Add(typeEntity.Name, value);
-            return (IGenericRepository<TEntity>)value;
+            return (GenericRepository<TEntity>)value;
         }
         private object? CreateOrignalOrAssignedRepository<TEntity>() where TEntity : BaseEntity
         {
-            var typeRepository = typeof(IGenericRepository<TEntity>);
+            var typeGenericRepository = typeof(GenericRepository<TEntity>);
+            var typeEntity = typeof(TEntity);
+            var dbSet = _dbContext.Set<TEntity>();
 
             var typeAssignabledRepository = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
-                .FirstOrDefault(t => typeRepository.IsAssignableFrom(t)
+                .FirstOrDefault(type => 
+                    typeGenericRepository.IsAssignableFrom(type)
                 );
             if (typeAssignabledRepository == null)
             {
-                return Activator.CreateInstance(typeof(GenericRepository<>).MakeGenericType(typeof(TEntity)), _dataContext);
+                return Activator.CreateInstance(typeGenericRepository.MakeGenericType(typeEntity), dbSet);
             }
             else
             {
-                return Activator.CreateInstance(typeAssignabledRepository, _dataContext);
+                return Activator.CreateInstance(typeAssignabledRepository, dbSet);
             }
         }
 
@@ -201,27 +201,27 @@ namespace PetProject.Infacstructure.Database
 
         public virtual IQueryable<TEntity> Queryable<TEntity>() where TEntity : BaseEntity
         {
-            return GetRepository<TEntity>().Queryable();
+            return GetOrCreateRepository<TEntity>().Queryable();
         }
 
         public virtual IQueryable<TEntity> Queryable<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : BaseEntity
         {
-            return GetRepository<TEntity>().Queryable(predicate);
+            return GetOrCreateRepository<TEntity>().Queryable(predicate);
         }
         
         public virtual TEntity Insert<TEntity>(TEntity entity, long userId) where TEntity : BaseEntity
         {
-            return GetRepository<TEntity>().Insert(entity, userId);
+            return GetOrCreateRepository<TEntity>().Insert(entity, userId);
         }
 
         public virtual void InsertRange<TEntity>(ICollection<TEntity> entities, long userId) where TEntity : BaseEntity
         {
-            GetRepository<TEntity>().InsertRange(entities, userId);
+            GetOrCreateRepository<TEntity>().InsertRange(entities, userId);
         }
 
         public virtual TEntity Update<TEntity>(TEntity entity, long userId) where TEntity : BaseEntity
         {
-            return GetRepository<TEntity>().Update(entity, userId);
+            return GetOrCreateRepository<TEntity>().Update(entity, userId);
         }
 
         public virtual void UpdateRange<TEntity>(ICollection<TEntity> entities, long userId) where TEntity : BaseEntity
@@ -231,37 +231,37 @@ namespace PetProject.Infacstructure.Database
                 entity.UpdatedTime = DateTime.UtcNow;
                 entity.UpdatedBy = userId;
             }
-            GetRepository<TEntity>().UpdateRange(entities, userId);
+            GetOrCreateRepository<TEntity>().UpdateRange(entities, userId);
         }
 
         public virtual void Delete<TEntity>(object id) where TEntity : BaseEntity
         {
-            GetRepository<TEntity>().Delete(id);
+            GetOrCreateRepository<TEntity>().Delete(id);
         }
 
         public virtual void Delete<TEntity>(TEntity entity) where TEntity : BaseEntity
         {
-            GetRepository<TEntity>().Delete(entity);
+            GetOrCreateRepository<TEntity>().Delete(entity);
         }
 
         public virtual void DeleteRange<TEntity>(ICollection<TEntity> entities) where TEntity : BaseEntity
         {
-            GetRepository<TEntity>().DeleteRange(entities);
+            GetOrCreateRepository<TEntity>().DeleteRange(entities);
         }
 
         public virtual TEntity? Find<TEntity>(params object[] keyValues) where TEntity : BaseEntity
         {
-            return GetRepository<TEntity>().Find(keyValues);
+            return GetOrCreateRepository<TEntity>().Find(keyValues);
         }
 
         public virtual ValueTask<TEntity?> FindAsync<TEntity>(params object[] keyValues) where TEntity : BaseEntity
         {
-            return GetRepository<TEntity>().FindAsync(keyValues);
+            return GetOrCreateRepository<TEntity>().FindAsync(keyValues);
         }
 
         public virtual ValueTask<TEntity?> FindAsync<TEntity>(object[] keyValues, CancellationToken cancellationToken) where TEntity : BaseEntity
         {
-            return GetRepository<TEntity>().FindAsync(keyValues, cancellationToken);
+            return GetOrCreateRepository<TEntity>().FindAsync(keyValues, cancellationToken);
         }
 
     }
