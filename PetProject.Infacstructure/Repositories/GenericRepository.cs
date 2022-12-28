@@ -15,8 +15,7 @@ namespace PetProject.Infacstructure.Repositories
 
         public virtual TEntity Update(TEntity entity, long userId)
         {
-            entity.UpdatedTime = DateTime.UtcNow;
-            entity.UpdatedBy = userId;
+            SetBaseValueUpdate(entity, userId);
             return _dbSet.Update(entity).Entity;
         }
         
@@ -24,11 +23,15 @@ namespace PetProject.Infacstructure.Repositories
         {
             var enumerable = entities.AsEnumerable().Select(s =>
             {
-                s.UpdatedTime = DateTime.UtcNow;
-                s.UpdatedBy = userId;
+                SetBaseValueUpdate(s, userId);
                 return s;
             });
             _dbSet.UpdateRange(enumerable);
+        }
+        private void SetBaseValueUpdate(TEntity entity, long userId)
+        {            
+            entity.UpdatedBy = userId;
+            entity.UpdatedTime = DateTime.UtcNow;
         }
 
         public virtual TEntity? Find(params object[] keyValues)
@@ -48,17 +51,20 @@ namespace PetProject.Infacstructure.Repositories
 
         public virtual TEntity Insert(TEntity entity, long userId)
         {
-            entity.CreatedBy = userId;
-            entity.CreatedTime = DateTime.UtcNow;
+            SetBaseValueInsert(entity, userId);
             return _dbSet.Add(entity).Entity;
         }
-
+        private void SetBaseValueInsert(TEntity entity,long userId)
+        {            
+            entity.CreatedBy = userId;
+            entity.CreatedTime = DateTime.UtcNow;
+        }
+        
         public virtual void InsertRange(ICollection<TEntity> entities, long userId)
         {
             var enumerable = entities.Select(entity =>
             {
-                entity.CreatedBy = userId;
-                entity.CreatedTime = DateTime.UtcNow;
+                SetBaseValueInsert(entity, userId);
                 return entity;
             }).AsEnumerable();
             _dbSet.AddRange(enumerable);
@@ -66,8 +72,7 @@ namespace PetProject.Infacstructure.Repositories
 
         public virtual ValueTask<EntityEntry<TEntity>> InsertAsync(TEntity entity, long userId, CancellationToken cancellationToken = default)
         {
-            entity.CreatedTime = DateTime.UtcNow;
-            entity.CreatedBy = userId;
+            SetBaseValueInsert(entity, userId);
             return _dbSet.AddAsync(entity, cancellationToken);
         }
 
@@ -75,8 +80,7 @@ namespace PetProject.Infacstructure.Repositories
         {
             var enumerable = entities.AsEnumerable().Select(s =>
             {
-                s.CreatedTime = DateTime.UtcNow;
-                s.UpdatedBy = userId;
+                SetBaseValueInsert(s, userId);
                 return s;
             });
             return _dbSet.AddRangeAsync(enumerable, cancellationToken);
