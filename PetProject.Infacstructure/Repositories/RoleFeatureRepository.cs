@@ -1,11 +1,11 @@
 ﻿using PetProject.Entities;
-using PetProject.Infacstructure.Database;
+using PetProject.Infacstructure.Interfaces;
 
 namespace PetProject.Infacstructure.Repositories
 {
     public class RoleFeatureRepository : GenericRepository<RoleFeature>
     {
-        public RoleFeatureRepository(PetProjectContext dataContext) : base(dataContext) { }
+        public RoleFeatureRepository(IDataContext dataContext) : base(dataContext) { }
 
         public override IQueryable<RoleFeature> Queryable()
         {

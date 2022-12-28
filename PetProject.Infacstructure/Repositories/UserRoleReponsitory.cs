@@ -1,11 +1,11 @@
 ﻿using PetProject.Entities;
-using PetProject.Infacstructure.Database;
+using PetProject.Infacstructure.Interfaces;
 
 namespace PetProject.Infacstructure.Repositories
 {
     public class UserRoleReponsitory : GenericRepository<UserRole>
     {
-        public UserRoleReponsitory(PetProjectContext dataContext) : base(dataContext) { }
+        public UserRoleReponsitory(IDataContext dataContext) : base(dataContext) { }
 
         public override IQueryable<UserRole> Queryable()
         {

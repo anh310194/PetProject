@@ -8,19 +8,23 @@ using PetProject.Domain;
 using PetProject.Domain.Interfaces;
 using PetProject.Utilities.Exceptions;
 using PetProject.Infacstructure.Repositories;
+using PetProject.Infacstructure.Interfaces;
 
 namespace PetProject.Infacstructure.Database
 {
     public class UnitOfWork : IUnitOfWork
     {
-        protected PetProjectContext _dbContext { get; private set; }
+        protected DbContext _dbContext { get; private set; }
+        protected IDataContext _dataContext { get; private set; }
 
         private bool _disposed;
         private IDictionary<string, object> _repositories;
-        public UnitOfWork(PetProjectContext dataContext)
+
+        public UnitOfWork(IDataContext dataContext)
         {
             _repositories = new Dictionary<string, object>();
-            _dbContext = dataContext;
+            _dbContext = dataContext.GetDbContext();
+            _dataContext = dataContext;
         }
 
         #region Dispose        
@@ -70,11 +74,11 @@ namespace PetProject.Infacstructure.Database
                 );
             if (typeAssignabledRepository == null)
             {
-                return Activator.CreateInstance(typeof(GenericRepository<>).MakeGenericType(typeof(TEntity)), _dbContext);
+                return Activator.CreateInstance(typeof(GenericRepository<>).MakeGenericType(typeof(TEntity)), _dataContext);
             }
             else
             {
-                return Activator.CreateInstance(typeAssignabledRepository, _dbContext);
+                return Activator.CreateInstance(typeAssignabledRepository, _dataContext);
             }
         }
 

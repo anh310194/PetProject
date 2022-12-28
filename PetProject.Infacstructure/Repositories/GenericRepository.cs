@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PetProject.Domain;
 using PetProject.Domain.Interfaces;
-using PetProject.Infacstructure.Database;
+using PetProject.Infacstructure.Interfaces;
 using System.Linq.Expressions;
 
 namespace PetProject.Infacstructure.Repositories
@@ -10,9 +10,9 @@ namespace PetProject.Infacstructure.Repositories
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
         protected readonly DbSet<TEntity> _dbSet;
-        public GenericRepository(PetProjectContext dataContext)
+        public GenericRepository(IDataContext dataContext)
         {
-            _dbSet = dataContext.Set<TEntity>();
+            _dbSet = dataContext.GetDbContext().Set<TEntity>();
         }
 
         public virtual TEntity Update(TEntity entity, long userId)
