@@ -1,4 +1,4 @@
-﻿using PetProject.Entities.Common;
+﻿using PetProject.Domain.Common;
 
 namespace PetProject.Entities
 {

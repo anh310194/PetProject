@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using PetProject.Entities.Common;
+using PetProject.Domain.Common;
 using PetProject.Interfaces.Common;
 using System.Linq.Expressions;
 
