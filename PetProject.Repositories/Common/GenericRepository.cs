@@ -1,17 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using PetProject.Domain;
-using PetProject.Domain.Interfaces;
+using PetProject.Entities.Common;
+using PetProject.Interfaces.Common;
 using System.Linq.Expressions;
 
-namespace PetProject.Infacstructure.Repositories
+namespace PetProject.Repositories.Common
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
+    public abstract class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
         protected readonly DbSet<TEntity> _dbSet;
-        public GenericRepository(DbSet<TEntity> dbSet)
+        public GenericRepository(IDataContext dbContext)
         {
-            _dbSet = dbSet;
+            _dbSet = dbContext.GetDbContext().Set<TEntity>();
         }
 
         public virtual TEntity Update(TEntity entity, long userId)
@@ -19,7 +19,7 @@ namespace PetProject.Infacstructure.Repositories
             SetBaseValueUpdate(entity, userId);
             return _dbSet.Update(entity).Entity;
         }
-        
+
         public virtual void UpdateRange(ICollection<TEntity> entities, long userId)
         {
             var enumerable = entities.AsEnumerable().Select(s =>
@@ -30,7 +30,7 @@ namespace PetProject.Infacstructure.Repositories
             _dbSet.UpdateRange(enumerable);
         }
         private void SetBaseValueUpdate(TEntity entity, long userId)
-        {            
+        {
             entity.UpdatedBy = userId;
             entity.UpdatedTime = DateTime.UtcNow;
         }
@@ -55,12 +55,12 @@ namespace PetProject.Infacstructure.Repositories
             SetBaseValueInsert(entity, userId);
             return _dbSet.Add(entity).Entity;
         }
-        private void SetBaseValueInsert(TEntity entity,long userId)
-        {            
+        private void SetBaseValueInsert(TEntity entity, long userId)
+        {
             entity.CreatedBy = userId;
             entity.CreatedTime = DateTime.UtcNow;
         }
-        
+
         public virtual void InsertRange(ICollection<TEntity> entities, long userId)
         {
             var enumerable = entities.Select(entity =>

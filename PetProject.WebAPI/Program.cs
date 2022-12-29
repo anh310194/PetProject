@@ -11,6 +11,7 @@ using PetProject.WebAPI.Filters;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
+using PetProject.Repositories;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 try
@@ -100,6 +101,7 @@ try
 
     //Add Petproject Services
     builder.Services.AddInfacstructure(builder.Configuration.GetConnectionString("SQLConnection"));
+    builder.Services.AddRepository();
     builder.Services.AddBusiness();
     builder.Services.AddHttpContextAccessor();
 

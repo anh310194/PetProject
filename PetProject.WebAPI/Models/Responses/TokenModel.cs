@@ -1,5 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using PetProject.Business.Model;
+using PetProject.Models;
 using PetProject.Utilities.Helper;
 using PetProject.WebAPI.Enums;
 using System.IdentityModel.Tokens.Jwt;

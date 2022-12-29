@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PetProject.Business.Interfaces;
-using PetProject.Business.Model;
-using PetProject.Entities;
 using PetProject.Utilities.Exceptions;
 using PetProject.Utilities.Helper;
 using PetProject.Business.Common;
-using PetProject.Domain.Interfaces;
+using PetProject.Interfaces.Services;
+using PetProject.Models;
+using PetProject.Interfaces.Common;
 
 namespace PetProject.Business.Implements
 {
@@ -15,7 +14,7 @@ namespace PetProject.Business.Implements
 
         public async Task<SignInModel> Authenticate(string userName, string password)
         {
-            var user = await _unitOfWork.Queryable<User>(p => p.UserName == userName).FirstOrDefaultAsync();
+            var user = await _unitOfWork.User.Queryable(p => p.UserName == userName).FirstOrDefaultAsync();
             if (user == null)
             {
                 throw new PetProjectException("the userName could not be found!");
@@ -39,7 +38,7 @@ namespace PetProject.Business.Implements
                 result.Roles = roleIds.Select(s => (long)s.FirstOrDefault().Value).ToArray();
             }
 
-            var roleFeature = await _unitOfWork.Queryable<RoleFeature>().ToListAsync();
+            var roleFeature = await _unitOfWork.RoleFeature.Queryable().ToListAsync();
 
             return result;
         }

@@ -3,14 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using PetProject.Business.Interfaces;
-using PetProject.Business.Model;
+using PetProject.Interfaces.Services;
+using PetProject.Models;
 using PetProject.WebAPI.Controllers;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace PetProject.UnitTest.Controller_Test

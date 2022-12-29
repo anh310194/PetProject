@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using PetProject.Domain.Interfaces;
-using PetProject.Infacstructure.Database;
-using PetProject.Infacstructure.Interfaces;
+using PetProject.Infacstructure.Context;
+using PetProject.Interfaces.Common;
 
 namespace PetProject.Infacstructure
 {
@@ -14,7 +13,6 @@ namespace PetProject.Infacstructure
                 options.UseSqlServer(connectionString, providerOptions => providerOptions.EnableRetryOnFailure())
             );
             services.AddScoped<IDataContext, PetProjectContext>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
     }
 }

@@ -2,9 +2,9 @@
 #nullable disable
 using Microsoft.EntityFrameworkCore;
 using PetProject.Entities;
-using PetProject.Infacstructure.Interfaces;
+using PetProject.Interfaces.Common;
 
-namespace PetProject.Infacstructure.Database
+namespace PetProject.Infacstructure.Context
 {
     public partial class PetProjectContext : DbContext, IDataContext
     {

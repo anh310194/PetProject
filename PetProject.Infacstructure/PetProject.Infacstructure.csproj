@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Database\PetProjectUnitOfWork.cs" />
+    <Compile Remove="Context\PetProjectUnitOfWork.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PetProject.Entities\PetProject.Entities.csproj" />
+    <ProjectReference Include="..\PetProject.Interfaces\PetProject.Interfaces.csproj" />
     <ProjectReference Include="..\PetProject.Utilities\PetProject.Utilities.csproj" />
   </ItemGroup>
 

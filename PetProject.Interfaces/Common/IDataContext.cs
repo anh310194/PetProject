@@ -1,6 +1,6 @@
-
 using Microsoft.EntityFrameworkCore;
-namespace PetProject.Infacstructure.Interfaces
+
+namespace PetProject.Interfaces.Common
 {
     public interface IDataContext{
         DbContext GetDbContext();

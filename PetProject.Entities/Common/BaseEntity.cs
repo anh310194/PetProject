@@ -1,5 +1,5 @@
 ﻿
-namespace PetProject.Domain
+namespace PetProject.Entities.Common
 {
     public abstract class BaseEntity
     {

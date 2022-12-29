@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using PetProject.Business.Interfaces;
+using PetProject.Interfaces.Services;
 using PetProject.WebAPI.Models.Requestes;
 using PetProject.WebAPI.Models.Responses;
 using System.IdentityModel.Tokens.Jwt;

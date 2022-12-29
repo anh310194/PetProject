@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-using PetProject.Domain;
-using PetProject.Domain.Interfaces;
+﻿using PetProject.Interfaces.Common;
 
 namespace PetProject.Business.Common
 {

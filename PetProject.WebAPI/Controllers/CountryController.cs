@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PetProject.Business.Interfaces;
-using PetProject.Business.Model;
+using PetProject.Interfaces.Services;
+using PetProject.Models;
 using PetProject.WebAPI.Attributes;
 using PetProject.WebAPI.Enums;
-using PetProject.WebAPI.Models.Responses;
-using System.Security.Principal;
 
 namespace PetProject.WebAPI.Controllers
 {
