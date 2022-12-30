@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PetProject.Infacstructure.Context;
-using PetProject.Interfaces.Common;
 
 namespace PetProject.Infacstructure
 {
@@ -12,7 +11,6 @@ namespace PetProject.Infacstructure
             services.AddDbContext<PetProjectContext>(options =>
                 options.UseSqlServer(connectionString, providerOptions => providerOptions.EnableRetryOnFailure())
             );
-            services.AddScoped<IDataContext, PetProjectContext>();
         }
     }
 }

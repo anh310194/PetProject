@@ -1,58 +1,93 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 using System.Transactions;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Data.Common;
 using PetProject.Interfaces.Common;
 using PetProject.Interfaces.Reponsitories;
+using PetProject.Utilities.Exceptions;
 
 namespace PetProject.Repositories.Common
 {
     public class UnitOfWork : IUnitOfWork
     {
         protected DbContext _dbContext { get; private set; }
-
-        private bool _disposed;
+        private bool _disposed;        
+        private IServiceProvider _serviceProvider { get; }
+        private IDictionary<string, object> _repositoryCollection;
 
         public UnitOfWork(
-            IDataContext dataContext,
-            IUserRepository user,
-            IDateTimeFormatRepository dateTimeFormat,
-            IFeatureRepository feature,
-            IRoleFeatureRepository roleFeature,
-            IRoleRepository role,
-            ITimeZoneRepository timeZone,
-            IUserRoleRepository userRole,
-            ICountryRepository country
+            DbContext dbContext,
+            IUserRepository userRepository,
+            IDateTimeFormatRepository dateTimeFormatRepository,
+            IFeatureRepository featureRepository,
+            IRoleFeatureRepository roleFeatureRepository,
+            IRoleRepository roleRepository,
+            ITimeZoneRepository timeZoneRepository,
+            IUserRoleRepository userRoleRepository,
+            ICountryRepository countryRepository,
+            IServiceProvider serviceProvider
         )
         {
-            _dbContext = dataContext.GetDbContext();
-            Country = country;
-            DateTimeFormat = dateTimeFormat;
-            Feature = feature;
-            RoleFeature = roleFeature;
-            Role = role;
-            TimeZone = timeZone;
-            UserRole= userRole;
-            User = user;
+            _dbContext = dbContext;
+            _countryRepository = countryRepository;
+            _dateTimeFormatRepository = dateTimeFormatRepository;
+            _featureRepository = featureRepository;
+            _roleFeatureRepository = roleFeatureRepository;
+            _roleRepository = roleRepository;
+            _timeZoneRepository = timeZoneRepository;
+            _userRoleRepository= userRoleRepository;
+            _userRepository = userRepository;
+            _serviceProvider = serviceProvider;
+            _repositoryCollection = new Dictionary<string, object>();
         }
-        public ICountryRepository Country { get; }
+        private ICountryRepository _countryRepository { get; }
+        public ICountryRepository CountryRepository { get{ return /*GetRepository(this.GetType())*/_countryRepository; } 
+        }
 
-        public IUserRepository User { get; }
+        private IUserRepository _userRepository { get; }
+        public IUserRepository UserRepository { get{ return _userRepository;} }
 
-        public IDateTimeFormatRepository DateTimeFormat { get; }
+        private IDateTimeFormatRepository _dateTimeFormatRepository { get; }
+        public IDateTimeFormatRepository DateTimeFormatRepository { get{ return _dateTimeFormatRepository;} }
 
-        public IFeatureRepository Feature { get; }
+        private IFeatureRepository _featureRepository { get; }
+        public IFeatureRepository FeatureRepository { get{ return _featureRepository;} }
 
-        public IRoleFeatureRepository RoleFeature { get; }
+        private IRoleFeatureRepository _roleFeatureRepository { get; }
+        public IRoleFeatureRepository RoleFeatureRepository { get{ return _roleFeatureRepository;} }
 
-        public IRoleRepository Role { get; }
+        private IRoleRepository _roleRepository { get; }
+        public IRoleRepository RoleRepository { get{ return _roleRepository;} }
 
-        public ITimeZoneRepository TimeZone { get; }
+        private ITimeZoneRepository _timeZoneRepository { get; }
+        public ITimeZoneRepository TimeZoneRepository { get{ return _timeZoneRepository;} }
 
-        public IUserRoleRepository UserRole { get; }
+        private IUserRoleRepository _userRoleRepository { get; }        
+        public IUserRoleRepository UserRoleRepository { get{ return _userRoleRepository;} }
 
+        private dynamic GetRepository(Type typeRepository)
+        {
+            object? repository;
+            if(_repositoryCollection.TryGetValue(typeRepository.Name, out repository))
+            {
+                return repository;
+            }
+
+            repository = CreateRepository(typeRepository);
+            return repository;
+        }
+
+        private dynamic CreateRepository(Type typeRepository)
+        {
+            object? repository = _serviceProvider.GetService(typeRepository);
+            if(repository == null){
+                throw new PetProjectException($"The {typeRepository.Name} could not be found in Dependency Injection Container.");
+            }
+
+            _repositoryCollection.Add(typeRepository.Name, repository);
+            return repository;
+        }
 
         #region Dispose        
         public void Dispose()

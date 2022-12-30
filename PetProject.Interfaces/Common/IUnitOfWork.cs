@@ -6,14 +6,14 @@ namespace PetProject.Interfaces.Common
 {
     public interface IUnitOfWork : IDisposable
     {
-        public IUserRepository User { get; }
-        public IDateTimeFormatRepository DateTimeFormat { get; }
-        public IFeatureRepository Feature { get; }
-        public IRoleFeatureRepository RoleFeature { get; }
-        public IRoleRepository Role { get; }
-        public ITimeZoneRepository TimeZone { get; }
-        public IUserRoleRepository UserRole { get; }
-        public ICountryRepository Country { get; }
+        public IUserRepository UserRepository { get; }
+        public IDateTimeFormatRepository DateTimeFormatRepository { get; }
+        public IFeatureRepository FeatureRepository { get; }
+        public IRoleFeatureRepository RoleFeatureRepository { get; }
+        public IRoleRepository RoleRepository { get; }
+        public ITimeZoneRepository TimeZoneRepository { get; }
+        public IUserRoleRepository UserRoleRepository { get; }
+        public ICountryRepository CountryRepository { get; }
 
         Task<int> SaveChangesAsync();
         int SaveChanges();

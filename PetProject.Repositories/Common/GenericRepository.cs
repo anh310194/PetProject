@@ -9,9 +9,9 @@ namespace PetProject.Repositories.Common
     public abstract class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
         protected readonly DbSet<TEntity> _dbSet;
-        public GenericRepository(IDataContext dbContext)
+        public GenericRepository(DbContext dbContext)
         {
-            _dbSet = dbContext.GetDbContext().Set<TEntity>();
+            _dbSet = dbContext.Set<TEntity>();
         }
 
         public virtual TEntity Update(TEntity entity, long userId)

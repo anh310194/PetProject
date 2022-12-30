@@ -14,7 +14,7 @@ namespace PetProject.Business.Implements
 
         public async Task<SignInModel> Authenticate(string userName, string password)
         {
-            var user = await _unitOfWork.User.Queryable(p => p.UserName == userName).FirstOrDefaultAsync();
+            var user = await _unitOfWork.UserRepository.Queryable(p => p.UserName == userName).FirstOrDefaultAsync();
             if (user == null)
             {
                 throw new PetProjectException("the userName could not be found!");
@@ -38,7 +38,7 @@ namespace PetProject.Business.Implements
                 result.Roles = roleIds.Select(s => (long)s.FirstOrDefault().Value).ToArray();
             }
 
-            var roleFeature = await _unitOfWork.RoleFeature.Queryable().ToListAsync();
+            var roleFeature = await _unitOfWork.RoleFeatureRepository.Queryable().ToListAsync();
 
             return result;
         }

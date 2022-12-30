@@ -1,13 +1,13 @@
 ﻿using PetProject.Entities;
 using PetProject.Repositories.Common;
-using PetProject.Interfaces.Common;
+using Microsoft.EntityFrameworkCore;
 using PetProject.Interfaces.Reponsitories;
 
 namespace PetProject.Repositories.Entities
 {
     public class RoleFeatureRepository : GenericRepository<RoleFeature>, IRoleFeatureRepository
     {
-        public RoleFeatureRepository(IDataContext dbContext) : base(dbContext) { }
+        public RoleFeatureRepository(DbContext dbContext) : base(dbContext) { }
 
         public override IQueryable<RoleFeature> Queryable()
         {
