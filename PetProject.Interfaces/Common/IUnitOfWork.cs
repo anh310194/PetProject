@@ -1,20 +1,10 @@
 ﻿using System.Data;
 using Microsoft.Data.SqlClient;
-using PetProject.Interfaces.Reponsitories;
 
 namespace PetProject.Interfaces.Common
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork : IDisposable, IRepositoryFactory
     {
-        public IUserRepository UserRepository { get; }
-        public IDateTimeFormatRepository DateTimeFormatRepository { get; }
-        public IFeatureRepository FeatureRepository { get; }
-        public IRoleFeatureRepository RoleFeatureRepository { get; }
-        public IRoleRepository RoleRepository { get; }
-        public ITimeZoneRepository TimeZoneRepository { get; }
-        public IUserRoleRepository UserRoleRepository { get; }
-        public ICountryRepository CountryRepository { get; }
-
         Task<int> SaveChangesAsync();
         int SaveChanges();
         Task<List<IEnumerable<IDictionary<string, object>>>> ExecCommandTextAsync(string query, CommandType commandType, params SqlParameter[] parameters);
