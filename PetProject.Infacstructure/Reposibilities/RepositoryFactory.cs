@@ -1,5 +1,5 @@
 ﻿using PetProject.Domain.Common;
-using PetProject.Domain.Interfaces;
+using PetProject.Infacstructure.Interfaces;
 using PetProject.Utilities.Exceptions;
 
 namespace PetProject.Repositories.Common

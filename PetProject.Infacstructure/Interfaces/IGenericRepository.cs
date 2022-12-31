@@ -2,7 +2,7 @@
 using PetProject.Domain.Common;
 using System.Linq.Expressions;
 
-namespace PetProject.Domain.Interfaces
+namespace PetProject.Infacstructure.Interfaces
 {
     public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     {

@@ -1,4 +1,4 @@
-﻿using PetProject.Domain.Interfaces;
+﻿using PetProject.Infacstructure.Interfaces;
 
 namespace PetProject.Business.Common
 {

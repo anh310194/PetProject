@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using PetProject.Domain.Interfaces;
 using PetProject.Infacstructure.Context;
 using PetProject.Infacstructure.Interfaces;
 using PetProject.Repositories.Common;

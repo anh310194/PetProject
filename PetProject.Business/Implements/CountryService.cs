@@ -2,7 +2,7 @@
 using PetProject.Business.Common;
 using PetProject.Business.Interfaces;
 using PetProject.Business.Models;
-using PetProject.Domain.Interfaces;
+using PetProject.Infacstructure.Interfaces;
 using PetProject.Domain.Entities;
 
 namespace PetProject.Business.Implements

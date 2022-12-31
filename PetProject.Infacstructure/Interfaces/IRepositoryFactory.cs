@@ -1,6 +1,6 @@
 ﻿using PetProject.Domain.Common;
 
-namespace PetProject.Domain.Interfaces
+namespace PetProject.Infacstructure.Interfaces
 {
     public interface IRepositoryFactory
     {
