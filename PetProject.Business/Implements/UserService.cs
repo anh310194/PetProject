@@ -4,7 +4,7 @@ using PetProject.Utilities.Helper;
 using PetProject.Business.Common;
 using PetProject.Business.Interfaces;
 using PetProject.Business.Models;
-using PetProject.Entities;
+using PetProject.Domain.Entities;
 using PetProject.Domain.Interfaces;
 
 namespace PetProject.Business.Implements
