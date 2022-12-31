@@ -1,11 +1,6 @@
-﻿using PetProject.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PetProject.Business.Models;
 
-namespace PetProject.Interfaces.Services
+namespace PetProject.Business.Interfaces
 {
     public interface ICountryService
     {

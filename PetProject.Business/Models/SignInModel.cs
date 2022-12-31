@@ -1,5 +1,5 @@
 ﻿
-namespace PetProject.Models
+namespace PetProject.Business.Models
 {
     public class SignInModel
     {

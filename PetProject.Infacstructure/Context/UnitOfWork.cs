@@ -3,40 +3,25 @@ using System.Transactions;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Data.Common;
-using PetProject.Interfaces.Common;
-using PetProject.Interfaces.Reponsitories;
+using PetProject.Repositories.Common;
+using PetProject.Infacstructure.Interfaces;
+using PetProject.Domain.Interfaces;
 
-namespace PetProject.Repositories.Common
+namespace PetProject.Infacstructure.Context
 {
-    public class UnitOfWork :RepositoryFactory, IUnitOfWork
+    public class UnitOfWork : RepositoryFactory, IUnitOfWork
     {
         protected DbContext _dbContext { get; private set; }
         private bool _disposed;
 
         public UnitOfWork(
-            DbContext dbContext,
-            IUserRepository userRepository,
-            IDateTimeFormatRepository dateTimeFormatRepository,
-            IFeatureRepository featureRepository,
-            IRoleFeatureRepository roleFeatureRepository,
-            IRoleRepository roleRepository,
-            ITimeZoneRepository timeZoneRepository,
-            IUserRoleRepository userRoleRepository,
-            ICountryRepository countryRepository,
+            IDataContext context,
             IServiceProvider serviceProvider
-        ) : base(           
-                userRepository,
-                dateTimeFormatRepository,
-                featureRepository,
-                roleFeatureRepository,
-                roleRepository,
-                timeZoneRepository,
-                userRoleRepository,
-                countryRepository,
+        ) : base(
                 serviceProvider
              )
         {
-            _dbContext = dbContext;           
+            _dbContext = context.DataContext;
         }
 
         #region Dispose        
@@ -169,7 +154,7 @@ namespace PetProject.Repositories.Common
 
         public Task<IEnumerable<IDictionary<string, object>>?> ExecStoreProcedureAsync(string query, params SqlParameter[] parameters)
         {
-            return ExecCommandTextAsync(query, CommandType.StoredProcedure, parameters).ContinueWith<IEnumerable<IDictionary<string, object>>?>(c =>
+            return ExecCommandTextAsync(query, CommandType.StoredProcedure, parameters).ContinueWith(c =>
             {
                 return c.Result.FirstOrDefault(); ;
             });

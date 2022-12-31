@@ -15,8 +15,12 @@
 	
   <ItemGroup>
     <ProjectReference Include="..\PetProject.Entities\PetProject.Entities.csproj" />
-    <ProjectReference Include="..\PetProject.Interfaces\PetProject.Interfaces.csproj" />
     <ProjectReference Include="..\PetProject.Utilities\PetProject.Utilities.csproj" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <Folder Include="Common\" />
+    <Folder Include="Entities\" />
   </ItemGroup>
 
 </Project>

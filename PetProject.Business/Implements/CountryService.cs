@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetProject.Business.Common;
-using PetProject.Interfaces.Services;
-using PetProject.Models;
-using PetProject.Interfaces.Common;
+using PetProject.Business.Interfaces;
+using PetProject.Business.Models;
+using PetProject.Domain.Interfaces;
+using PetProject.Entities;
 
 namespace PetProject.Business.Implements
 {
@@ -12,22 +13,22 @@ namespace PetProject.Business.Implements
 
         public void DeleteCountryById(long id)
         {
-            _unitOfWork.CountryRepository.Delete(id);
+            _unitOfWork.GenericRepository<Country>().Delete(id);
         }
 
         public Task<List<CountryModel>> GetCountries()
         {
-            return _unitOfWork.CountryRepository.Queryable().Select(s => new CountryModel() { Id = s.Id, CountryCode = s.CountryCode, CountryName = s.CountryName }).ToListAsync();
+            return _unitOfWork.GenericRepository<Country>().Queryable().Select(s => new CountryModel() { Id = s.Id, CountryCode = s.CountryCode, CountryName = s.CountryName }).ToListAsync();
         }
 
         public Task<CountryModel?> GetCountryById(long id)
         {
-            return _unitOfWork.CountryRepository.Queryable().Select(s => new CountryModel() { Id = s.Id, CountryCode = s.CountryCode, CountryName = s.CountryName }).FirstOrDefaultAsync(p => p.Id == id);
+            return _unitOfWork.GenericRepository<Country>().Queryable().Select(s => new CountryModel() { Id = s.Id, CountryCode = s.CountryCode, CountryName = s.CountryName }).FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public Task<CountryModel?> UpsertCountryById(CountryModel model)
         {
-            return _unitOfWork.CountryRepository.Queryable().Select(s => new CountryModel() { Id = s.Id, CountryCode = s.CountryCode, CountryName = s.CountryName }).FirstOrDefaultAsync();
+            return _unitOfWork.GenericRepository<Country>().Queryable().Select(s => new CountryModel() { Id = s.Id, CountryCode = s.CountryCode, CountryName = s.CountryName }).FirstOrDefaultAsync();
         }
     }
 }

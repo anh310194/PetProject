@@ -1,4 +1,4 @@
-﻿using PetProject.Interfaces.Services;
+﻿using PetProject.Business.Interfaces;
 using PetProject.Business.Implements;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -1,6 +1,6 @@
-﻿using PetProject.Models;
+﻿using PetProject.Business.Models;
 
-namespace PetProject.Interfaces.Services
+namespace PetProject.Business.Interfaces
 {
     public interface IUserService
     {

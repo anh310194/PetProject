@@ -11,9 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PetProject.Domain\PetProject.Domain.csproj" />
     <ProjectReference Include="..\PetProject.Entities\PetProject.Entities.csproj" />
-    <ProjectReference Include="..\PetProject.Interfaces\PetProject.Interfaces.csproj" />
+    <ProjectReference Include="..\PetProject.Infacstructure\PetProject.Infacstructure.csproj" />
     <ProjectReference Include="..\PetProject.Utilities\PetProject.Utilities.csproj" />
   </ItemGroup>
 
