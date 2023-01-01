@@ -3,17 +3,17 @@ using PetProject.Utilities.Helper;
 using PetProject.WebAPI.Enums;
 using PetProject.WebAPI.Models;
 
-namespace PetProject.WebAPI.Controllers
-{
-    [Route("api/[controller]")]
-    [ApiController]
-    public class SharedController : Controller
-    {
+namespace PetProject.WebAPI.Controllers;
 
-        [HttpGet("Menus")]
-        public ActionResult<List<MenuModel>> Menus()
-        {
-            var result = new List<MenuModel>() {
+[Route("api/[controller]")]
+[ApiController]
+public class SharedController : Controller
+{
+
+    [HttpGet("Menus")]
+    public ActionResult<List<MenuModel>> Menus()
+    {
+        var result = new List<MenuModel>() {
                 new MenuModel()
                 {
                     Route= "/",
@@ -23,30 +23,30 @@ namespace PetProject.WebAPI.Controllers
                 }
             };
 
-            var masterData = new MenuModel()
+        var masterData = new MenuModel()
+        {
+            Route = "MasterData",
+            Name = "MasterData",
+            Type = "sub",
+            Icon = "subject",
+            Children = new MenuChildrenItem[]
             {
-                Route = "MasterData",
-                Name = "MasterData",
-                Type = "sub",
-                Icon = "subject",
-                Children = new MenuChildrenItem[]
-                {
                     new MenuChildrenItem()
                     {
                         Route = "/country",
                         Name= "Country",
                         Type= "link",
                     }
-                }
-            };
-            result.Add(masterData);
-            return result;
-        }
+            }
+        };
+        result.Add(masterData);
+        return result;
+    }
 
-        [HttpGet("Permissions")]
-        public ActionResult<List<string?>> Permissions()
-        {
-            return EnumHelper.GetDisplayNames<FeatureEnum>().ToList(); 
-        }
+    [HttpGet("Permissions")]
+    public ActionResult<List<string?>> Permissions()
+    {
+        return EnumHelper.GetDisplayNames<FeatureEnum>().ToList();
     }
 }
+

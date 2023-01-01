@@ -11,7 +11,6 @@ using PetProject.WebAPI.Filters;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
-using PetProject.Repositories;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 try

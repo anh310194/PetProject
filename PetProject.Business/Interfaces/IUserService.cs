@@ -1,9 +1,8 @@
 ﻿using PetProject.Business.Models;
 
-namespace PetProject.Business.Interfaces
+namespace PetProject.Business.Interfaces;
+
+public interface IUserService
 {
-    public interface IUserService
-    {
-        Task<SignInModel> Authenticate(string userName, string password);
-    }
+    Task<SignInModel> Authenticate(string userName, string password);
 }

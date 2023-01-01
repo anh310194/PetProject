@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace PetProject.Infacstructure.Interfaces
+namespace PetProject.Infacstructure.Interfaces;
+
+public interface IDataContext
 {
-    public interface IDataContext
-    {
-        DbContext DataContext { get; }
-    }
+    DbContext DataContext { get; }
 }

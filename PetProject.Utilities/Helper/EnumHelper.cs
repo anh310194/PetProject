@@ -1,136 +1,135 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace PetProject.Utilities.Helper
+namespace PetProject.Utilities.Helper;
+
+
+public static class EnumHelper
 {
-
-    public static class EnumHelper
+    public static IEnumerable<string> GetNames<TEnum>() where TEnum : Enum
     {
-        public static IEnumerable<string> GetNames<TEnum>() where TEnum : Enum
-        {
-            return Enum.GetNames(typeof(TEnum));
-        }
+        return Enum.GetNames(typeof(TEnum));
+    }
 
-        public static string? GetName<TEnum>(int value) where TEnum : Enum
-        {
-            Type typeModel = typeof(TEnum);
-            var result = Enum.GetName(typeModel, value);
-            return result;
-        }
-        public static string? GetName<TEnum>(long value) where TEnum : Enum
-        {
-            Type typeModel = typeof(TEnum);
-            var result = Enum.GetName(typeModel, value);
-            return result;
-        }
+    public static string? GetName<TEnum>(int value) where TEnum : Enum
+    {
+        Type typeModel = typeof(TEnum);
+        var result = Enum.GetName(typeModel, value);
+        return result;
+    }
+    public static string? GetName<TEnum>(long value) where TEnum : Enum
+    {
+        Type typeModel = typeof(TEnum);
+        var result = Enum.GetName(typeModel, value);
+        return result;
+    }
 
-        public static string? GetName<TEnum>(object value) where TEnum : Enum
-        {
-            Type typeModel = typeof(TEnum);
-            var result = Enum.GetName(typeModel, value);
-            return result;
-        }
+    public static string? GetName<TEnum>(object value) where TEnum : Enum
+    {
+        Type typeModel = typeof(TEnum);
+        var result = Enum.GetName(typeModel, value);
+        return result;
+    }
 
-        public static IEnumerable<string?> GetDisplayNames<TEnum>() where TEnum : Enum
+    public static IEnumerable<string?> GetDisplayNames<TEnum>() where TEnum : Enum
+    {
+        foreach (var value in Enum.GetValues(typeof(TEnum)))
         {
-            foreach (var value in Enum.GetValues(typeof(TEnum)))
-            {
-                yield return GetDisplayName((Enum)value);
-            }
+            yield return GetDisplayName((Enum)value);
         }
+    }
 
-        public static string? GetDisplayName(Enum value)
+    public static string? GetDisplayName(Enum value)
+    {
+        if (value == null)
         {
-            if (value == null)
-            {
-                return null;
-            }
-            var type = value.GetType();
-            if (type == null)
-            {
-                return null;
-            }
-            var members = type.GetMember(value.ToString());
-            if (members == null || members.Count() == 0)
-            {
-                return null;
-            }
-            var displayAttribute = members.First().GetCustomAttribute<DisplayAttribute>();
-            if (displayAttribute != null)
-            {
-                return null;
-            }
-            string displayName = value.ToString();
-            //if (displayAttribute.ResourceType != null)
-            //{
-            //    displayName = ResourceHelper.GetDisplay(displayAttribute.ResourceType, displayAttribute.Name);
-            //}
-            //if (string.IsNullOrEmpty(displayName))
-            //{
-            //    displayName = ResourceHelper.GetDisplayEnum(displayAttribute.Name);
-            //}
-
-            return displayName;
+            return null;
         }
-
-        public static T ParseEnum<T>(string value) where T : Enum
+        var type = value.GetType();
+        if (type == null)
         {
-            return (T)Enum.Parse(typeof(T), value);
+            return null;
         }
-
-        public static bool TryParseEnum<TEnum>(string value, out TEnum enumValue) where TEnum : struct, Enum
+        var members = type.GetMember(value.ToString());
+        if (members == null || members.Count() == 0)
         {
-            try
-            {
-                enumValue = ParseEnum<TEnum>(value);
-                return true;
-            }
-            catch (Exception)
-            {
-                var enums = Enum.GetValues<TEnum>();
-                enumValue = enums[0];
-                return false;
-            }
+            return null;
         }
-
-        public static string? GetDisplayName<TEnum>(int value) where TEnum : Enum
+        var displayAttribute = members.First().GetCustomAttribute<DisplayAttribute>();
+        if (displayAttribute != null)
         {
-            var castEnum = ParseEnum<TEnum>(value.ToString());
-            return GetDisplayName(castEnum);
+            return null;
         }
+        string displayName = value.ToString();
+        //if (displayAttribute.ResourceType != null)
+        //{
+        //    displayName = ResourceHelper.GetDisplay(displayAttribute.ResourceType, displayAttribute.Name);
+        //}
+        //if (string.IsNullOrEmpty(displayName))
+        //{
+        //    displayName = ResourceHelper.GetDisplayEnum(displayAttribute.Name);
+        //}
 
-        public static int GetValue<TEnum>(string name) where TEnum : Enum
-        {
-            var result = Enum.Parse(typeof(TEnum), name);
-            return Convert.ToInt32(result);
-        }
+        return displayName;
+    }
 
-        public static byte GetByteValue<TEnum>(string name) where TEnum : Enum
-        {
-            var result = Enum.Parse(typeof(TEnum), name);
-            return Convert.ToByte(result);
-        }
+    public static T ParseEnum<T>(string value) where T : Enum
+    {
+        return (T)Enum.Parse(typeof(T), value);
+    }
 
-        public static bool GetValueTryParse<TEnum>(string name, out int resultOut) where TEnum : Enum
+    public static bool TryParseEnum<TEnum>(string value, out TEnum enumValue) where TEnum : struct, Enum
+    {
+        try
         {
-            resultOut = 0;
-            try
-            {
-                resultOut = GetValue<TEnum>(name);
-                return true;
-            }
-            catch (Exception) { return false; }
+            enumValue = ParseEnum<TEnum>(value);
+            return true;
         }
+        catch (Exception)
+        {
+            var enums = Enum.GetValues<TEnum>();
+            enumValue = enums[0];
+            return false;
+        }
+    }
 
-        public static bool GetByteValueTryParse<TEnum>(string name, out byte resultOut) where TEnum : Enum
+    public static string? GetDisplayName<TEnum>(int value) where TEnum : Enum
+    {
+        var castEnum = ParseEnum<TEnum>(value.ToString());
+        return GetDisplayName(castEnum);
+    }
+
+    public static int GetValue<TEnum>(string name) where TEnum : Enum
+    {
+        var result = Enum.Parse(typeof(TEnum), name);
+        return Convert.ToInt32(result);
+    }
+
+    public static byte GetByteValue<TEnum>(string name) where TEnum : Enum
+    {
+        var result = Enum.Parse(typeof(TEnum), name);
+        return Convert.ToByte(result);
+    }
+
+    public static bool GetValueTryParse<TEnum>(string name, out int resultOut) where TEnum : Enum
+    {
+        resultOut = 0;
+        try
         {
-            resultOut = 0;
-            try
-            {
-                resultOut = GetByteValue<TEnum>(name);
-                return true;
-            }
-            catch (Exception) { return false; }
+            resultOut = GetValue<TEnum>(name);
+            return true;
         }
+        catch (Exception) { return false; }
+    }
+
+    public static bool GetByteValueTryParse<TEnum>(string name, out byte resultOut) where TEnum : Enum
+    {
+        resultOut = 0;
+        try
+        {
+            resultOut = GetByteValue<TEnum>(name);
+            return true;
+        }
+        catch (Exception) { return false; }
     }
 }

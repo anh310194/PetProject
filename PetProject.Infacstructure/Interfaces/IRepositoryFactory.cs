@@ -1,9 +1,8 @@
 ﻿using PetProject.Domain.Common;
 
-namespace PetProject.Infacstructure.Interfaces
+namespace PetProject.Infacstructure.Interfaces;
+
+public interface IRepositoryFactory
 {
-    public interface IRepositoryFactory
-    {
-        IGenericRepository<TEntity> GenericRepository<TEntity>() where TEntity : BaseEntity;
-    }
+    IGenericRepository<TEntity> GenericRepository<TEntity>() where TEntity : BaseEntity;
 }

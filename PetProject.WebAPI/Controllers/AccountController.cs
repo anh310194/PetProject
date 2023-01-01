@@ -3,20 +3,19 @@ using Microsoft.AspNetCore.Mvc;
 using PetProject.WebAPI.Models;
 using PetProject.WebAPI.Models.Responses;
 
-namespace PetProject.WebAPI.Controllers
+namespace PetProject.WebAPI.Controllers;
+
+[Authorize]
+[Route("api/[controller]")]
+[ApiController]
+public class AccountController : BaseController
 {
-    [Authorize]
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AccountController : BaseController
+    public AccountController(IHttpContextAccessor accessor) : base(accessor)
     {
-        public AccountController(IHttpContextAccessor accessor) : base(accessor)
-        {
-        }
-        [HttpGet()]
-        public ActionResult<UserTokenModel> Index()
-        {
-            return CurrentUser;
-        }
+    }
+    [HttpGet()]
+    public ActionResult<UserTokenModel> Index()
+    {
+        return CurrentUser;
     }
 }
