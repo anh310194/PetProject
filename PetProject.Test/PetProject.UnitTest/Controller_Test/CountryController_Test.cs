@@ -24,7 +24,6 @@ public class CountryController_Test
     private ILogger<CountryController> logger;
     private Mock<IHttpContextAccessor> mockHttpContextAccessor;
     private Mock<ICountryService> mockCountryService;
-    private UserTokenModel userToken;
 
     public CountryController_Test()
     {
@@ -82,9 +81,9 @@ public class CountryController_Test
     public async Task InsertCountry_Ok()
     {
         var mockCountryModel = new CountryModel() { CountryCode = "VN", CountryName = "Viet Nam", Id = 1 };
-        mockCountryService.Setup(x => x.InsertCountryById(userToken.UserName, mockCountryModel)).ReturnsAsync(mockCountryModel);
 
         var countryController = new CountryController(mockCountryService.Object, logger, mockHttpContextAccessor.Object);
+        mockCountryService.Setup(x => x.InsertCountryById(countryController.CurrentUser.UserName, mockCountryModel)).ReturnsAsync(mockCountryModel);
 
         // Act
         var response = await countryController.InsertCountry(mockCountryModel);
