@@ -44,5 +44,19 @@ namespace PetProject.Utilities.Extensions
             }
             return result;
         }
+
+        public static double JwtExpiredTime(this IConfiguration configuration)
+        {
+            var expiredTime = configuration["Jwt:ExpiredTime"];
+            double value = 0;
+            if (double.TryParse(expiredTime, out value))
+            {
+                return value;
+            }
+            else
+            {
+                throw new PetProjectException($"The configuration file could not be found value that key is Jwt:ExpiredTime");
+            }
+        }
     }
 }

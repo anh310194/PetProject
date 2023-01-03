@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PetProject.Business.Models;
 using PetProject.Utilities.Exceptions;
@@ -38,20 +39,20 @@ public class BaseController : ControllerBase
 
     public UserTokenModel CreateUserTokenModel()
     {
-        var user = _accessor.HttpContext?.User.Identity as ClaimsIdentity;
-        if (user == null)
+        var identity = _accessor.HttpContext?.User.Identity as ClaimsIdentity;
+        if (identity == null)
         {
             throw new PetProjectException("Could not found");
         }
         UserTokenModel result = new UserTokenModel();
         long userId;
-        long.TryParse(user.FindFirst(nameof(result.Id))?.Value, out userId);
+        long.TryParse(identity.FindFirst(nameof(result.Id))?.Value, out userId);
         result.Id = userId;
-        result.FirstName = user.FindFirst(nameof(result.FirstName))?.Value.ToString();
-        result.LastName = user.FindFirst(nameof(result.LastName))?.Value.ToString();
-        result.UserName = user.FindFirst(nameof(result.UserName))?.Value.ToString();
-        result.UserType = user.FindFirst(nameof(result.UserType))?.Value.ToString();
-        result.Roles = GetRoles(user.FindAll(ClaimTypes.Role));
+        result.FirstName = identity.FindFirst(nameof(result.FirstName))?.Value.ToString();
+        result.LastName = identity.FindFirst(nameof(result.LastName))?.Value.ToString();
+        result.UserName = identity.FindFirst(nameof(result.UserName))?.Value.ToString();
+        result.UserType = identity.FindFirst(nameof(result.UserType))?.Value.ToString();
+        result.Roles = GetRoles(identity.FindAll(ClaimTypes.Role));
 
         return result;
     }
@@ -76,6 +77,33 @@ public class BaseController : ControllerBase
 
     public TokenModel GetTokenModel(IConfiguration configuration, SignInModel userToken)
     {
+        var TokenModel = new TokenModel()
+        {
+            Type = JwtBearerDefaults.AuthenticationScheme,
+            ExpiredTime = configuration.JwtExpiredTime()
+        };
+
+        var jwtSecurityToken = GetJwtSecurityToken(configuration, userToken);
+        TokenModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+
+        return TokenModel;
+    }
+    private JwtSecurityToken GetJwtSecurityToken(IConfiguration configuration, SignInModel userToken)
+    {
+        return new JwtSecurityToken(
+            issuer: configuration.JwtIssuer(),
+            audience: configuration.JwtAudience(),
+            claims: GetClaims(userToken),
+            expires: DateTime.UtcNow.AddSeconds(configuration.JwtExpiredTime()),
+            signingCredentials: GetSigningCredentials(configuration));
+    }
+    private SigningCredentials GetSigningCredentials(IConfiguration configuration)
+    {
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.JwtKey()));
+        return new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+    }
+    private List<Claim> GetClaims(SignInModel userToken)
+    {
         if (userToken == null)
         {
             throw new PetProjectException("The user token could not be found");
@@ -87,32 +115,17 @@ public class BaseController : ControllerBase
                     new Claim(nameof(userToken.FirstName), userToken.FirstName ?? ""),
                     new Claim(nameof(userToken.LastName), userToken.LastName ?? ""),
                     new Claim(nameof(userToken.UserName), userToken.UserName ?? ""),
-                    new Claim(nameof(userToken.UserType), userToken.UserType ?? ""),
-                };
+                    new Claim(nameof(userToken.UserType), userToken.UserType ?? "")};
 
-        if (userToken.Roles != null)
+        if (userToken.Roles == null)
         {
-
-            foreach (var role in userToken.Roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
-            }
+            return claims;
         }
 
-        var TokenModel = new TokenModel()
+        foreach (var role in userToken.Roles)
         {
-            Type = JwtBearerDefaults.AuthenticationScheme,
-            ExpiredTime = 36000
-        };
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.JwtKey()));
-        var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var jwtSecurityToken = new JwtSecurityToken(
-            configuration.JwtIssuer(),
-            configuration.JwtAudience(),
-            claims,
-            expires: DateTime.UtcNow.AddSeconds(TokenModel.ExpiredTime),
-            signingCredentials: signIn);
-        TokenModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-        return TokenModel;
+            claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+        }
+        return claims;
     }
 }
