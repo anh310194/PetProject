@@ -12,7 +12,7 @@ public class CountryController : BaseController
 {
     private readonly ILogger _logger;
     private readonly ICountryService _countryService;
-    public CountryController(ICountryService countryService, ILogger<CountryController> logger, IHttpContextAccessor accessor): base(accessor)
+    public CountryController(ICountryService countryService, ILogger<CountryController> logger, IHttpContextAccessor accessor) : base(accessor)
     {
         _countryService = countryService;
         _logger = logger;
@@ -42,16 +42,15 @@ public class CountryController : BaseController
     [FeatureAuthorize(FeatureEnum.AddCountry)]
     public async Task<ActionResult<CountryModel?>> InsertCountry(CountryModel model)
     {
-        var result = await _countryService.UpsertCountryById(model);
+        var result = await _countryService.InsertCountryById(CurrentUser.UserName, model);
         return result;
     }
 
     [HttpPut("{id}")]
     [FeatureAuthorize(FeatureEnum.UpdateCountry)]
-    public async Task<ActionResult<CountryModel?>> UpdateCountry(int id, CountryModel model)
+    public async Task<ActionResult<CountryModel?>> UpdateCountry(CountryModel model)
     {
-        model.Id = id;
-        var result = await _countryService.UpsertCountryById(model);
+        var result = await _countryService.UpdateCountryById(CurrentUser.UserName, model);
         return result;
     }
 

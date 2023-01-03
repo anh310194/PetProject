@@ -14,12 +14,11 @@ namespace PetProject.WebAPI.Controllers;
 [ApiController]
 public class BaseController : ControllerBase
 {
-    private UserTokenModel _currentUser;
+    private UserTokenModel? _currentUser;
     private IHttpContextAccessor _accessor;
     public BaseController(IHttpContextAccessor accessor)
     {
         _accessor = accessor;
-        _currentUser = CreateUserTokenModel();
     }
 
     public UserTokenModel CurrentUser
@@ -41,15 +40,15 @@ public class BaseController : ControllerBase
         {
             throw new PetProjectException("Could not found");
         }
-        UserTokenModel result = new UserTokenModel();
-        result.FirstName = identity.FindFirst(nameof(result.FirstName))?.Value.ToString();
-        result.LastName = identity.FindFirst(nameof(result.LastName))?.Value.ToString();
-        result.UserName = identity.FindFirst(nameof(result.UserName))?.Value.ToString();
-        result.UserType = identity.FindFirst(nameof(result.UserType))?.Value.ToString();
-        result.IdentityId = identity.FindFirst(nameof(result.IdentityId))?.Value.ToString();
-        result.Roles = GetRoles(identity.FindAll(ClaimTypes.Role));
+        UserTokenModel userToken = new UserTokenModel();
+        userToken.FirstName = identity.FindFirst(nameof(userToken.FirstName))?.Value.ToString();
+        userToken.LastName = identity.FindFirst(nameof(userToken.LastName))?.Value.ToString();
+        userToken.UserName = identity.FindFirst(nameof(userToken.UserName))?.Value.ToString();
+        userToken.UserType = identity.FindFirst(nameof(userToken.UserType))?.Value.ToString();
+        userToken.IdentityId = identity.FindFirst(nameof(userToken.IdentityId))?.Value.ToString();
+        userToken.Roles = GetRoles(identity.FindAll(ClaimTypes.Role));
 
-        return result;
+        return userToken;
     }
     private List<long> GetRoles(IEnumerable<Claim>? permissions)
     {

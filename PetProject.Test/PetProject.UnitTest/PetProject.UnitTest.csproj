@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -24,6 +24,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\PetProject.WebAPI\PetProject.WebAPI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Service_Test\" />
   </ItemGroup>
 
 </Project>
