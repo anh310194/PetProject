@@ -2,18 +2,19 @@
 using PetProject.Business.Interfaces;
 using PetProject.WebAPI.Models.Requestes;
 using PetProject.WebAPI.Models.Responses;
+using System;
 
 namespace PetProject.WebAPI.Controllers;
 
+[Route("api/[controller]")]
+[ApiController]
 public class LoginController : BaseController
 {
-    private readonly ILogger _logger;
     private readonly IConfiguration _configuration;
     private readonly IUserService _userService;
-    public LoginController(ILogger<LoginController> logger, IConfiguration configuration, IUserService userService, IHttpContextAccessor accessor) : base(accessor)
+    public LoginController(IConfiguration configuration, IUserService userService, IHttpContextAccessor accessor) : base(accessor)
     {
         _configuration = configuration;
-        _logger = logger;
         _userService = userService;
     }
 
@@ -34,7 +35,17 @@ public class LoginController : BaseController
         {
             return BadRequest("the User Name or password invalid!");
         }
+        var userToken = new UserTokenModel()
+        {
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            IdentityId = Guid.NewGuid().ToString(),
+            Id = user.Id,
+            Roles = user.Roles?.ToList(),
+            UserName = user.UserName,
+            UserType = user.UserType
 
-        return GetTokenModel(_configuration, user);
+        };
+        return GetTokenModel(_configuration, userToken);
     }
 }

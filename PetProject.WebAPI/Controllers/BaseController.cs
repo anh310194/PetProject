@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using PetProject.Business.Models;
 using PetProject.Utilities.Exceptions;
 using PetProject.Utilities.Extensions;
 using PetProject.WebAPI.Models.Responses;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
 
 namespace PetProject.WebAPI.Controllers;
@@ -37,7 +34,7 @@ public class BaseController : ControllerBase
         }
     }
 
-    public UserTokenModel CreateUserTokenModel()
+    private UserTokenModel CreateUserTokenModel()
     {
         var identity = _accessor.HttpContext?.User.Identity as ClaimsIdentity;
         if (identity == null)
@@ -52,6 +49,7 @@ public class BaseController : ControllerBase
         result.LastName = identity.FindFirst(nameof(result.LastName))?.Value.ToString();
         result.UserName = identity.FindFirst(nameof(result.UserName))?.Value.ToString();
         result.UserType = identity.FindFirst(nameof(result.UserType))?.Value.ToString();
+        result.IdentityId = identity.FindFirst(nameof(result.IdentityId))?.Value.ToString();
         result.Roles = GetRoles(identity.FindAll(ClaimTypes.Role));
 
         return result;
@@ -75,7 +73,7 @@ public class BaseController : ControllerBase
         return roles;
     }
 
-    public TokenModel GetTokenModel(IConfiguration configuration, SignInModel userToken)
+    protected TokenModel GetTokenModel(IConfiguration configuration, UserTokenModel userToken)
     {
         var TokenModel = new TokenModel()
         {
@@ -88,7 +86,7 @@ public class BaseController : ControllerBase
 
         return TokenModel;
     }
-    private JwtSecurityToken GetJwtSecurityToken(IConfiguration configuration, SignInModel userToken)
+    private JwtSecurityToken GetJwtSecurityToken(IConfiguration configuration, UserTokenModel userToken)
     {
         return new JwtSecurityToken(
             issuer: configuration.JwtIssuer(),
@@ -97,25 +95,25 @@ public class BaseController : ControllerBase
             expires: DateTime.UtcNow.AddSeconds(configuration.JwtExpiredTime()),
             signingCredentials: GetSigningCredentials(configuration));
     }
+
     private SigningCredentials GetSigningCredentials(IConfiguration configuration)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.JwtKey()));
         return new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
     }
-    private List<Claim> GetClaims(SignInModel userToken)
+    private List<Claim> GetClaims(UserTokenModel userToken)
     {
         if (userToken == null)
         {
             throw new PetProjectException("The user token could not be found");
         }
         var claims = new List<Claim> {
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                    new Claim(nameof(userToken.Id), userToken.Id.ToString()),
-                    new Claim(nameof(userToken.FirstName), userToken.FirstName ?? ""),
-                    new Claim(nameof(userToken.LastName), userToken.LastName ?? ""),
-                    new Claim(nameof(userToken.UserName), userToken.UserName ?? ""),
-                    new Claim(nameof(userToken.UserType), userToken.UserType ?? "")};
+            new Claim(nameof(userToken.IdentityId), userToken.IdentityId ?? ""),
+            new Claim(nameof(userToken.Id), userToken.Id.ToString()),
+            new Claim(nameof(userToken.FirstName), userToken.FirstName ?? ""),
+            new Claim(nameof(userToken.LastName), userToken.LastName ?? ""),
+            new Claim(nameof(userToken.UserName), userToken.UserName ?? ""),
+            new Claim(nameof(userToken.UserType), userToken.UserType ?? "")};
 
         if (userToken.Roles == null)
         {
