@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetProject.WebAPI.Models.Responses;
-using System.Security.Principal;
 
 namespace PetProject.WebAPI.Controllers;
 
-public class BaseController : Controller
+[Route("api/[controller]")]
+[ApiController]
+public class BaseController : ControllerBase
 {
     protected readonly UserTokenModel CurrentUser;
     public BaseController(IHttpContextAccessor accessor)

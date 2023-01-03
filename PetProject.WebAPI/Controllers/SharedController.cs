@@ -5,11 +5,12 @@ using PetProject.WebAPI.Models;
 
 namespace PetProject.WebAPI.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class SharedController : Controller
+public class SharedController : BaseController
 {
+    public SharedController(IHttpContextAccessor accessor): base(accessor)
+    {
 
+    }
     [HttpGet("Menus")]
     public ActionResult<List<MenuModel>> Menus()
     {

@@ -8,8 +8,6 @@ using PetProject.WebAPI.Enums;
 namespace PetProject.WebAPI.Controllers;
 
 [Authorize]
-[Route("api/[controller]")]
-[ApiController]
 public class CountryController : BaseController
 {
     private readonly ILogger _logger;

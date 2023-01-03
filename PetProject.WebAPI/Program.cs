@@ -11,6 +11,7 @@ using PetProject.WebAPI.Filters;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
+using PetProject.Utilities.Extensions;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 try
@@ -32,7 +33,8 @@ try
     });
 
     //Add Authentication Service
-    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
         options.RequireHttpsMetadata = false;
         options.SaveToken = true;
@@ -40,9 +42,9 @@ try
         {
             ValidateIssuer = true,
             ValidateAudience = true,
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            ValidAudience = builder.Configuration.JwtAudience(),
+            ValidIssuer = builder.Configuration.JwtIssuer(),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.JwtKey()))
         };
     });
 
@@ -99,7 +101,7 @@ try
     });
 
     //Add Petproject Services
-    builder.Services.AddInfacstructure(builder.Configuration.GetConnectionString("SQLConnection"));
+    builder.Services.AddInfacstructure(builder.Configuration.ConnectionDatabase());
     builder.Services.AddBusiness();
     builder.Services.AddHttpContextAccessor();
 

@@ -5,14 +5,12 @@ using PetProject.WebAPI.Models.Responses;
 
 namespace PetProject.WebAPI.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class LoginController : Controller
+public class LoginController : BaseController
 {
     private readonly ILogger _logger;
     private readonly IConfiguration _configuration;
     private readonly IUserService _userService;
-    public LoginController(ILogger<LoginController> logger, IConfiguration configuration, IUserService userService)
+    public LoginController(ILogger<LoginController> logger, IConfiguration configuration, IUserService userService, IHttpContextAccessor accessor) : base(accessor)
     {
         _configuration = configuration;
         _logger = logger;
