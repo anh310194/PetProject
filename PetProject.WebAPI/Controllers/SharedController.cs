@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetProject.Utilities.Helper;
-using PetProject.WebAPI.Enums;
+using PetProject.Utilities.Enums;
 using PetProject.WebAPI.Models;
 
 namespace PetProject.WebAPI.Controllers;

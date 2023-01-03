@@ -1,4 +1,4 @@
-﻿namespace PetProject.WebAPI.Enums;
+﻿namespace PetProject.Utilities.Enums;
 
 public enum FeatureEnum
 {

@@ -1,16 +1,9 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
 using PetProject.Business;
-using PetProject.Utilities.Helper;
 using PetProject.Infacstructure;
-using PetProject.WebAPI.Enums;
 using PetProject.WebAPI.Filters;
-using System.Reflection;
-using System.Security.Claims;
-using System.Text;
+using PetProject.WebAPI.Services;
 using PetProject.Utilities.Extensions;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
@@ -33,72 +26,14 @@ try
     });
 
     //Add Authentication Service
-    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.RequireHttpsMetadata = false;
-        options.SaveToken = true;
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidAudience = builder.Configuration.JwtAudience(),
-            ValidIssuer = builder.Configuration.JwtIssuer(),
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.JwtKey()))
-        };
-    });
+    builder.Services.AddAuthenticationPetProject(builder.Configuration);
 
     //Add Authorization Service
-    builder.Services.AddAuthorization(options =>
-    {
-        foreach (var name in EnumHelper.GetNames<FeatureEnum>())
-        {
-            var role = EnumHelper.GetValue<FeatureEnum>(name);
-            options.AddPolicy(name, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, role.ToString()));
-        }
-    });
+    builder.Services.AddAuthorizationPetProject();
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen(options =>
-    {
-        options.SwaggerDoc("v1", new OpenApiInfo
-        {
-            Version = "v1",
-            Title = "PepProject API",
-            Description = "The project is managing Rest API",
-            TermsOfService = new Uri("https://example.com/terms"),
-            Contact = new OpenApiContact
-            {
-                Name = "Contact",
-                Url = new Uri("https://example.com/contact")
-            },
-        });
-        // Include 'SecurityScheme' to use JWT Authentication
-        var jwtSecurityScheme = new OpenApiSecurityScheme
-        {
-            Scheme = "bearer",
-            BearerFormat = "JWT",
-            Name = "JWT Authentication",
-            In = ParameterLocation.Header,
-            Type = SecuritySchemeType.Http,
-            Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
-
-            Reference = new OpenApiReference
-            {
-                Id = JwtBearerDefaults.AuthenticationScheme,
-                Type = ReferenceType.SecurityScheme
-            }
-        };
-
-        options.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-
-        options.AddSecurityRequirement(new OpenApiSecurityRequirement { { jwtSecurityScheme, Array.Empty<string>() } });
-
-
-        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-    });
+    builder.Services.AddSwaggerPetProject();
 
     //Add Petproject Services
     builder.Services.AddInfacstructure(builder.Configuration.ConnectionDatabase());

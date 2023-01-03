@@ -30,9 +30,11 @@ public class LoginController : BaseController
         }
 
         var user = await _userService.Authenticate(model.UserName, model.Password);
+        if (user == null)
+        {
+            return BadRequest("the User Name or password invalid!");
+        }
 
-        var userToken = new UserTokenModel(user);
-
-        return userToken.GetTokenModel(_configuration);
+        return GetTokenModel(_configuration, user);
     }
 }

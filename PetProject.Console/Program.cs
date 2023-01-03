@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using PetProject.Business;
 using PetProject.Business.Interfaces;
 using PetProject.Infacstructure;
+using PetProject.Utilities.Extensions;
 
 using IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
@@ -21,6 +22,6 @@ await host.RunAsync();
 static void AddServices(HostBuilderContext context, IServiceCollection services)
 {
     IConfiguration configuration = context.Configuration;
-    services.AddInfacstructure(configuration.GetConnectionString("SQLConnection"));
+    services.AddInfacstructure(configuration.ConnectionDatabase());
     services.AddBusiness();
 }

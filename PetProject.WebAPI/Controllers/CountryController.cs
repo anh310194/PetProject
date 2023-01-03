@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PetProject.Business.Interfaces;
 using PetProject.Business.Models;
 using PetProject.WebAPI.Attributes;
-using PetProject.WebAPI.Enums;
+using PetProject.Utilities.Enums;
 
 namespace PetProject.WebAPI.Controllers;
 
