@@ -29,10 +29,9 @@ public class UserService : BaseService, IUserService
             UserName = userName,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Id = user.Id,
             UserType = "sysadmin"
         };
-        var paremeter = new Microsoft.Data.SqlClient.SqlParameter("@UserId", System.Data.SqlDbType.BigInt) { Value = result.Id };
+        var paremeter = new Microsoft.Data.SqlClient.SqlParameter("@UserId", System.Data.SqlDbType.BigInt) { Value = user.Id };
         var roleIds = (await _unitOfWork.ExecStoreProcedureAsync("GetFeaturesByUser", paremeter));
         if (roleIds != null)
         {

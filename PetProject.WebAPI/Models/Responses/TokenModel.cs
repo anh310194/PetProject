@@ -9,7 +9,6 @@ public class TokenModel
 
 public class UserTokenModel
 {
-    public long Id { get; set; }
     public string? UserName { get; set; }
     public List<long>? Roles { get; set; }
     public string? FirstName { get; set; }

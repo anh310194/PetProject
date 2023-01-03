@@ -42,9 +42,6 @@ public class BaseController : ControllerBase
             throw new PetProjectException("Could not found");
         }
         UserTokenModel result = new UserTokenModel();
-        long userId;
-        long.TryParse(identity.FindFirst(nameof(result.Id))?.Value, out userId);
-        result.Id = userId;
         result.FirstName = identity.FindFirst(nameof(result.FirstName))?.Value.ToString();
         result.LastName = identity.FindFirst(nameof(result.LastName))?.Value.ToString();
         result.UserName = identity.FindFirst(nameof(result.UserName))?.Value.ToString();
@@ -109,7 +106,6 @@ public class BaseController : ControllerBase
         }
         var claims = new List<Claim> {
             new Claim(nameof(userToken.IdentityId), userToken.IdentityId ?? ""),
-            new Claim(nameof(userToken.Id), userToken.Id.ToString()),
             new Claim(nameof(userToken.FirstName), userToken.FirstName ?? ""),
             new Claim(nameof(userToken.LastName), userToken.LastName ?? ""),
             new Claim(nameof(userToken.UserName), userToken.UserName ?? ""),

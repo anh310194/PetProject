@@ -40,7 +40,6 @@ public class LoginController : BaseController
             FirstName = user.FirstName,
             LastName = user.LastName,
             IdentityId = Guid.NewGuid().ToString(),
-            Id = user.Id,
             Roles = user.Roles?.ToList(),
             UserName = user.UserName,
             UserType = user.UserType
