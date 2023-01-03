@@ -24,6 +24,7 @@ public class CountryController_Test
     private ILogger<CountryController> logger;
     private Mock<IHttpContextAccessor> mockHttpContextAccessor;
     private Mock<ICountryService> mockCountryService;
+    private CountryController countryController;
 
     public CountryController_Test()
     {
@@ -31,6 +32,7 @@ public class CountryController_Test
         logger = mockLog.Object;
         mockHttpContextAccessor = MockJwt.MockHttpContextAccessor_Admin();
         mockCountryService = new Mock<ICountryService>();
+        countryController = new CountryController(mockCountryService.Object, logger, mockHttpContextAccessor.Object);
     }
 
 
@@ -38,7 +40,6 @@ public class CountryController_Test
     public async Task GetCountries_Ok()
     {
         mockCountryService.Setup(x => x.GetCountries()).ReturnsAsync(new List<CountryModel>() { new CountryModel() });
-        var countryController = new CountryController(mockCountryService.Object, logger, mockHttpContextAccessor.Object);
 
         // Act
         var response = await countryController.GetAll();
@@ -54,7 +55,6 @@ public class CountryController_Test
     {
         var parameter = 2;
         mockCountryService.Setup(x => x.GetCountryById(parameter));
-        var countryController = new CountryController(mockCountryService.Object, logger, mockHttpContextAccessor.Object);
 
         // Act
         var response = await countryController.GetCountryById(parameter);
@@ -68,7 +68,6 @@ public class CountryController_Test
     {
         var parameter = 2;
         mockCountryService.Setup(x => x.GetCountryById(parameter)).ReturnsAsync(new CountryModel());
-        var countryController = new CountryController(mockCountryService.Object, logger, mockHttpContextAccessor.Object);
 
         // Act
         var response = await countryController.GetCountryById(parameter);
@@ -82,7 +81,6 @@ public class CountryController_Test
     {
         var mockCountryModel = new CountryModel() { CountryCode = "VN", CountryName = "Viet Nam", Id = 1 };
 
-        var countryController = new CountryController(mockCountryService.Object, logger, mockHttpContextAccessor.Object);
         mockCountryService.Setup(x => x.InsertCountryById(countryController.CurrentUser.UserName, mockCountryModel)).ReturnsAsync(mockCountryModel);
 
         // Act
