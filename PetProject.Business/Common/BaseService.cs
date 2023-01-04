@@ -1,4 +1,6 @@
-﻿using PetProject.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PetProject.Domain;
+using PetProject.Domain.Entities;
 using PetProject.Infacstructure.Interfaces;
 using PetProject.Utilities.Exceptions;
 
@@ -16,13 +18,13 @@ public abstract class BaseService
     {
         if (string.IsNullOrEmpty(userName))
         {
-            throw new PetProjectException($"The value user name is empty!");
+            throw new PetProjectException(PetProjectMessage.USER_NAME_EMTPY);
         }
-        long? userId = _unitOfWork.GenericRepository<User>().Queryable(p => p.UserName == userName).Select(s => s.Id).FirstOrDefault();
-        if (userId == null)
+        var user = _unitOfWork.UserRepository.GetUserByUserName(userName);
+        if (user == null)
         {
-            throw new PetProjectException($"The user name: {userName} could not be found!");
+            throw new PetProjectException(string.Format(PetProjectMessage.NOT_FOUND_USER_NAME, userName));
         }
-        return userId.Value;
+        return user.Id;
     }
 }

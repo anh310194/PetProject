@@ -5,46 +5,46 @@ using PetProject.Business.Models;
 using PetProject.Infacstructure.Interfaces;
 using PetProject.Domain.Entities;
 using PetProject.Utilities.Exceptions;
+using PetProject.Domain;
 
 namespace PetProject.Business.Implements;
 
 public class CountryService : BaseService, ICountryService
 {
-    private IGenericRepository<Country> countryRepository;
     public CountryService(IUnitOfWork unitOfWork) : base(unitOfWork)
     {
-        countryRepository = _unitOfWork.GenericRepository<Country>();
     }
 
     public void DeleteCountryById(long id)
     {
-        _unitOfWork.GenericRepository<Country>().Delete(id);
+        _unitOfWork.CountryRepository.Delete(id);
         _unitOfWork.SaveChanges();
     }
 
     public Task<List<CountryModel>> GetCountries()
     {
-        return _unitOfWork.GenericRepository<Country>().Queryable().Select(s => new CountryModel() { Id = s.Id, CountryCode = s.CountryCode, CountryName = s.CountryName }).ToListAsync();
+        return _unitOfWork.CountryRepository.Queryable().Select(s => new CountryModel() { Id = s.Id, CountryCode = s.CountryCode, CountryName = s.CountryName }).ToListAsync();
     }
 
     public Task<CountryModel?> GetCountryById(long id)
     {
-        return _unitOfWork.GenericRepository<Country>().Queryable().Select(s => new CountryModel() { Id = s.Id, CountryCode = s.CountryCode, CountryName = s.CountryName }).FirstOrDefaultAsync(p => p.Id == id);
+        return _unitOfWork.CountryRepository.Queryable(p => p.Id == id)
+            .Select(s => new CountryModel() { Id = s.Id, CountryCode = s.CountryCode, CountryName = s.CountryName }).FirstOrDefaultAsync();
     }
 
     public async Task<CountryModel?> UpdateCountryById(string? userName, CountryModel model)
     {
-        var country = await countryRepository.FindAsync(model.Id);
+        var country = await _unitOfWork.CountryRepository.FindAsync(model.Id);
         if (country == null)
         {
-            throw new PetProjectException($"The Country {model.Id} could not be found");
+            throw new PetProjectException(string.Format(PetProjectMessage.NOT_FOUND_COUNTRY_ID, model.Id));
         }
 
         country.CountryCode = model.CountryCode;
         country.CountryName = model.CountryName;
 
         long userId = GetUserId(userName);
-        countryRepository.Update(country, userId);
+        _unitOfWork.CountryRepository.Update(country, userId);
 
         await _unitOfWork.SaveChangesAsync();
 
@@ -70,11 +70,10 @@ public class CountryService : BaseService, ICountryService
         };
 
         long userId = GetUserId(userName);
-        var result = await countryRepository.InsertAsync(country, userId);
+        var result = await _unitOfWork.CountryRepository.InsertAsync(country, userId);
 
         await _unitOfWork.SaveChangesAsync();
 
         return MappingCountryModel(result.Entity);
     }
-
 }

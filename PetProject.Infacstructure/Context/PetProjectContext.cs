@@ -6,13 +6,12 @@ using PetProject.Infacstructure.Interfaces;
 
 namespace PetProject.Infacstructure.Context;
 
-public partial class PetProjectContext : DbContext, IDataContext
+public partial class PetProjectContext : DbContext
 {
     public PetProjectContext(DbContextOptions<PetProjectContext> options)
         : base(options)
     {
     }
-    public DbContext DataContext { get { return this; } }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

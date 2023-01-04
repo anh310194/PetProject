@@ -14,13 +14,13 @@ public class UnitOfWork : RepositoryFactory, IUnitOfWork
     private bool _disposed;
 
     public UnitOfWork(
-        IDataContext context,
+        PetProjectContext context,
         IServiceProvider serviceProvider
     ) : base(
             serviceProvider
          )
     {
-        _dbContext = context.DataContext;
+        _dbContext = context;
     }
 
     #region Dispose        

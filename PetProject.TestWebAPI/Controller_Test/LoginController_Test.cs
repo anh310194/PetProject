@@ -3,12 +3,12 @@ using Moq;
 using NUnit.Framework;
 using PetProject.Business.Interfaces;
 using PetProject.Business.Models;
-using PetProject.TestWebAPIMock;
+using PetProject.TestWebAPI.Mock;
 using PetProject.WebAPI.Controllers;
 using PetProject.WebAPI.Interfaces;
 using PetProject.WebAPI.Models.Requestes;
 
-namespace PetProject.TestWebAPIController_Test
+namespace PetProject.TestWebAPI.Controller_Test
 {
     public class LoginController_Test
     {

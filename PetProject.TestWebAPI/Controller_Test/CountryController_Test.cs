@@ -4,12 +4,12 @@ using Moq;
 using NUnit.Framework;
 using PetProject.Business.Interfaces;
 using PetProject.Business.Models;
-using PetProject.TestWebAPIMock;
+using PetProject.TestWebAPI.Mock;
 using PetProject.Utilities.Exceptions;
 using PetProject.WebAPI.Controllers;
 using PetProject.WebAPI.Interfaces;
 
-namespace PetProject.TestWebAPIController_Test;
+namespace PetProject.TestWebAPI.Controller_Test;
 
 public class CountryController_Test
 {

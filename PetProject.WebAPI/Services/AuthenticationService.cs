@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using PetProject.Business.Models;
-using PetProject.Domain.Entities;
 using PetProject.Utilities.Exceptions;
 using PetProject.Utilities.Extensions;
 using PetProject.WebAPI.Models.Responses;
@@ -21,6 +20,7 @@ namespace PetProject.WebAPI.Services
             _accessor = accessor;
             _configuration = configuration;
         }
+
         public UserTokenModel CurrentUser
         {
             get
@@ -32,7 +32,6 @@ namespace PetProject.WebAPI.Services
                 return _currentUser;
             }
         }
-
         private UserTokenModel CreateUserTokenModel()
         {
             var identity = _accessor.HttpContext?.User.Identity as ClaimsIdentity;
@@ -84,6 +83,10 @@ namespace PetProject.WebAPI.Services
         }
         private UserTokenModel GetUserTokenModel(SignInModel signInUser)
         {
+            if (signInUser == null)
+            {
+                throw new PetProjectException("The singn model is empty!");
+            }
             return new UserTokenModel()
             {
                 FirstName = signInUser.FirstName,
@@ -97,15 +100,18 @@ namespace PetProject.WebAPI.Services
         }
         private string GetToken(UserTokenModel userToken)
         {
-            var jwtSecurityToken = GetJwtSecurityToken(userToken);
-            return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            var claims = GetClaims(userToken);
+            var jwtSecurityToken = GetJwtSecurityToken(claims);
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            return tokenHandler.WriteToken(jwtSecurityToken);
         }
-        private JwtSecurityToken GetJwtSecurityToken(UserTokenModel userToken)
+        private JwtSecurityToken GetJwtSecurityToken(IEnumerable<Claim> claims)
         {
             return new JwtSecurityToken(
                 issuer: _configuration.JwtIssuer(),
                 audience: _configuration.JwtAudience(),
-                claims: GetClaims(userToken),
+                claims: claims,
                 expires: DateTime.UtcNow.AddSeconds(_configuration.JwtExpiredTime()),
                 signingCredentials: GetSigningCredentials());
         }

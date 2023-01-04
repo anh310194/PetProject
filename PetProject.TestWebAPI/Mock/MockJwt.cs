@@ -4,7 +4,7 @@ using PetProject.Utilities.Enums;
 using PetProject.WebAPI.Models.Responses;
 using System.Security.Claims;
 
-namespace PetProject.TestWebAPIMock
+namespace PetProject.TestWebAPI.Mock
 {
     public static class MockJwt
     {
@@ -25,10 +25,9 @@ namespace PetProject.TestWebAPIMock
             }
             return _userTokenAdmin;
         }
-        public static Mock<IHttpContextAccessor> MockHttpContextAccessor_Admin()
-        {
-            UserTokenModel userToken = MockUserTokenAdmin();
 
+        public static Mock<IHttpContextAccessor> MockHttpContextAccessor(UserTokenModel userToken)
+        {
             var claims = GetClaimsByUserToken(userToken);
             var user = GetClaimsPrincipal(claims);
             var context = new DefaultHttpContext() { User = user };
@@ -37,6 +36,7 @@ namespace PetProject.TestWebAPIMock
             mockHttpContextAccessor.SetupGet(s => s.HttpContext).Returns(context);
             return mockHttpContextAccessor;
         }
+
         private static ClaimsPrincipal GetClaimsPrincipal(List<Claim> claims)
         {
             ClaimsPrincipal user = new ClaimsPrincipal();
