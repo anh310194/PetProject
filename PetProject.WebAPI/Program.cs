@@ -3,8 +3,10 @@ using NLog.Web;
 using PetProject.Business;
 using PetProject.Infacstructure;
 using PetProject.WebAPI.Filters;
-using PetProject.WebAPI.Services;
 using PetProject.Utilities.Extensions;
+using PetProject.WebAPI.Extensions;
+using PetProject.WebAPI.Services;
+using PetProject.WebAPI.Interfaces;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 try
@@ -25,11 +27,10 @@ try
         options.Filters.Add<HttpResponseExceptionFilter>();
     });
 
-    //Add Authentication Service
+    //Add Authentication and Authorization Service
     builder.Services.AddAuthenticationPetProject(builder.Configuration);
-
-    //Add Authorization Service
     builder.Services.AddAuthorizationPetProject();
+    builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();

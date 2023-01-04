@@ -4,6 +4,8 @@ using PetProject.Business.Interfaces;
 using PetProject.Business.Models;
 using PetProject.WebAPI.Attributes;
 using PetProject.Utilities.Enums;
+using PetProject.Utilities.Exceptions;
+using PetProject.WebAPI.Interfaces;
 
 namespace PetProject.WebAPI.Controllers;
 
@@ -12,7 +14,7 @@ public class CountryController : BaseController
 {
     private readonly ILogger _logger;
     private readonly ICountryService _countryService;
-    public CountryController(ICountryService countryService, ILogger<CountryController> logger, IHttpContextAccessor accessor) : base(accessor)
+    public CountryController(ICountryService countryService, ILogger<CountryController> logger, IAuthenticationService authenticationservice) : base(authenticationservice)
     {
         _countryService = countryService;
         _logger = logger;
@@ -43,6 +45,10 @@ public class CountryController : BaseController
     public async Task<ActionResult<CountryModel?>> InsertCountry(CountryModel model)
     {
         var result = await _countryService.InsertCountryById(CurrentUser.UserName, model);
+        if (result == null)
+        {
+            throw new PetProjectException("The country can't not insert.");
+        }
         return result;
     }
 
@@ -51,6 +57,10 @@ public class CountryController : BaseController
     public async Task<ActionResult<CountryModel?>> UpdateCountry(CountryModel model)
     {
         var result = await _countryService.UpdateCountryById(CurrentUser.UserName, model);
+        if (result == null)
+        {
+            throw new PetProjectException("The country can't not update.");
+        }
         return result;
     }
 
@@ -64,6 +74,6 @@ public class CountryController : BaseController
     public ActionResult DeleteCountry(long id)
     {
         _countryService.DeleteCountryById(id);
-        return NoContent();
+        return Ok();
     }
 }

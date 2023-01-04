@@ -19,6 +19,7 @@ public class CountryService : BaseService, ICountryService
     public void DeleteCountryById(long id)
     {
         _unitOfWork.GenericRepository<Country>().Delete(id);
+        _unitOfWork.SaveChanges();
     }
 
     public Task<List<CountryModel>> GetCountries()

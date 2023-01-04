@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 
-namespace PetProject.WebAPI.Services
+namespace PetProject.WebAPI.Extensions
 {
     public static class ServiceCollection
     {

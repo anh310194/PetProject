@@ -1,12 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using PetProject.Utilities.Exceptions;
-using PetProject.Utilities.Extensions;
+﻿using Microsoft.AspNetCore.Mvc;
+using PetProject.WebAPI.Interfaces;
 using PetProject.WebAPI.Models.Responses;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace PetProject.WebAPI.Controllers;
 
@@ -15,10 +9,10 @@ namespace PetProject.WebAPI.Controllers;
 public class BaseController : ControllerBase
 {
     private UserTokenModel? _currentUser;
-    private IHttpContextAccessor _accessor;
-    public BaseController(IHttpContextAccessor accessor)
+    private IAuthenticationService _authenticationService;
+    public BaseController(IAuthenticationService authenticationservice)
     {
-        _accessor = accessor;
+        _authenticationService = authenticationservice;
     }
 
     public UserTokenModel CurrentUser
@@ -27,98 +21,9 @@ public class BaseController : ControllerBase
         {
             if (_currentUser == null)
             {
-                _currentUser = CreateUserTokenModel();
+                _currentUser = _authenticationService.CurrentUser;
             }
             return _currentUser;
         }
-    }
-
-    private UserTokenModel CreateUserTokenModel()
-    {
-        var identity = _accessor.HttpContext?.User.Identity as ClaimsIdentity;
-        if (identity == null)
-        {
-            throw new PetProjectException("Could not found");
-        }
-        UserTokenModel userToken = new UserTokenModel();
-        userToken.FirstName = identity.FindFirst(nameof(userToken.FirstName))?.Value.ToString();
-        userToken.LastName = identity.FindFirst(nameof(userToken.LastName))?.Value.ToString();
-        userToken.UserName = identity.FindFirst(nameof(userToken.UserName))?.Value.ToString();
-        userToken.UserType = identity.FindFirst(nameof(userToken.UserType))?.Value.ToString();
-        userToken.IdentityId = identity.FindFirst(nameof(userToken.IdentityId))?.Value.ToString();
-        userToken.Roles = GetRoles(identity.FindAll(ClaimTypes.Role));
-
-        return userToken;
-    }
-    private List<long> GetRoles(IEnumerable<Claim>? permissions)
-    {
-        var roles = new List<long>();
-        if (permissions == null)
-        {
-            return roles;
-        }
-        foreach (var permission in permissions)
-        {
-            string value = permission.Value;
-            int roleId;
-            if (int.TryParse(value, out roleId))
-            {
-                roles.Add(roleId);
-            }
-        }
-        return roles;
-    }
-
-    protected TokenModel GetTokenModel(IConfiguration configuration, UserTokenModel userToken)
-    {
-        var TokenModel = new TokenModel()
-        {
-            Type = JwtBearerDefaults.AuthenticationScheme,
-            ExpiredTime = configuration.JwtExpiredTime()
-        };
-
-        var jwtSecurityToken = GetJwtSecurityToken(configuration, userToken);
-        TokenModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-
-        return TokenModel;
-    }
-    private JwtSecurityToken GetJwtSecurityToken(IConfiguration configuration, UserTokenModel userToken)
-    {
-        return new JwtSecurityToken(
-            issuer: configuration.JwtIssuer(),
-            audience: configuration.JwtAudience(),
-            claims: GetClaims(userToken),
-            expires: DateTime.UtcNow.AddSeconds(configuration.JwtExpiredTime()),
-            signingCredentials: GetSigningCredentials(configuration));
-    }
-
-    private SigningCredentials GetSigningCredentials(IConfiguration configuration)
-    {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.JwtKey()));
-        return new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-    }
-    private List<Claim> GetClaims(UserTokenModel userToken)
-    {
-        if (userToken == null)
-        {
-            throw new PetProjectException("The user token could not be found");
-        }
-        var claims = new List<Claim> {
-            new Claim(nameof(userToken.IdentityId), userToken.IdentityId ?? ""),
-            new Claim(nameof(userToken.FirstName), userToken.FirstName ?? ""),
-            new Claim(nameof(userToken.LastName), userToken.LastName ?? ""),
-            new Claim(nameof(userToken.UserName), userToken.UserName ?? ""),
-            new Claim(nameof(userToken.UserType), userToken.UserType ?? "")};
-
-        if (userToken.Roles == null)
-        {
-            return claims;
-        }
-
-        foreach (var role in userToken.Roles)
-        {
-            claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
-        }
-        return claims;
     }
 }

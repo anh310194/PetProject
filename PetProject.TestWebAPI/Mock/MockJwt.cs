@@ -2,27 +2,32 @@
 using Moq;
 using PetProject.Utilities.Enums;
 using PetProject.WebAPI.Models.Responses;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 
-namespace PetProject.UnitTest.Mock
+namespace PetProject.TestWebAPIMock
 {
     public static class MockJwt
     {
+        private static UserTokenModel? _userTokenAdmin;
+        public static UserTokenModel MockUserTokenAdmin()
+        {
+            if (_userTokenAdmin == null)
+            {
+                _userTokenAdmin = new UserTokenModel()
+                {
+                    IdentityId = "9ef7ac43-38c7-46dd-85cd-459bc917c95a",
+                    FirstName = "system",
+                    LastName = "administrator",
+                    UserName = "sysadmin",
+                    UserType = "sysadmin",
+                    Roles = Enum.GetValues<FeatureEnum>().Select(s => (long)s).ToList(),
+                };
+            }
+            return _userTokenAdmin;
+        }
         public static Mock<IHttpContextAccessor> MockHttpContextAccessor_Admin()
         {
-            UserTokenModel userToken = new UserTokenModel()
-            {
-                IdentityId = "9ef7ac43-38c7-46dd-85cd-459bc917c95a",
-                FirstName = "system",
-                LastName = "administrator",
-                UserName = "sysadmin",
-                UserType = "sysadmin",
-                Roles = Enum.GetValues<FeatureEnum>().Select(s => (long)s).ToList(),
-            };
+            UserTokenModel userToken = MockUserTokenAdmin();
 
             var claims = GetClaimsByUserToken(userToken);
             var user = GetClaimsPrincipal(claims);
