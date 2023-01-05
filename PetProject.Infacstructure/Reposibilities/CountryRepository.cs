@@ -6,9 +6,9 @@ using PetProject.Repositories.Common;
 
 namespace PetProject.Infacstructure.Reposibilities
 {
-    internal class CountryRepository : GenericRepository<Country>, ICountryRepository
+    public class CountryRepository : GenericRepository<Country>, ICountryRepository
     {
-        public CountryRepository(PetProjectContext context): base(context)
+        public CountryRepository(PetProjectContext context) : base(context)
         {
 
         }

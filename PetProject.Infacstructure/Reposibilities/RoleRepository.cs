@@ -4,7 +4,7 @@ using PetProject.Repositories.Common;
 
 namespace PetProject.Infacstructure.Reposibilities
 {
-    internal class RoleRepository : GenericRepository<Role>, IRoleRepository
+    public class RoleRepository : GenericRepository<Role>, IRoleRepository
     {
         public RoleRepository(PetProjectContext context) : base(context)
         {

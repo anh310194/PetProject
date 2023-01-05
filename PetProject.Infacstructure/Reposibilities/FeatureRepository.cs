@@ -4,7 +4,7 @@ using PetProject.Repositories.Common;
 
 namespace PetProject.Infacstructure.Reposibilities
 {
-    internal class FeatureRepository : GenericRepository<Feature>, IFeatureRepository
+    public class FeatureRepository : GenericRepository<Feature>, IFeatureRepository
     {
         public FeatureRepository(PetProjectContext context) : base(context)
         {
