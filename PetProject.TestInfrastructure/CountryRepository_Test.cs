@@ -45,6 +45,9 @@ namespace PetProject.TestInfrastructure
         [Test]
         public async Task GetCountries_Ok()
         {
+            //Arrange
+            Common.ClearTracked();
+
             //Atc
             var result = await _unitOfWork.CountryRepository.Queryable().ToListAsync();
 
@@ -56,6 +59,9 @@ namespace PetProject.TestInfrastructure
         [Test]
         public async Task GetCountryByCountryCode_Ok()
         {
+            //Arrange
+            Common.ClearTracked();
+
             //Atc
             var result = await _unitOfWork.CountryRepository.GetByCountryCodeAsync(_seedCountry.CountryCode);
 
@@ -67,6 +73,9 @@ namespace PetProject.TestInfrastructure
         [Test]
         public async Task InsertCountry_Ok()
         {
+            //Arrange
+            Common.ClearTracked();
+
             //Atc
             var newCountry = new Country
             {
@@ -84,10 +93,13 @@ namespace PetProject.TestInfrastructure
         }
 
         [Test]
-        public void UpdateCountry_RowversionChanged()
+        public void UpdateCountry_DbUpdateConcurrency_Conflicts()
         {
+            //Arrange
+            Common.ClearTracked();
+
             //Atc
-            var newCountry = new Country
+            var updateCountry = new Country
             {
                 Id = _seedCountry.Id,
                 CountryCode = _seedCountry.CountryCode,
@@ -96,13 +108,44 @@ namespace PetProject.TestInfrastructure
                 CreatedTime = _seedCountry.CreatedTime,
                 RowVersion = new byte[] { 1, 2, 3, 4, 5, 6, 4, 6, }
             };
-            Assert.Throws<System.InvalidOperationException>(() => _unitOfWork.CountryRepository.Update(newCountry, userId));
+            Assert.Throws<DbUpdateConcurrencyException>(() =>
+                {
+                    _unitOfWork.CountryRepository.Update(updateCountry, userId);
+                    _unitOfWork.SaveChanges();
+                }
+            );
+        }
+
+
+        [Test]
+        public async Task UpdateCountry_InvalidOperationException_Conflicts()
+        {
+            //Arrange
+            Common.ClearTracked();
+            var updateCountry = await _unitOfWork.CountryRepository.GetByCountryCodeAsync(_seedCountry.CountryCode);
+
+            //Atc
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                var newUpdated = new Country()
+                {
+                    Id = updateCountry.Id,
+                    CountryName = updateCountry.CountryName,
+                    CreatedBy = updateCountry.CreatedBy,
+                    CreatedTime = updateCountry.CreatedTime,
+                    RowVersion = new byte[] { 2, 4, 3, 7, 5, 6, 4, 6, }
+                };
+
+                _unitOfWork.CountryRepository.Update(newUpdated, userId);
+                _unitOfWork.SaveChanges();
+            });
         }
 
         [Test]
         public void UpdateCountry_Successed()
         {
             //Arrange
+            Common.ClearTracked();
             var newCountry = _unitOfWork.CountryRepository.Find(_seedCountry.Id);
             newCountry.CountryName = "Changed";
 
@@ -118,6 +161,7 @@ namespace PetProject.TestInfrastructure
         public void DeleteCountry_Successed()
         {
             //Arrange
+            Common.ClearTracked();
             var newCountry = new Country
             {
                 CountryCode = "Delete",

@@ -7,9 +7,15 @@ namespace PetProject.TestInfrastructure
 {
     public static class Common
     {
+        private static PetProjectContext _context;
         private static UnitOfWork? _unitOfWorkInstance;
+        public static void ClearTracked()
+        {
+            _context.ChangeTracker.Clear();
+        }
         public static IUnitOfWork UnitOfWorkInstance(PetProjectContext context)
         {
+            _context = context;
             if (_unitOfWorkInstance != null)
             {
                 return _unitOfWorkInstance;

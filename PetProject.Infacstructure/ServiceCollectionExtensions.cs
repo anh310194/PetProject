@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using PetProject.Infacstructure.Context;
 using PetProject.Domain.Interfaces;
 using PetProject.Infacstructure.Reposibilities;
-using PetProject.Repositories.Common;
 using PetProject.Domain.Entities;
 
 namespace PetProject.Infacstructure; 
