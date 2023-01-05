@@ -68,8 +68,12 @@ namespace PetProject.WebAPI.Services
             return roles;
         }
 
-        public TokenModel GetTokenModel(SignInModel signInUser)
+        public TokenModel GetTokenModel(SignInModel? signInUser)
         {
+            if (signInUser == null)
+            {
+                throw new PetProjectException("Could not be found SignInModel");
+            }
             var userToken = GetUserTokenModel(signInUser);
             var TokenModel = new TokenModel()
             {

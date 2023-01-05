@@ -66,7 +66,7 @@ public class CountryService : BaseService, ICountryService
 
     public async Task<CountryModel?> InsertCountryById(string? userName, CountryModel model)
     {
-        var countryCodeExists = _unitOfWork.CountryRepository.GetByCountryCode(model.CountryCode);
+        var countryCodeExists = await _unitOfWork.CountryRepository.GetByCountryCodeAsync(model.CountryCode);
         if (countryCodeExists != null)
         {
             throw new PetProjectException(string.Format(PetProjectMessage.COUNTRY_CODE_EXISTS, model.CountryCode));

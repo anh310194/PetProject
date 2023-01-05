@@ -12,9 +12,9 @@ namespace PetProject.Infacstructure.Reposibilities
         {
 
         }
-        public Country GetByCountryCode(string? countryCode)
+        public Task<Country?> GetByCountryCodeAsync(string? countryCode)
         {
-            return _dbSet.AsQueryable().FirstOrDefault(p => p.CountryCode == countryCode);
+            return _dbSet.AsQueryable().FirstOrDefaultAsync(p => p.CountryCode == countryCode);
         }
     }
 }

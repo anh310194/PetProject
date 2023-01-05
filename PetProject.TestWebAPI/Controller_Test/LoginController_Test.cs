@@ -59,7 +59,8 @@ namespace PetProject.TestWebAPI.Controller_Test
         public async Task Login_Failure()
         {
             //Arrange
-            _mockUserService.Setup(s => s.Authenticate(_signInRequestModel.UserName, _signInRequestModel.Password));
+            _mockUserService.Reset();
+            _mockUserService.Setup(s => s.Authenticate(It.IsAny<string>(), It.IsAny<string>()));
 
             //Act
             var response = await _loginController.Index(_signInRequestModel);
@@ -81,8 +82,9 @@ namespace PetProject.TestWebAPI.Controller_Test
                 UserName = userToken.UserName,
                 UserType = userToken.UserType,
             };
-           _mockUserService.Setup(s => s.Authenticate(_signInRequestModel.UserName, _signInRequestModel.Password)).ReturnsAsync(signInModel);
-            _mockAuthenticationService.Setup(s => s.GetTokenModel(signInModel)).Returns(new WebAPI.Models.Responses.TokenModel());
+            _mockUserService.Reset();
+            _mockUserService.Setup(s => s.Authenticate(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(signInModel);
+            _mockAuthenticationService.Setup(s => s.GetTokenModel(It.IsAny<SignInModel>())).Returns(new WebAPI.Models.Responses.TokenModel());
 
             //Act
             var response = await _loginController.Index(_signInRequestModel);

@@ -4,6 +4,6 @@ namespace PetProject.Domain.Interfaces
 {
     public interface ICountryRepository: IGenericRepository<Country>
     {
-        Country GetByCountryCode(string? countryCode);
+        Task<Country?> GetByCountryCodeAsync(string? countryCode);
     }
 }

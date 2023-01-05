@@ -144,6 +144,7 @@ namespace PetProject.TestBusiness
         {
             //Arrange            
             _unitOfWork.Reset();
+            _unitOfWork.Setup(s => s.CountryRepository.GetByCountryCodeAsync(It.IsAny<string?>()));
             _unitOfWork.Setup(s => s.CountryRepository.FindAsync(It.IsAny<long>())).ReturnsAsync(new Country());
             _unitOfWork.Setup(s => s.UserRepository.GetUserByUserName(It.IsAny<string>()));
 
@@ -159,7 +160,7 @@ namespace PetProject.TestBusiness
         {
             //Arrange
             _unitOfWork.Reset();
-            _unitOfWork.Setup(s => s.CountryRepository.GetByCountryCode(It.IsAny<string>())).Returns(_countryExpected);
+            _unitOfWork.Setup(s => s.CountryRepository.GetByCountryCodeAsync(It.IsAny<string?>())).ReturnsAsync(_countryExpected);
 
             //Act
             var exception = Assert.ThrowsAsync<PetProjectException>(async () => await _countryService.InsertCountryById(_user.UserName, countryModel));
@@ -174,7 +175,7 @@ namespace PetProject.TestBusiness
             //Arrange
             _unitOfWork.Reset();
             _unitOfWork.Setup(s => s.UserRepository.GetUserByUserName(It.IsAny<string>())).Returns(_user);
-            _unitOfWork.Setup(s => s.CountryRepository.GetByCountryCode(It.IsAny<string>()));
+            _unitOfWork.Setup(s => s.CountryRepository.GetByCountryCodeAsync(It.IsAny<string?>()));
             _unitOfWork.Setup(s => s.CountryRepository.InsertAsync(It.IsAny<Country>(), It.IsAny<long>())).ReturnsAsync(_countryExpected);
             _unitOfWork.Setup(s => s.SaveChangesAsync());
 

@@ -31,6 +31,8 @@ public class CountryController_Test
     [Test]
     public async Task GetCountries_Ok()
     {
+        //Arrange
+        mockCountryService.Reset();
         mockCountryService.Setup(x => x.GetCountries()).ReturnsAsync(new List<CountryModel>() { new CountryModel() });
 
         // Act
@@ -44,6 +46,8 @@ public class CountryController_Test
     [Test]
     public async Task GetCountries_Null()
     {
+        //Arrange
+        mockCountryService.Reset();
         mockCountryService.Setup(x => x.GetCountries());
 
         // Act
@@ -56,11 +60,12 @@ public class CountryController_Test
     [Test]
     public async Task GetCountryById_BadRequest()
     {
-        var parameter = 2;
-        mockCountryService.Setup(x => x.GetCountryById(parameter));
+        //Arrange
+        mockCountryService.Reset();
+        mockCountryService.Setup(x => x.GetCountryById(It.IsAny<long>()));
 
         // Act
-        var response = await countryController.GetCountryById(parameter);
+        var response = await countryController.GetCountryById(mockCountryModel.Id);
 
         // Assert
         Assert.IsTrue(response.Result is BadRequestResult);
@@ -69,11 +74,12 @@ public class CountryController_Test
     [Test]
     public async Task GetCountryById_Ok()
     {
-        var parameter = 2;
-        mockCountryService.Setup(x => x.GetCountryById(parameter)).ReturnsAsync(new CountryModel());
+        //Arrange
+        mockCountryService.Reset();
+        mockCountryService.Setup(x => x.GetCountryById(It.IsAny<long>())).ReturnsAsync(mockCountryModel);
 
         // Act
-        var response = await countryController.GetCountryById(parameter);
+        var response = await countryController.GetCountryById(mockCountryModel.Id);
 
         // Assert
         Assert.IsTrue(response.Value != null);
@@ -82,7 +88,9 @@ public class CountryController_Test
     [Test]
     public async Task InsertCountry_Ok()
     {
-        mockCountryService.Setup(x => x.InsertCountryById(countryController.CurrentUser.UserName, mockCountryModel)).ReturnsAsync(mockCountryModel);
+        //Arrange
+        mockCountryService.Reset();
+        mockCountryService.Setup(x => x.InsertCountryById(It.IsAny<string>(), It.IsAny<CountryModel>())).ReturnsAsync(mockCountryModel);
 
         // Act
         var response = await countryController.InsertCountry(mockCountryModel);
@@ -94,7 +102,8 @@ public class CountryController_Test
     [Test]
     public void InsertCountry_Exception()
     {
-        mockCountryService.Setup(x => x.InsertCountryById(countryController.CurrentUser.UserName, mockCountryModel));
+        mockCountryService.Reset();
+        mockCountryService.Setup(x => x.InsertCountryById(It.IsAny<string>(), It.IsAny<CountryModel>()));
 
         // Act
         Assert.ThrowsAsync<PetProjectException>(async () => await countryController.InsertCountry(mockCountryModel));
@@ -103,7 +112,9 @@ public class CountryController_Test
     [Test]
     public async Task UpdateCountry_Ok()
     {
-        mockCountryService.Setup(x => x.UpdateCountryById(countryController.CurrentUser.UserName, mockCountryModel)).ReturnsAsync(mockCountryModel);
+        //Arrange
+        mockCountryService.Reset();
+        mockCountryService.Setup(x => x.UpdateCountryById(It.IsAny<string>(), It.IsAny<CountryModel>())).ReturnsAsync(mockCountryModel);
 
         // Act
         var response = await countryController.UpdateCountry(mockCountryModel);
@@ -115,7 +126,9 @@ public class CountryController_Test
     [Test]
     public void UpdateCountry_Exception()
     {
-        mockCountryService.Setup(x => x.UpdateCountryById(countryController.CurrentUser.UserName, mockCountryModel));
+        //Arrange
+        mockCountryService.Reset();
+        mockCountryService.Setup(x => x.UpdateCountryById(It.IsAny<string>(), It.IsAny<CountryModel>()));
 
         // Act
         Assert.ThrowsAsync<PetProjectException>(async () => await countryController.UpdateCountry(mockCountryModel));

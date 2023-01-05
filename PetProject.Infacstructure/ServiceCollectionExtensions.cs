@@ -4,6 +4,7 @@ using PetProject.Infacstructure.Context;
 using PetProject.Domain.Interfaces;
 using PetProject.Infacstructure.Reposibilities;
 using PetProject.Repositories.Common;
+using PetProject.Domain.Entities;
 
 namespace PetProject.Infacstructure; 
 
@@ -15,8 +16,15 @@ public static class ServiceCollectionExtensions
             options.UseSqlServer(connectionString, providerOptions => providerOptions.EnableRetryOnFailure())
         );
 
-        services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddTransient(typeof(ICountryRepository), typeof(CountryRepository));
+        services.AddTransient(typeof(IDateTimeFormatRepository), typeof(DateTimeFormatRepository));
+        services.AddTransient(typeof(IFeatureRepository), typeof(FeatureRepository));
+        services.AddTransient(typeof(IRoleFeatureRepository), typeof(RoleFeatureRepository));
+        services.AddTransient(typeof(IRoleRepository), typeof(RoleRepository));
+        services.AddTransient(typeof(ITimeZoneRepository), typeof(TimeZoneRepository));
         services.AddTransient(typeof(IUserRepository), typeof(UserRepository));
+        services.AddTransient(typeof(IUserRoleRepository), typeof(UserRoleRepository));
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 }

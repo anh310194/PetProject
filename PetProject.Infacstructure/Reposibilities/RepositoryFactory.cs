@@ -1,45 +1,46 @@
 ﻿using PetProject.Domain.Common;
+using PetProject.Domain.Entities;
 using PetProject.Domain.Interfaces;
-using PetProject.Utilities.Exceptions;
 
 namespace PetProject.Repositories.Common;
 
 public abstract class RepositoryFactory : IRepositoryFactory
 {
-    private IServiceProvider _serviceProvider;
-    public RepositoryFactory(IServiceProvider serviceProvider)
+    public RepositoryFactory(
+        ICountryRepository countryRepository,
+        IDateTimeFormatRepository dateTimeFormatRepository,
+        IFeatureRepository featureRepository,
+        IRoleFeatureRepository roleFeatureRepository,
+        IRoleRepository roleRepository,
+        ITimeZoneRepository timeZoneRepository,
+        IUserRepository userRepository,
+        IUserRoleRepository userRoleRepository
+        )
     {
-        _serviceProvider = serviceProvider;
+        CountryRepository = countryRepository;
+        DateTimeFormatRepository = dateTimeFormatRepository;
+        FeatureRepository = featureRepository;
+        RoleFeatureRepository = roleFeatureRepository;
+        RoleRepository = roleRepository;
+        TimeZoneRepository = timeZoneRepository;
+        UserRepository = userRepository;
+        UserRoleRepository = userRoleRepository;
     }
 
-    public ICountryRepository CountryRepository
-    {
-        get
-        {
-            return GetRepository(typeof(ICountryRepository));
-        }
-    }
+    public ICountryRepository CountryRepository { get; }
 
-    public IUserRepository UserRepository
-    {
-        get
-        {
-            return GetRepository(typeof(IUserRepository));
-        }
-    }
+    public IDateTimeFormatRepository DateTimeFormatRepository { get; }
 
-    public IGenericRepository<TEntity> GenericRepository<TEntity>() where TEntity : BaseEntity
-    {
-        return GetRepository(typeof(IGenericRepository<TEntity>));
-    }
-    private dynamic GetRepository(Type typeRepository)
-    {
-        object? repository = _serviceProvider.GetService(typeRepository);
-        if (repository == null)
-        {
-            throw new PetProjectException($"The {typeRepository.Name} could not be found in Dependency Injection Container.");
-        }
+    public IFeatureRepository FeatureRepository { get; }
 
-        return repository;
-    }
+    public IRoleFeatureRepository RoleFeatureRepository { get; }
+
+    public IRoleRepository RoleRepository { get; }
+
+    public ITimeZoneRepository TimeZoneRepository { get; }
+
+    public IUserRepository UserRepository { get; }
+
+    public IUserRoleRepository UserRoleRepository { get; }
+
 }

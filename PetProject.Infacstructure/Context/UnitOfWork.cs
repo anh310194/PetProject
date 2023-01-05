@@ -5,6 +5,7 @@ using Microsoft.Data.SqlClient;
 using System.Data.Common;
 using PetProject.Repositories.Common;
 using PetProject.Domain.Interfaces;
+using PetProject.Domain.Entities;
 
 namespace PetProject.Infacstructure.Context;
 
@@ -15,9 +16,23 @@ public class UnitOfWork : RepositoryFactory, IUnitOfWork
 
     public UnitOfWork(
         PetProjectContext context,
-        IServiceProvider serviceProvider
+        ICountryRepository countryRepository,
+        IDateTimeFormatRepository dateTimeFormatRepository,
+        IFeatureRepository featureRepository,
+        IRoleFeatureRepository roleFeatureRepository,
+        IRoleRepository roleRepository,
+        ITimeZoneRepository timeZoneRepository,
+        IUserRepository userRepository,
+        IUserRoleRepository userRoleRepository
     ) : base(
-            serviceProvider
+             countryRepository,
+             dateTimeFormatRepository,
+             featureRepository,
+             roleFeatureRepository,
+             roleRepository,
+             timeZoneRepository,
+             userRepository,
+             userRoleRepository
          )
     {
         _dbContext = context;

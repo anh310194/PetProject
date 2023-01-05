@@ -4,7 +4,6 @@ using PetProject.Utilities.Helper;
 using PetProject.Business.Common;
 using PetProject.Business.Interfaces;
 using PetProject.Business.Models;
-using PetProject.Domain.Entities;
 using PetProject.Domain.Interfaces;
 
 namespace PetProject.Business.Implements;
@@ -15,7 +14,7 @@ public class UserService : BaseService, IUserService
 
     public async Task<SignInModel> Authenticate(string userName, string password)
     {
-        var user = await _unitOfWork.GenericRepository<User>().Queryable(p => p.UserName == userName).FirstOrDefaultAsync();
+        var user = await _unitOfWork.UserRepository.Queryable(p => p.UserName == userName).FirstOrDefaultAsync();
         if (user == null)
         {
             throw new PetProjectException("the userName could not be found!");
@@ -38,7 +37,7 @@ public class UserService : BaseService, IUserService
             result.Roles = roleIds.Select(s => (long)s.FirstOrDefault().Value).ToArray();
         }
 
-        var roleFeature = await _unitOfWork.GenericRepository<RoleFeature>().Queryable().ToListAsync();
+        var roleFeature = await _unitOfWork.RoleFeatureRepository.Queryable().ToListAsync();
 
         return result;
     }
