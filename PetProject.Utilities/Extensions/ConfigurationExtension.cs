@@ -10,7 +10,7 @@ namespace PetProject.Utilities.Extensions
             var result = configuration["Jwt:Audience"];
             if (result == null)
             {
-                throw new PetProjectException($"The configuration file could not be found value that key is Jwt:Audience");
+                throw new PetProjectException(string.Format(PetProjectMessage.NOT_FOUND_KEY_CONFIGURATION, "Jwt:Audience"));
             }
             return result;
         }
@@ -20,7 +20,7 @@ namespace PetProject.Utilities.Extensions
             var result = configuration["Jwt:Issuer"];
             if (result == null)
             {
-                throw new PetProjectException($"The configuration file could not be found value that key is Jwt:Issuer");
+                throw new PetProjectException(string.Format(PetProjectMessage.NOT_FOUND_KEY_CONFIGURATION, "Jwt:Issuer"));
             }
             return result;
         }
@@ -30,7 +30,7 @@ namespace PetProject.Utilities.Extensions
             var result = configuration["Jwt:Key"];
             if (result == null)
             {
-                throw new PetProjectException($"The configuration file could not be found value that key is Jwt:Key");
+                throw new PetProjectException(string.Format(PetProjectMessage.NOT_FOUND_KEY_CONFIGURATION, "Jwt:Key"));
             }
             return result;
         }
@@ -40,7 +40,7 @@ namespace PetProject.Utilities.Extensions
             var result = configuration.GetConnectionString("SQLConnection");
             if (result == null)
             {
-                throw new PetProjectException($"The configuration file could not be found value that key is SQLConnection");
+                throw new PetProjectException(string.Format(PetProjectMessage.NOT_FOUND_KEY_CONFIGURATION, "SQLConnection"));
             }
             return result;
         }
@@ -55,7 +55,7 @@ namespace PetProject.Utilities.Extensions
             }
             else
             {
-                throw new PetProjectException($"The configuration file could not be found value that key is Jwt:ExpiredTime");
+                throw new PetProjectException(string.Format(PetProjectMessage.NOT_FOUND_KEY_CONFIGURATION, "Jwt:ExpiredTime"));
             }
         }
     }

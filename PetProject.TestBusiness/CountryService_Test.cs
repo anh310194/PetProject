@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using PetProject.Business.Implements;
 using PetProject.Business.Models;
-using PetProject.Domain;
+using PetProject.Utilities;
 using PetProject.Domain.Entities;
 using PetProject.Domain.Interfaces;
 using PetProject.Utilities.Exceptions;

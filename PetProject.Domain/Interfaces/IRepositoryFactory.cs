@@ -1,5 +1,4 @@
-﻿using PetProject.Domain.Common;
-using PetProject.Domain.Entities;
+﻿using PetProject.Domain.Entities;
 
 namespace PetProject.Domain.Interfaces;
 

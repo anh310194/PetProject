@@ -5,7 +5,7 @@ using PetProject.Business.Models;
 using PetProject.Domain.Interfaces;
 using PetProject.Domain.Entities;
 using PetProject.Utilities.Exceptions;
-using PetProject.Domain;
+using PetProject.Utilities;
 
 namespace PetProject.Business.Implements;
 
