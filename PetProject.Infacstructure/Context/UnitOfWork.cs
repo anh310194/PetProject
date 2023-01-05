@@ -4,7 +4,7 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Data.Common;
 using PetProject.Repositories.Common;
-using PetProject.Infacstructure.Interfaces;
+using PetProject.Domain.Interfaces;
 
 namespace PetProject.Infacstructure.Context;
 

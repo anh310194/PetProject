@@ -1,6 +1,6 @@
 ﻿using PetProject.Domain.Entities;
 using PetProject.Infacstructure.Context;
-using PetProject.Infacstructure.Interfaces;
+using PetProject.Domain.Interfaces;
 using PetProject.Repositories.Common;
 
 namespace PetProject.Infacstructure.Reposibilities
@@ -12,9 +12,9 @@ namespace PetProject.Infacstructure.Reposibilities
 
         }
 
-        public User? GetUserByUserName(string userName)
+        public User? GetUserByUserName(string? userName)
         {
-            return Queryable(p => p.UserName == userName).FirstOrDefault();
+            return Queryable(p => !string.IsNullOrEmpty(userName) && p.UserName == userName).FirstOrDefault();
         }
     }
 }

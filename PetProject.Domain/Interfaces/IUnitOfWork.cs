@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using Microsoft.Data.SqlClient;
 
-namespace PetProject.Infacstructure.Interfaces;
+namespace PetProject.Domain.Interfaces;
 
 public interface IUnitOfWork : IDisposable, IRepositoryFactory
 {

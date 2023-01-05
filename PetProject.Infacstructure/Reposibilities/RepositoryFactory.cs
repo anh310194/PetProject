@@ -1,30 +1,22 @@
 ﻿using PetProject.Domain.Common;
-using PetProject.Domain.Entities;
-using PetProject.Infacstructure.Interfaces;
+using PetProject.Domain.Interfaces;
 using PetProject.Utilities.Exceptions;
 
 namespace PetProject.Repositories.Common;
 
 public abstract class RepositoryFactory : IRepositoryFactory
 {
-    private IUserRepository _userRepository;
-    private IGenericRepository<Country> _countryRepository;
     private IServiceProvider _serviceProvider;
     public RepositoryFactory(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }
 
-    public IGenericRepository<Country> CountryRepository
+    public ICountryRepository CountryRepository
     {
         get
         {
-            if (_countryRepository == null)
-            {
-                _countryRepository = CountryRepository;
-            }
-
-            return _countryRepository;
+            return GetRepository(typeof(ICountryRepository));
         }
     }
 
@@ -32,12 +24,7 @@ public abstract class RepositoryFactory : IRepositoryFactory
     {
         get
         {
-            if (_userRepository == null)
-            {
-                _userRepository = GetRepository(typeof(IGenericRepository<User>));
-            }
-
-            return _userRepository;
+            return GetRepository(typeof(IUserRepository));
         }
     }
 

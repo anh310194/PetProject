@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetProject.Domain;
 using PetProject.Domain.Entities;
-using PetProject.Infacstructure.Interfaces;
+using PetProject.Domain.Interfaces;
 using PetProject.Utilities.Exceptions;
 
 namespace PetProject.Business.Common;

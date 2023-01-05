@@ -1,12 +1,12 @@
 ﻿using PetProject.Domain.Common;
 using PetProject.Domain.Entities;
 
-namespace PetProject.Infacstructure.Interfaces;
+namespace PetProject.Domain.Interfaces;
 
 public interface IRepositoryFactory
 {
     IGenericRepository<TEntity> GenericRepository<TEntity>() where TEntity : BaseEntity;
 
-    IGenericRepository<Country> CountryRepository { get; }
+    ICountryRepository CountryRepository { get; }
     IUserRepository UserRepository { get; }
 }

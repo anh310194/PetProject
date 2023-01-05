@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PetProject.Domain.Common;
 using PetProject.Infacstructure.Context;
-using PetProject.Infacstructure.Interfaces;
+using PetProject.Domain.Interfaces;
 using System.Linq.Expressions;
+using System.Threading;
 
 namespace PetProject.Repositories.Common;
 
@@ -72,13 +72,30 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         _dbSet.AddRange(enumerable);
     }
 
-    public virtual ValueTask<EntityEntry<TEntity>> InsertAsync(TEntity entity, long userId, CancellationToken cancellationToken = default)
+    public virtual async ValueTask<TEntity> InsertAsync(TEntity entity, long userId)
     {
         SetBaseValueInsert(entity, userId);
-        return _dbSet.AddAsync(entity, cancellationToken);
+        var result = await _dbSet.AddAsync(entity);
+        return result.Entity;
+    }
+    public virtual async ValueTask<TEntity> InsertAsync(TEntity entity, long userId, CancellationToken cancellationToken)
+    {
+        SetBaseValueInsert(entity, userId);
+        var result = await _dbSet.AddAsync(entity, cancellationToken);
+        return result.Entity;
     }
 
-    public virtual Task InsertRangeAsync(ICollection<TEntity> entities, long userId, CancellationToken cancellationToken = default)
+    public virtual Task InsertRangeAsync(ICollection<TEntity> entities, long userId)
+    {
+        var enumerable = entities.AsEnumerable().Select(s =>
+        {
+            SetBaseValueInsert(s, userId);
+            return s;
+        });
+        return _dbSet.AddRangeAsync(enumerable);
+    }
+
+    public virtual Task InsertRangeAsync(ICollection<TEntity> entities, long userId, CancellationToken cancellationToken)
     {
         var enumerable = entities.AsEnumerable().Select(s =>
         {
@@ -131,4 +148,5 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         }
         return result;
     }
+
 }

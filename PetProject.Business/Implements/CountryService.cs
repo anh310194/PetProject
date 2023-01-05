@@ -2,7 +2,7 @@
 using PetProject.Business.Common;
 using PetProject.Business.Interfaces;
 using PetProject.Business.Models;
-using PetProject.Infacstructure.Interfaces;
+using PetProject.Domain.Interfaces;
 using PetProject.Domain.Entities;
 using PetProject.Utilities.Exceptions;
 using PetProject.Domain;
@@ -44,14 +44,18 @@ public class CountryService : BaseService, ICountryService
         country.CountryName = model.CountryName;
 
         long userId = GetUserId(userName);
-        _unitOfWork.CountryRepository.Update(country, userId);
+        var result = _unitOfWork.CountryRepository.Update(country, userId);
 
         await _unitOfWork.SaveChangesAsync();
 
-        return MappingCountryModel(country);
+        return MappingCountryModel(result);
     }
-    private CountryModel MappingCountryModel(Country country)
+    private CountryModel MappingCountryModel(Country? country)
     {
+        if (country == null)
+        {
+            throw new Exception("The Country could not found in MappingCountryModel method.");
+        }
         return new CountryModel()
         {
             Id = country.Id,
@@ -62,18 +66,21 @@ public class CountryService : BaseService, ICountryService
 
     public async Task<CountryModel?> InsertCountryById(string? userName, CountryModel model)
     {
+        var countryCodeExists = _unitOfWork.CountryRepository.GetByCountryCode(model.CountryCode);
+        if (countryCodeExists != null)
+        {
+            throw new PetProjectException(string.Format(PetProjectMessage.COUNTRY_CODE_EXISTS, model.CountryCode));
+        }
         var country = new Country()
         {
-            Id = model.Id,
             CountryCode = model.CountryCode,
             CountryName = model.CountryName,
         };
 
         long userId = GetUserId(userName);
-        var result = await _unitOfWork.CountryRepository.InsertAsync(country, userId);
-
+        var countryResult = await _unitOfWork.CountryRepository.InsertAsync(country, userId);
         await _unitOfWork.SaveChangesAsync();
 
-        return MappingCountryModel(result.Entity);
+        return MappingCountryModel(countryResult);
     }
 }

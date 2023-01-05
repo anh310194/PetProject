@@ -2,14 +2,16 @@
 using PetProject.Domain.Common;
 using System.Linq.Expressions;
 
-namespace PetProject.Infacstructure.Interfaces;
+namespace PetProject.Domain.Interfaces;
 
 public interface IGenericRepository<TEntity> where TEntity : BaseEntity
 {
     TEntity Insert(TEntity entity, long userId);
     void InsertRange(ICollection<TEntity> entities, long userId);
-    ValueTask<EntityEntry<TEntity>> InsertAsync(TEntity entity, long userId, CancellationToken cancellationToken = default);
-    Task InsertRangeAsync(ICollection<TEntity> entities, long userId, CancellationToken cancellationToken = default);
+    ValueTask<TEntity> InsertAsync(TEntity entity, long userId);
+    ValueTask<TEntity> InsertAsync(TEntity entity, long userId, CancellationToken cancellationToken);
+    Task InsertRangeAsync(ICollection<TEntity> entities, long userId);
+    Task InsertRangeAsync(ICollection<TEntity> entities, long userId, CancellationToken cancellationToken);
     TEntity Update(TEntity entity, long userId);
     void UpdateRange(ICollection<TEntity> entities, long userId);
     void Delete(object id);
