@@ -14,7 +14,8 @@ public abstract class RepositoryFactory : IRepositoryFactory
         IRoleRepository roleRepository,
         ITimeZoneRepository timeZoneRepository,
         IUserRepository userRepository,
-        IUserRoleRepository userRoleRepository
+        IUserRoleRepository userRoleRepository,
+        IStoreProcedureRepository storeProcedureRepository
         )
     {
         CountryRepository = countryRepository;
@@ -25,6 +26,7 @@ public abstract class RepositoryFactory : IRepositoryFactory
         TimeZoneRepository = timeZoneRepository;
         UserRepository = userRepository;
         UserRoleRepository = userRoleRepository;
+        StoreProcedureRepository = storeProcedureRepository;
     }
 
     public ICountryRepository CountryRepository { get; }
@@ -43,4 +45,5 @@ public abstract class RepositoryFactory : IRepositoryFactory
 
     public IUserRoleRepository UserRoleRepository { get; }
 
+    public IStoreProcedureRepository StoreProcedureRepository { get; }
 }

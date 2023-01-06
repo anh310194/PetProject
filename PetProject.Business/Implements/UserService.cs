@@ -10,9 +10,7 @@ namespace PetProject.Business.Implements;
 
 public class UserService : BaseService, IUserService
 {
-    private IStoreProcedureRepository _storeProcedureRepository;
-    public UserService(IUnitOfWork unitOfWork, IStoreProcedureRepository storeProcedureRepository) : base(unitOfWork) { 
-        _storeProcedureRepository = storeProcedureRepository;
+    public UserService(IUnitOfWork unitOfWork) : base(unitOfWork) {
     }
 
     public async Task<SignInModel> Authenticate(string userName, string password)
@@ -37,7 +35,7 @@ public class UserService : BaseService, IUserService
             LastName = user.LastName,
             UserType = user.UserType
         };
-        result.Roles = await _storeProcedureRepository.GetRolesBysUserId(user.Id);
+        result.Roles = await _unitOfWork.StoreProcedureRepository.GetRolesBysUserId(user.Id);
         return result;
     }
     

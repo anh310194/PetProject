@@ -14,13 +14,11 @@ namespace PetProject.TestBusiness
     {
         private UserService _userService;
         private Mock<IUnitOfWork> _unitOfWork;
-        private Mock<IStoreProcedureRepository> _storeProcedureRepository;
 
         public UserService_Test()
         {
             _unitOfWork = new Mock<IUnitOfWork>();
-            _storeProcedureRepository = new Mock<IStoreProcedureRepository>();
-            _userService = new UserService(_unitOfWork.Object, _storeProcedureRepository.Object);
+            _userService = new UserService(_unitOfWork.Object);
         }
         [Test]
         [TestCase("system", "")]
@@ -87,7 +85,7 @@ namespace PetProject.TestBusiness
             var user = MockUser.GetUser();
             _unitOfWork.Reset();
             _unitOfWork.Setup(s => s.UserRepository.GetUserByUserNameAsync(It.IsAny<string?>())).ReturnsAsync(user);
-            _storeProcedureRepository.Setup(s => s.GetRolesBysUserId(It.IsAny<long>())).ReturnsAsync(roles);
+            _unitOfWork.Setup(s => s.StoreProcedureRepository.GetRolesBysUserId(It.IsAny<long>())).ReturnsAsync(roles);
 
             //Act
             return _userService.Authenticate(user.UserName ?? "", MockUser.PlainedPassword);

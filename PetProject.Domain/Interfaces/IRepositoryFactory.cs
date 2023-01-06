@@ -12,4 +12,5 @@ public interface IRepositoryFactory
     ITimeZoneRepository TimeZoneRepository { get; }
     IUserRepository UserRepository { get; }
     IUserRoleRepository UserRoleRepository { get; }
+    IStoreProcedureRepository StoreProcedureRepository { get; }
 }

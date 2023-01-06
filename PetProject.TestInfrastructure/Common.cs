@@ -28,6 +28,7 @@ namespace PetProject.TestInfrastructure
             ITimeZoneRepository timeZoneRepository = new TimeZoneRepository(context);
             IUserRepository userRepository = new UserRepository(context);
             IUserRoleRepository userRoleRepository = new UserRoleRepository(context);
+            IStoreProcedureRepository storeProcedureRepository = new StoreProcedureRepository(context);
 
             _unitOfWorkInstance = new UnitOfWork(
                 context,
@@ -38,7 +39,8 @@ namespace PetProject.TestInfrastructure
                 roleRepository,
                 timeZoneRepository,
                 userRepository,
-                userRoleRepository
+                userRoleRepository,
+                storeProcedureRepository
             );
 
             return _unitOfWorkInstance;

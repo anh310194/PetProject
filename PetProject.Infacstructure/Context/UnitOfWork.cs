@@ -23,7 +23,8 @@ public class UnitOfWork : RepositoryFactory, IUnitOfWork
         IRoleRepository roleRepository,
         ITimeZoneRepository timeZoneRepository,
         IUserRepository userRepository,
-        IUserRoleRepository userRoleRepository
+        IUserRoleRepository userRoleRepository,
+        IStoreProcedureRepository storeProcedureRepository
     ) : base(
              countryRepository,
              dateTimeFormatRepository,
@@ -32,7 +33,8 @@ public class UnitOfWork : RepositoryFactory, IUnitOfWork
              roleRepository,
              timeZoneRepository,
              userRepository,
-             userRoleRepository
+             userRoleRepository, 
+             storeProcedureRepository
          )
     {
         _dbContext = context;
