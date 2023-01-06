@@ -1,8 +1,10 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using PetProject.Infacstructure.Context;
-using System.Data.Common;
+﻿using System.Data.Common;
 using System.Data;
+
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+
+using PetProject.Infacstructure.Context;
 using PetProject.Interfaces.Repositories;
 
 namespace PetProject.Infacstructure.Reposibilities

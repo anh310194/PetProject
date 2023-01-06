@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Reflection;
+using System.Security.Claims;
+using System.Text;
+
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+
 using PetProject.Utilities.Enums;
 using PetProject.Utilities.Extensions;
 using PetProject.Utilities.Helper;
-using System.Reflection;
-using System.Security.Claims;
-using System.Text;
 
 namespace PetProject.WebAPI.Extensions
 {

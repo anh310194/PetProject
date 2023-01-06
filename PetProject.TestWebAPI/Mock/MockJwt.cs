@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Security.Claims;
+
+using Microsoft.AspNetCore.Http;
 using Moq;
 using PetProject.Utilities.Enums;
 using PetProject.WebAPI.Models.Responses;
-using System.Security.Claims;
 
 namespace PetProject.TestWebAPI.Mock
 {

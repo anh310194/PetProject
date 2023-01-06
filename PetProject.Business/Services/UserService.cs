@@ -19,24 +19,28 @@ public class UserService : BaseService, IUserService
         {
             throw new PetProjectApplicationException(PetProjectMessage.USER_NAME_PASSWORD_EMPTY);
         }
+
         var user = await _unitOfWork.UserRepository.GetUserByUserNameAsync(userName);
         if (user == null)
         {
             throw new PetProjectApplicationException(string.Format(PetProjectMessage.NOT_FOUND_USER_NAME, userName));
         }
-        if (!SecurityHelper.VerifyHashedPassword(user.Password, password, user.SaltPassword))
+        else if (SecurityHelper.VerifyHashedPassword(user.Password, password, user.SaltPassword))
+        {
+            return new SignInModel()
+            {
+                UserName = userName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserType = user.UserType,
+                Roles = (await _unitOfWork.StoreProcedureRepository.GetRolesBysUserId(user.Id)).ToArray()
+            };
+        }
+        else
         {
             throw new PetProjectApplicationException(PetProjectMessage.LoginFail);
         }
-        var result = new SignInModel()
-        {
-            UserName = userName,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            UserType = user.UserType
-        };
-        result.Roles = (await _unitOfWork.StoreProcedureRepository.GetRolesBysUserId(user.Id)).ToArray();
-        return result;
+        
     }
 
 }

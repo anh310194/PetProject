@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Transactions;
+﻿using System.Transactions;
+
+using Microsoft.EntityFrameworkCore;
+
 using PetProject.Repositories.Common;
 using PetProject.Interfaces.Repositories;
 

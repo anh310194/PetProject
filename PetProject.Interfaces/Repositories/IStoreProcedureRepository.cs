@@ -1,5 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
-using System.Data;
+﻿using System.Data;
+
+using Microsoft.Data.SqlClient;
 
 namespace PetProject.Interfaces.Repositories;
 

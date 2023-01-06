@@ -1,5 +1,6 @@
-﻿using PetProject.Domain.Common;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
+
+using PetProject.Domain.Common;
 
 namespace PetProject.Interfaces.Repositories;
 

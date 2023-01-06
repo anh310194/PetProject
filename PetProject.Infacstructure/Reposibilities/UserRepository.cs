@@ -1,8 +1,9 @@
-﻿using PetProject.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+
+using PetProject.Domain.Entities;
 using PetProject.Infacstructure.Context;
 using PetProject.Interfaces.Repositories;
 using PetProject.Repositories.Common;
-using Microsoft.EntityFrameworkCore;
 
 namespace PetProject.Infacstructure.Reposibilities
 {
