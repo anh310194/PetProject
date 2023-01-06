@@ -1,19 +1,19 @@
 ﻿using PetProject.Utilities.Exceptions;
 using PetProject.Utilities.Helper;
-using PetProject.Business.Common;
 using PetProject.Models;
 using PetProject.Interfaces.Repositories;
 using PetProject.Utilities;
 using PetProject.Interfaces.Business;
 
-namespace PetProject.Business.Implements;
+namespace PetProject.Business.Services;
 
 public class UserService : BaseService, IUserService
 {
-    public UserService(IUnitOfWork unitOfWork) : base(unitOfWork) {
+    public UserService(IUnitOfWork unitOfWork) : base(unitOfWork)
+    {
     }
 
-    public async Task<SignInModel> Authenticate(string userName, string password)
+    public async Task<SignInModel> Authenticate(string? userName, string? password)
     {
         if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
         {
@@ -35,8 +35,8 @@ public class UserService : BaseService, IUserService
             LastName = user.LastName,
             UserType = user.UserType
         };
-        result.Roles = await _unitOfWork.StoreProcedureRepository.GetRolesBysUserId(user.Id);
+        result.Roles = (await _unitOfWork.StoreProcedureRepository.GetRolesBysUserId(user.Id)).ToArray();
         return result;
     }
-    
+
 }

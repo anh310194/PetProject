@@ -39,8 +39,7 @@ public class CountryController_Test
         var response = await countryController.GetAll();
 
         // Assert
-        var result = response.Value;
-        Assert.IsTrue(result?.Any());
+        Assert.IsTrue(response.Any());
     }
 
     [Test]
@@ -54,7 +53,7 @@ public class CountryController_Test
         var response = await countryController.GetAll();
 
         // Assert
-        Assert.IsNull(response.Value);
+        Assert.IsNull(response);
     }
 
     [Test]

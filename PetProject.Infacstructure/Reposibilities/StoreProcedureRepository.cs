@@ -14,18 +14,23 @@ namespace PetProject.Infacstructure.Reposibilities
         {
             _dbContext = context;
         }
-        public async Task<long[]?> GetRolesBysUserId(long userId)
+        public async Task<ICollection<long>> GetRolesBysUserId(long userId)
         {
+            List<long> result;
             var paremeter = new SqlParameter("@UserId", System.Data.SqlDbType.BigInt) { Value = userId };
             var roleIds = await ExecStoreProcedureAsync("GetFeaturesByUser", paremeter);
             if (roleIds != null)
             {
-                return roleIds.Select(s => (long)s.FirstOrDefault().Value).ToArray();
+                result = roleIds.Select(s => (long)s.FirstOrDefault().Value).ToList();
             }
-            return null;
+            else
+            {
+                result = new List<long>();
+            }
+            return result;
         }
 
-        public virtual async Task<List<IEnumerable<IDictionary<string, object>>>> ExecCommandTextAsync(string query, CommandType commandType, params SqlParameter[] parameters)
+        public virtual async Task<ICollection<IEnumerable<IDictionary<string, object>>>> ExecCommandTextAsync(string query, CommandType commandType, params SqlParameter[] parameters)
         {
             var list = new List<IEnumerable<IDictionary<string, object>>>();
             using (var reader = await ExecCommandText(query, commandType, parameters).ExecuteReaderAsync())
@@ -52,7 +57,7 @@ namespace PetProject.Infacstructure.Reposibilities
             _dbContext.Database.OpenConnection();
             return command;
         }
-        private List<IDictionary<string, object>> ReadToCollection(DbDataReader reader)
+        private ICollection<IDictionary<string, object>> ReadToCollection(DbDataReader reader)
         {
             List<IDictionary<string, object>> result = new List<IDictionary<string, object>>();
             while (reader.Read())
@@ -67,7 +72,7 @@ namespace PetProject.Infacstructure.Reposibilities
             return result;
         }
 
-        public Task<List<IEnumerable<IDictionary<string, object>>>> ExecStoreProcedureReturnMutipleAsync(string query, params SqlParameter[] parameters)
+        public Task<ICollection<IEnumerable<IDictionary<string, object>>>> ExecStoreProcedureReturnMutipleAsync(string query, params SqlParameter[] parameters)
         {
             return ExecCommandTextAsync(query, CommandType.StoredProcedure, parameters);
         }

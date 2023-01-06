@@ -1,6 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
-using PetProject.Business.Implements;
+using PetProject.Business.Services;
 using PetProject.Interfaces.Repositories;
 using PetProject.Models;
 using PetProject.TestBusiness.Mock;
@@ -67,18 +67,6 @@ namespace PetProject.TestBusiness
             Assert.IsTrue(exception.Message == PetProjectMessage.LoginFail);
         }
 
-        [Test]
-        public async Task Authentication_GetRoles_Null()
-        {
-            //Arrange
-            long[]? roles = null;
-
-            //Act
-            var result = await Autneticate_Act(roles);
-
-            //Assert
-            Assert.IsTrue(result.Roles == null);
-        }
         private Task<SignInModel> Autneticate_Act(long[]? roles)
         {
             var user = MockUser.GetUser();
@@ -87,7 +75,7 @@ namespace PetProject.TestBusiness
             _unitOfWork.Setup(s => s.StoreProcedureRepository.GetRolesBysUserId(It.IsAny<long>())).ReturnsAsync(roles);
 
             //Act
-            return _userService.Authenticate(user.UserName ?? "", MockUser.PlainedPassword);
+            return _userService.Authenticate(user.UserName, MockUser.PlainedPassword);
         }
 
         [Test]

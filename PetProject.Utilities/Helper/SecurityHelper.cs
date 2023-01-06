@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using PetProject.Utilities.Constants;
 
 namespace PetProject.Utilities.Helper;
 
@@ -13,13 +14,12 @@ public static class SecurityHelper
     /// <returns></returns>
     public static string CreateSaltPassword()
     {
-        byte[] byteSalt = RandomNumberGenerator.GetBytes(128 / 8);// divide by 8 to convert bits to bytes
+        byte[] byteSalt = RandomNumberGenerator.GetBytes(ConvertBitToByte(SecurityConst.SALT_PASSWORD_BITS));
         return Convert.ToBase64String(byteSalt);
     }
-
-    public static string GenerateSlug(int length = 9)
+    private static int ConvertBitToByte(int bitValue)
     {
-        return shortid.ShortId.Generate(new shortid.Configuration.GenerationOptions(true, false, length));
+        return bitValue / SecurityConst.DIVIDE_NUMBER_BIT;
     }
 
     public static bool VerifyHashedPassword(string? hashedPassword, string? plainPassword, string? saltPassword)
@@ -39,8 +39,8 @@ public static class SecurityHelper
             KeyDerivation.Pbkdf2(password: password!,
             salt: byteSalt,
             prf: KeyDerivationPrf.HMACSHA256,
-            iterationCount: 100000,
-            numBytesRequested: 256 / 8)
+            iterationCount: SecurityConst.KEY_DERIVATION_ITERATION_COUNT,
+            numBytesRequested: ConvertBitToByte(SecurityConst.KEY_DERIVATION_NUMMBER_BYTES_REQUESTED))
             );
     }
 

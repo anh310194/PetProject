@@ -2,7 +2,7 @@
 using PetProject.Utilities.Exceptions;
 using PetProject.Interfaces.Repositories;
 
-namespace PetProject.Business.Common;
+namespace PetProject.Business.Services;
 
 public abstract class BaseService
 {

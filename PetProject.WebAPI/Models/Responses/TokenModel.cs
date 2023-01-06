@@ -10,7 +10,7 @@ public class TokenModel
 public class UserTokenModel
 {
     public string? UserName { get; set; }
-    public List<long>? Roles { get; set; }
+    public ICollection<long>? Roles { get; set; }
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     public int UserType { get; set; }

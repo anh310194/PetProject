@@ -56,7 +56,7 @@ namespace PetProject.WebAPI.Services
 
             return userToken;
         }
-        private List<long>? GetRoles(IEnumerable<Claim>? permissions)
+        private ICollection<long>? GetRoles(IEnumerable<Claim>? permissions)
         {
             if (permissions == null)
             {
@@ -131,7 +131,7 @@ namespace PetProject.WebAPI.Services
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.JwtKey()));
             return new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         }
-        private List<Claim> GetClaims(UserTokenModel userToken)
+        private ICollection<Claim> GetClaims(UserTokenModel userToken)
         {
             if (userToken == null)
             {

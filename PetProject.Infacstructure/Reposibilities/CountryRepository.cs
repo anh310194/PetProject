@@ -17,9 +17,10 @@ namespace PetProject.Infacstructure.Reposibilities
         {
             return _dbSet.AsQueryable().FirstOrDefaultAsync(p => p.CountryCode == countryCode);
         }
-        public Task<List<CountryModel>> GetCountryModels()
+        public async Task<ICollection<CountryModel>> GetCountryModels()
         {
-            return Queryable().Select(s => new CountryModel() { Id = s.Id, CountryCode = s.CountryCode, CountryName = s.CountryName }).ToListAsync();
+            var result = await Queryable().Select(s => new CountryModel() { Id = s.Id, CountryCode = s.CountryCode, CountryName = s.CountryName }).ToListAsync();
+            return result;
         }
 
         public Task<CountryModel?> GetCountryModelById(long id)

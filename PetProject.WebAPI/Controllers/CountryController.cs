@@ -22,10 +22,11 @@ public class CountryController : BaseController
     }
     [HttpGet]
     [FeatureAuthorize(FeatureEnum.ReadCountry)]
-    public async Task<ActionResult<IEnumerable<CountryModel>>> GetAll()
+    public async Task<IEnumerable<CountryModel>> GetAll()
     {
         _logger.LogInformation("Get All Countries");
-        return await _countryService.GetCountries();
+        var result = await _countryService.GetCountries();
+        return result;
     }
 
     [HttpGet("{id}")]

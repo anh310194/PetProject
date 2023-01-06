@@ -1,12 +1,11 @@
-﻿using PetProject.Business.Common;
-using PetProject.Models;
+﻿using PetProject.Models;
 using PetProject.Domain.Entities;
 using PetProject.Utilities.Exceptions;
 using PetProject.Utilities;
 using PetProject.Interfaces.Business;
 using PetProject.Interfaces.Repositories;
 
-namespace PetProject.Business.Implements;
+namespace PetProject.Business.Services;
 
 public class CountryService : BaseService, ICountryService
 {
@@ -20,7 +19,7 @@ public class CountryService : BaseService, ICountryService
         _unitOfWork.SaveChanges();
     }    
 
-    public Task<List<CountryModel>> GetCountries()
+    public Task<ICollection<CountryModel>> GetCountries()
     {
         return _unitOfWork.CountryRepository.GetCountryModels();
     }

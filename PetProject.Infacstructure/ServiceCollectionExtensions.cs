@@ -4,7 +4,7 @@ using PetProject.Infacstructure.Context;
 using PetProject.Infacstructure.Reposibilities;
 using PetProject.Interfaces.Repositories;
 
-namespace PetProject.Infacstructure; 
+namespace PetProject.Infacstructure;
 
 public static class ServiceCollectionExtensions
 {
@@ -14,17 +14,17 @@ public static class ServiceCollectionExtensions
             options.UseSqlServer(connectionString, providerOptions => providerOptions.EnableRetryOnFailure())
         );
 
-        services.AddTransient(typeof(ICountryRepository), typeof(CountryRepository));
-        services.AddTransient(typeof(IDateTimeFormatRepository), typeof(DateTimeFormatRepository));
-        services.AddTransient(typeof(IFeatureRepository), typeof(FeatureRepository));
-        services.AddTransient(typeof(IRoleFeatureRepository), typeof(RoleFeatureRepository));
-        services.AddTransient(typeof(IRoleRepository), typeof(RoleRepository));
-        services.AddTransient(typeof(ITimeZoneRepository), typeof(TimeZoneRepository));
-        services.AddTransient(typeof(IUserRepository), typeof(UserRepository));
-        services.AddTransient(typeof(IUserRoleRepository), typeof(UserRoleRepository));
+        services.AddTransient<ICountryRepository, CountryRepository>();
+        services.AddTransient<IDateTimeFormatRepository, DateTimeFormatRepository>();
+        services.AddTransient<IFeatureRepository, FeatureRepository>();
+        services.AddTransient<IRoleFeatureRepository, RoleFeatureRepository>();
+        services.AddTransient<IRoleRepository, RoleRepository>();
+        services.AddTransient<ITimeZoneRepository, TimeZoneRepository>();
+        services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<IUserRoleRepository, UserRoleRepository>();
+        services.AddTransient<IStoreProcedureRepository, StoreProcedureRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        services.AddTransient<IStoreProcedureRepository, StoreProcedureRepository>();
     }
 }

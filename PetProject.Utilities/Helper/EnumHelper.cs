@@ -61,14 +61,6 @@ public static class EnumHelper
             return null;
         }
         string displayName = value.ToString();
-        //if (displayAttribute.ResourceType != null)
-        //{
-        //    displayName = ResourceHelper.GetDisplay(displayAttribute.ResourceType, displayAttribute.Name);
-        //}
-        //if (string.IsNullOrEmpty(displayName))
-        //{
-        //    displayName = ResourceHelper.GetDisplayEnum(displayAttribute.Name);
-        //}
 
         return displayName;
     }

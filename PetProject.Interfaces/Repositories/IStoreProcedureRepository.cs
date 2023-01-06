@@ -5,8 +5,8 @@ namespace PetProject.Interfaces.Repositories;
 
 public interface IStoreProcedureRepository
 {
-    Task<long[]?> GetRolesBysUserId(long userId);
-    Task<List<IEnumerable<IDictionary<string, object>>>> ExecCommandTextAsync(string query, CommandType commandType, params SqlParameter[] parameters);
-    Task<List<IEnumerable<IDictionary<string, object>>>> ExecStoreProcedureReturnMutipleAsync(string query, params SqlParameter[] parameters);
+    Task<ICollection<long>> GetRolesBysUserId(long userId);
+    Task<ICollection<IEnumerable<IDictionary<string, object>>>> ExecCommandTextAsync(string query, CommandType commandType, params SqlParameter[] parameters);
+    Task<ICollection<IEnumerable<IDictionary<string, object>>>> ExecStoreProcedureReturnMutipleAsync(string query, params SqlParameter[] parameters);
     Task<IEnumerable<IDictionary<string, object>>?> ExecStoreProcedureAsync(string query, params SqlParameter[] parameters);
 }
