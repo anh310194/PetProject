@@ -8,7 +8,7 @@ using PetProject.WebAPI.Extensions;
 using PetProject.WebAPI.Services;
 using PetProject.WebAPI.Interfaces;
 
-var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 try
 {
     logger.Debug("init main");
