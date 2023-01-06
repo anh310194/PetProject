@@ -1,6 +1,6 @@
 ﻿using PetProject.Utilities;
-using PetProject.Domain.Interfaces;
 using PetProject.Utilities.Exceptions;
+using PetProject.Interfaces.Repositories;
 
 namespace PetProject.Business.Common;
 

@@ -1,7 +1,7 @@
 ﻿using PetProject.Domain.Entities;
-using PetProject.Domain.Interfaces;
 using PetProject.Infacstructure.Context;
 using PetProject.Infacstructure.Reposibilities;
+using PetProject.Interfaces.Repositories;
 
 namespace PetProject.TestInfrastructure
 {

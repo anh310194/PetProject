@@ -1,5 +1,5 @@
 ﻿using PetProject.Domain.Entities;
 
-namespace PetProject.Domain.Interfaces;
+namespace PetProject.Interfaces.Repositories;
 
 public interface IUserRoleRepository : IGenericRepository<UserRole> { }

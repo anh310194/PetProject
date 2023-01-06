@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PetProject.Infacstructure\PetProject.Infacstructure.csproj" />
+    <ProjectReference Include="..\PetProject.Models\PetProject.Models.csproj" />
     <ProjectReference Include="..\PetProject.Utilities\PetProject.Utilities.csproj" />
   </ItemGroup>
 

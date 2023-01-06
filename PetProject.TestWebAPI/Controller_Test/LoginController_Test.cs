@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using PetProject.Business.Interfaces;
-using PetProject.Business.Models;
+using PetProject.Interfaces.Business;
+using PetProject.Models;
 using PetProject.TestWebAPI.Mock;
 using PetProject.WebAPI.Controllers;
 using PetProject.WebAPI.Interfaces;

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PetProject.Business.Interfaces;
+using PetProject.Interfaces.Business;
 using PetProject.Utilities;
 using PetProject.WebAPI.Interfaces;
 using PetProject.WebAPI.Models.Requestes;

@@ -18,11 +18,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Interfaces\" />
     <Folder Include="Script\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PetProject.Domain\PetProject.Domain.csproj" />
+    <ProjectReference Include="..\PetProject.Interfaces\PetProject.Interfaces.csproj" />
+    <ProjectReference Include="..\PetProject.Models\PetProject.Models.csproj" />
     <ProjectReference Include="..\PetProject.Utilities\PetProject.Utilities.csproj" />
   </ItemGroup>
 

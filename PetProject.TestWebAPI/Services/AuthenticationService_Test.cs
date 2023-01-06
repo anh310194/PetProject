@@ -2,10 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Moq;
 using NUnit.Framework;
-using PetProject.Business.Models;
 using PetProject.TestWebAPI.Mock;
 using PetProject.Utilities.Exceptions;
-using PetProject.Utilities.Extensions;
 using PetProject.WebAPI.Services;
 
 namespace PetProject.TestWebAPI.Services

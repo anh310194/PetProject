@@ -1,5 +1,5 @@
-﻿using PetProject.Business.Models;
-using PetProject.Domain.Entities;
+﻿using PetProject.Domain.Entities;
+using PetProject.Models;
 
 namespace PetProject.TestBusiness.MockData;
 public static class MockCountry

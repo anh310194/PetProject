@@ -1,5 +1,5 @@
 ﻿using PetProject.Domain.Entities;
-using PetProject.Domain.Interfaces;
+using PetProject.Interfaces.Repositories;
 using PetProject.Infacstructure.Context;
 using PetProject.Repositories.Common;
 

@@ -1,10 +1,10 @@
 ﻿using PetProject.Utilities.Exceptions;
 using PetProject.Utilities.Helper;
 using PetProject.Business.Common;
-using PetProject.Business.Interfaces;
-using PetProject.Business.Models;
-using PetProject.Domain.Interfaces;
+using PetProject.Models;
+using PetProject.Interfaces.Repositories;
 using PetProject.Utilities;
+using PetProject.Interfaces.Business;
 
 namespace PetProject.Business.Implements;
 

@@ -1,13 +1,13 @@
 ﻿using Moq;
 using NUnit.Framework;
 using PetProject.Business.Implements;
-using PetProject.Business.Models;
 using PetProject.Utilities;
 using PetProject.Domain.Entities;
-using PetProject.Domain.Interfaces;
+using PetProject.Interfaces.Repositories;
 using PetProject.Utilities.Exceptions;
 using PetProject.TestBusiness.Mock;
 using PetProject.TestBusiness.MockData;
+using PetProject.Models;
 
 namespace PetProject.TestBusiness
 {

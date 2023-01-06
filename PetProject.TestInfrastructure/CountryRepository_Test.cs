@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using PetProject.Domain.Entities;
-using PetProject.Domain.Interfaces;
+using PetProject.Interfaces.Repositories;
 using PetProject.Infacstructure.Context;
 
 namespace PetProject.TestInfrastructure

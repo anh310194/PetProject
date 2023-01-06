@@ -1,6 +1,6 @@
-﻿using PetProject.Business.Interfaces;
-using PetProject.Business.Implements;
+﻿using PetProject.Business.Implements;
 using Microsoft.Extensions.DependencyInjection;
+using PetProject.Interfaces.Business;
 
 namespace PetProject.Business;
 

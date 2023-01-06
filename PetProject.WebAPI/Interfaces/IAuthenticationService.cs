@@ -1,4 +1,4 @@
-﻿using PetProject.Business.Models;
+﻿using PetProject.Models;
 using PetProject.WebAPI.Models.Responses;
 
 namespace PetProject.WebAPI.Interfaces

@@ -3,8 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PetProject.Infacstructure.Context;
 using System.Data.Common;
 using System.Data;
-using PetProject.Domain.Interfaces;
-using System.Transactions;
+using PetProject.Interfaces.Repositories;
 
 namespace PetProject.Infacstructure.Reposibilities
 {

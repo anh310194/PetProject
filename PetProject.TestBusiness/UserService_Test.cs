@@ -1,9 +1,8 @@
-﻿using Microsoft.Data.SqlClient;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using PetProject.Business.Implements;
-using PetProject.Business.Models;
-using PetProject.Domain.Interfaces;
+using PetProject.Interfaces.Repositories;
+using PetProject.Models;
 using PetProject.TestBusiness.Mock;
 using PetProject.Utilities;
 using PetProject.Utilities.Exceptions;

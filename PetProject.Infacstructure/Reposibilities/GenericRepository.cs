@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetProject.Domain.Common;
 using PetProject.Infacstructure.Context;
-using PetProject.Domain.Interfaces;
+using PetProject.Interfaces.Repositories;
 using System.Linq.Expressions;
-using System.Threading;
 
 namespace PetProject.Repositories.Common;
 

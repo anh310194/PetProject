@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Transactions;
-using System.Data;
-using Microsoft.Data.SqlClient;
-using System.Data.Common;
 using PetProject.Repositories.Common;
-using PetProject.Domain.Interfaces;
-using PetProject.Domain.Entities;
+using PetProject.Interfaces.Repositories;
 
 namespace PetProject.Infacstructure.Context;
 

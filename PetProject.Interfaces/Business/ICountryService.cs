@@ -1,6 +1,6 @@
-﻿using PetProject.Business.Models;
+﻿using PetProject.Models;
 
-namespace PetProject.Business.Interfaces;
+namespace PetProject.Interfaces.Business;
 
 public interface ICountryService
 {

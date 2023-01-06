@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using PetProject.Business.Models;
+using PetProject.Models;
 using PetProject.Utilities;
 using PetProject.Utilities.Exceptions;
 using PetProject.Utilities.Extensions;

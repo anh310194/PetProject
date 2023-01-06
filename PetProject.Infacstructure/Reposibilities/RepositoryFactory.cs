@@ -1,6 +1,4 @@
-﻿using PetProject.Domain.Common;
-using PetProject.Domain.Entities;
-using PetProject.Domain.Interfaces;
+﻿using PetProject.Interfaces.Repositories;
 
 namespace PetProject.Repositories.Common;
 

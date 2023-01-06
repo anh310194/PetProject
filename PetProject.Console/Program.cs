@@ -3,8 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PetProject.Business;
-using PetProject.Business.Interfaces;
 using PetProject.Infacstructure;
+using PetProject.Interfaces.Business;
 using PetProject.Utilities.Extensions;
 
 using IHost host = Host.CreateDefaultBuilder(args)
