@@ -2,4 +2,6 @@
 
 namespace PetProject.Domain.Entities;
 
-public interface IRoleRepository : IGenericRepository<Role> { }
+public interface IRoleRepository : IGenericRepository<Role>
+{
+}

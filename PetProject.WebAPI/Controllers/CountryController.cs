@@ -6,6 +6,7 @@ using PetProject.WebAPI.Attributes;
 using PetProject.Utilities.Enums;
 using PetProject.Utilities.Exceptions;
 using PetProject.WebAPI.Interfaces;
+using PetProject.Utilities;
 
 namespace PetProject.WebAPI.Controllers;
 
@@ -47,7 +48,7 @@ public class CountryController : BaseController
         var result = await _countryService.InsertCountryById(CurrentUser.UserName, model);
         if (result == null)
         {
-            throw new PetProjectException("The country can't not insert.");
+            throw new PetProjectApplicationException(PetProjectMessage.INSERT_FAILURE_COUNTRY);
         }
         return result;
     }
@@ -59,7 +60,7 @@ public class CountryController : BaseController
         var result = await _countryService.UpdateCountryById(CurrentUser.UserName, model);
         if (result == null)
         {
-            throw new PetProjectException("The country can't not update.");
+            throw new PetProjectApplicationException(PetProjectMessage.UPDATE_FAILURE_COUNTRY);
         }
         return result;
     }

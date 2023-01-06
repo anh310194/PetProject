@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using PetProject.Business.Models;
+using PetProject.Utilities;
 using PetProject.Utilities.Exceptions;
 using PetProject.Utilities.Extensions;
 using PetProject.WebAPI.Models.Responses;
@@ -37,25 +38,31 @@ namespace PetProject.WebAPI.Services
             var identity = _accessor.HttpContext?.User.Identity as ClaimsIdentity;
             if (identity == null)
             {
-                throw new PetProjectException("Could not found");
+                throw new PetProjectException(string.Format(PetProjectMessage.NULL_MODEL, nameof(ClaimsIdentity)));
             }
             UserTokenModel userToken = new UserTokenModel();
             userToken.FirstName = identity.FindFirst(nameof(userToken.FirstName))?.Value.ToString();
             userToken.LastName = identity.FindFirst(nameof(userToken.LastName))?.Value.ToString();
             userToken.UserName = identity.FindFirst(nameof(userToken.UserName))?.Value.ToString();
-            userToken.UserType = identity.FindFirst(nameof(userToken.UserType))?.Value.ToString();
             userToken.IdentityId = identity.FindFirst(nameof(userToken.IdentityId))?.Value.ToString();
+
+            var userType = identity.FindFirst(nameof(userToken.UserType))?.Value.ToString();
+            if (int.TryParse(userType, out int result))
+            {
+                userToken.UserType = result;
+            }
+
             userToken.Roles = GetRoles(identity.FindAll(ClaimTypes.Role));
 
             return userToken;
         }
-        private List<long> GetRoles(IEnumerable<Claim>? permissions)
+        private List<long>? GetRoles(IEnumerable<Claim>? permissions)
         {
-            var roles = new List<long>();
             if (permissions == null)
             {
-                return roles;
+                return null;
             }
+            var roles = new List<long>();
             foreach (var permission in permissions)
             {
                 string value = permission.Value;
@@ -72,7 +79,7 @@ namespace PetProject.WebAPI.Services
         {
             if (signInUser == null)
             {
-                throw new PetProjectException("Could not be found SignInModel");
+                throw new PetProjectException(string.Format(PetProjectMessage.NULL_MODEL, nameof(SignInModel)));
             }
             var userToken = GetUserTokenModel(signInUser);
             var TokenModel = new TokenModel()
@@ -89,7 +96,7 @@ namespace PetProject.WebAPI.Services
         {
             if (signInUser == null)
             {
-                throw new PetProjectException("The singn model is empty!");
+                throw new PetProjectException(string.Format(PetProjectMessage.NULL_MODEL, nameof(SignInModel)));
             }
             return new UserTokenModel()
             {
@@ -128,14 +135,14 @@ namespace PetProject.WebAPI.Services
         {
             if (userToken == null)
             {
-                throw new PetProjectException("The user token could not be found");
+                throw new PetProjectException(string.Format(PetProjectMessage.NULL_MODEL, nameof(UserTokenModel)));
             }
             var claims = new List<Claim> {
             new Claim(nameof(userToken.IdentityId), userToken.IdentityId ?? ""),
             new Claim(nameof(userToken.FirstName), userToken.FirstName ?? ""),
             new Claim(nameof(userToken.LastName), userToken.LastName ?? ""),
             new Claim(nameof(userToken.UserName), userToken.UserName ?? ""),
-            new Claim(nameof(userToken.UserType), userToken.UserType ?? "")};
+            new Claim(nameof(userToken.UserType), userToken.UserType.ToString())};
 
             if (userToken.Roles == null)
             {

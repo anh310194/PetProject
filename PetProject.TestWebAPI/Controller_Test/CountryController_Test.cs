@@ -106,7 +106,7 @@ public class CountryController_Test
         mockCountryService.Setup(x => x.InsertCountryById(It.IsAny<string>(), It.IsAny<CountryModel>()));
 
         // Act
-        Assert.ThrowsAsync<PetProjectException>(async () => await countryController.InsertCountry(mockCountryModel));
+        Assert.ThrowsAsync<PetProjectApplicationException>(async () => await countryController.InsertCountry(mockCountryModel));
     }
 
     [Test]
@@ -131,6 +131,6 @@ public class CountryController_Test
         mockCountryService.Setup(x => x.UpdateCountryById(It.IsAny<string>(), It.IsAny<CountryModel>()));
 
         // Act
-        Assert.ThrowsAsync<PetProjectException>(async () => await countryController.UpdateCountry(mockCountryModel));
+        Assert.ThrowsAsync<PetProjectApplicationException>(async () => await countryController.UpdateCountry(mockCountryModel));
     }
 }

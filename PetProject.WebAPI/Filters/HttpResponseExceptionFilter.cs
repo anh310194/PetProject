@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using PetProject.Utilities;
 using PetProject.Utilities.Exceptions;
 
 namespace PetProject.WebAPI.Filters;
@@ -20,18 +21,23 @@ public class HttpResponseExceptionFilter : IActionFilter, IOrderedFilter
             return;
         }
         ObjectResult objectResult;
-        if (context.Exception is PetProjectException httpResponseException)
+        if (context.Exception is PetProjectApplicationException httpResponseException)
         {
-            _logger.LogError(context.Exception, "Bussiness Error");
-            objectResult = new ObjectResult(httpResponseException.Message);
+            _logger.LogError(context.Exception, PetProjectMessage.TITLE_PROJECT_ERROR);
+            objectResult = new ObjectResult(PetProjectMessage.PROJECT_ERROR);
+        }
+        else if (context.Exception is PetProjectException httpResponsePetProjectException)
+        {
+            _logger.LogError(context.Exception, PetProjectMessage.TITLE_BUSINESS_ERROR);
+            objectResult = new ObjectResult(httpResponsePetProjectException.Message);
         }
         else
         {
 #if DEBUG
             objectResult = new ObjectResult(context.Exception);
 #else
-                _logger.LogError(context.Exception, "System Error");
-                objectResult = new ObjectResult("The system error. Please contact Addmin!");
+            _logger.LogError(context.Exception, PetProjectMessage.TITLE_SYSTEM_ERROR);
+                objectResult = new ObjectResult(PetProjectMessage.SYSTEM_ERROR);
 #endif
         }
         objectResult.StatusCode = StatusCodes.Status500InternalServerError;

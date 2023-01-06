@@ -16,12 +16,12 @@ public abstract class BaseService
     {
         if (string.IsNullOrEmpty(userName))
         {
-            throw new PetProjectException(PetProjectMessage.USER_NAME_EMTPY);
+            throw new PetProjectApplicationException(PetProjectMessage.USER_NAME_EMTPY);
         }
         var user = _unitOfWork.UserRepository.GetUserByUserName(userName);
         if (user == null)
         {
-            throw new PetProjectException(string.Format(PetProjectMessage.NOT_FOUND_USER_NAME, userName));
+            throw new PetProjectApplicationException(string.Format(PetProjectMessage.NOT_FOUND_USER_NAME, userName));
         }
         return user.Id;
     }

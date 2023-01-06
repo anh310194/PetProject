@@ -8,7 +8,6 @@ namespace PetProject.Infacstructure.Reposibilities
     {
         public RoleRepository(PetProjectContext context) : base(context)
         {
-
         }
     }
 }

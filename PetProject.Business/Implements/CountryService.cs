@@ -37,7 +37,7 @@ public class CountryService : BaseService, ICountryService
         var country = await _unitOfWork.CountryRepository.FindAsync(model.Id);
         if (country == null)
         {
-            throw new PetProjectException(string.Format(PetProjectMessage.NOT_FOUND_COUNTRY_ID, model.Id));
+            throw new PetProjectApplicationException(string.Format(PetProjectMessage.NOT_FOUND_COUNTRY_ID, model.Id));
         }
 
         country.CountryCode = model.CountryCode;
@@ -50,11 +50,11 @@ public class CountryService : BaseService, ICountryService
 
         return MappingCountryModel(result);
     }
-    private CountryModel MappingCountryModel(Country? country)
+    private CountryModel? MappingCountryModel(Country? country)
     {
         if (country == null)
         {
-            throw new Exception("The Country could not found in MappingCountryModel method.");
+            return null;
         }
         return new CountryModel()
         {
@@ -69,7 +69,7 @@ public class CountryService : BaseService, ICountryService
         var countryCodeExists = await _unitOfWork.CountryRepository.GetByCountryCodeAsync(model.CountryCode);
         if (countryCodeExists != null)
         {
-            throw new PetProjectException(string.Format(PetProjectMessage.COUNTRY_CODE_EXISTS, model.CountryCode));
+            throw new PetProjectApplicationException(string.Format(PetProjectMessage.COUNTRY_CODE_EXISTS, model.CountryCode));
         }
         var country = new Country()
         {

@@ -6,6 +6,8 @@ using PetProject.Utilities;
 using PetProject.Domain.Entities;
 using PetProject.Domain.Interfaces;
 using PetProject.Utilities.Exceptions;
+using PetProject.TestBusiness.Mock;
+using PetProject.TestBusiness.MockData;
 
 namespace PetProject.TestBusiness
 {
@@ -14,7 +16,7 @@ namespace PetProject.TestBusiness
         private CountryService _countryService;
         private Country _country;
         private User _user;
-        private CountryModel countryModel;
+        private CountryModel _countryModel;
         private Country _countryExpected;
 
         private Mock<IUnitOfWork> _unitOfWork;
@@ -22,38 +24,10 @@ namespace PetProject.TestBusiness
         {
             _unitOfWork = new Mock<IUnitOfWork>();
             _countryService = new CountryService(_unitOfWork.Object);
-            _country = new Country
-            {
-                CountryCode = "US",
-                CountryName = "United States",
-                Id = 1,
-                CreatedBy = 1,
-                CreatedTime = DateTime.UtcNow
-            };
-
-            _user = new User()
-            {
-                Address1 = "Test_Address1",
-                Address2 = "Test_Address2",
-                City = "Test_city",
-                CountFailSignIn = 0,
-                CountryId = 1,
-                CreatedBy = 1,
-                CreatedTime = DateTime.UtcNow,
-                FirstName = "Test_FirstName",
-                LastName = "Test_lastName",
-                Password = "password",
-                Status = 1,
-                UserName = "Test_username",
-                Id = 1,
-            };
-            countryModel = new CountryModel()
-            {
-                Id = 1,
-                CountryCode = "Test_CountryCode",
-                CountryName = "Test_CountryName",
-            };
-            _countryExpected = new Country() { CountryCode = "Test_CountryCode", CountryName = "Test_CountryName", Id = 2 };
+            _country = MockCountry.GetCountry();
+            _user = MockUser.GetUser();
+            _countryModel = MockCountry.GetCountryModel();
+            _countryExpected = MockCountry.GetCountryExpected();
 
         }
 
@@ -67,7 +41,7 @@ namespace PetProject.TestBusiness
             _unitOfWork.Setup(s => s.CountryRepository.FindAsync(It.IsAny<long>())).ReturnsAsync(new Country());
 
             //Act
-            var assertException = Assert.ThrowsAsync<PetProjectException>(async () => await _countryService.UpdateCountryById(userName, countryModel));
+            var assertException = Assert.ThrowsAsync<PetProjectApplicationException>(async () => await _countryService.UpdateCountryById(userName, _countryModel));
 
             //Assert
             Assert.IsTrue(assertException.Message == PetProjectMessage.USER_NAME_EMTPY);
@@ -82,7 +56,7 @@ namespace PetProject.TestBusiness
             _unitOfWork.Setup(s => s.UserRepository.GetUserByUserName(It.IsAny<string>()));
 
             //Act
-            var exception = Assert.ThrowsAsync<PetProjectException>(async () => await _countryService.UpdateCountryById(_user.UserName, countryModel));
+            var exception = Assert.ThrowsAsync<PetProjectApplicationException>(async () => await _countryService.UpdateCountryById(_user.UserName, _countryModel));
 
             //Assert
             Assert.IsTrue(exception.Message == string.Format(PetProjectMessage.NOT_FOUND_USER_NAME, _user.UserName));
@@ -96,10 +70,10 @@ namespace PetProject.TestBusiness
             _unitOfWork.Setup(s => s.CountryRepository.FindAsync(It.IsAny<long>()));
 
             //Act
-            var exception = Assert.ThrowsAsync<PetProjectException>(async () => await _countryService.UpdateCountryById("", countryModel));
+            var exception = Assert.ThrowsAsync<PetProjectApplicationException>(async () => await _countryService.UpdateCountryById("", _countryModel));
 
             //Assert
-            Assert.IsTrue(exception.Message == string.Format(PetProjectMessage.NOT_FOUND_COUNTRY_ID, countryModel.Id));
+            Assert.IsTrue(exception.Message == string.Format(PetProjectMessage.NOT_FOUND_COUNTRY_ID, _countryModel.Id));
         }
 
         [Test]
@@ -107,14 +81,14 @@ namespace PetProject.TestBusiness
         {
             //Arrange
             _unitOfWork.Reset();
-            Country countryExpected = new Country() { CountryCode = countryModel.CountryCode, CountryName = countryModel.CountryName, Id = 2 };
+            Country countryExpected = new Country() { CountryCode = _countryModel.CountryCode, CountryName = _countryModel.CountryName, Id = 2 };
             _unitOfWork.Setup(s => s.CountryRepository.FindAsync(It.IsAny<long>())).ReturnsAsync(_country);
             _unitOfWork.Setup(s => s.UserRepository.GetUserByUserName(It.IsAny<string>())).Returns(_user);
             _unitOfWork.Setup(s => s.CountryRepository.Update(It.IsAny<Country>(), It.IsAny<long>())).Returns(countryExpected);
             _unitOfWork.Setup(s => s.SaveChangesAsync());
 
             //Act
-            var result = await _countryService.UpdateCountryById(_user.UserName, countryModel);
+            var result = await _countryService.UpdateCountryById(_user.UserName, _countryModel);
 
             //Assert
             Assert.IsNotNull(result);
@@ -133,7 +107,7 @@ namespace PetProject.TestBusiness
             _unitOfWork.Setup(s => s.CountryRepository.FindAsync(It.IsAny<long>())).ReturnsAsync(new Country());
 
             //Act
-            var assertException = Assert.ThrowsAsync<PetProjectException>(async () => await _countryService.InsertCountryById(userName, countryModel));
+            var assertException = Assert.ThrowsAsync<PetProjectApplicationException>(async () => await _countryService.InsertCountryById(userName, _countryModel));
 
             //Assert
             Assert.IsTrue(assertException.Message == PetProjectMessage.USER_NAME_EMTPY);
@@ -149,7 +123,7 @@ namespace PetProject.TestBusiness
             _unitOfWork.Setup(s => s.UserRepository.GetUserByUserName(It.IsAny<string>()));
 
             //Act
-            var exception = Assert.ThrowsAsync<PetProjectException>(async () => await _countryService.InsertCountryById(_user.UserName, countryModel));
+            var exception = Assert.ThrowsAsync<PetProjectApplicationException>(async () => await _countryService.InsertCountryById(_user.UserName, _countryModel));
 
             //Assert
             Assert.IsTrue(exception.Message == string.Format(PetProjectMessage.NOT_FOUND_USER_NAME, _user.UserName));
@@ -163,7 +137,7 @@ namespace PetProject.TestBusiness
             _unitOfWork.Setup(s => s.CountryRepository.GetByCountryCodeAsync(It.IsAny<string?>())).ReturnsAsync(_countryExpected);
 
             //Act
-            var exception = Assert.ThrowsAsync<PetProjectException>(async () => await _countryService.InsertCountryById(_user.UserName, countryModel));
+            var exception = Assert.ThrowsAsync<PetProjectApplicationException>(async () => await _countryService.InsertCountryById(_user.UserName, _countryModel));
 
             //Assert
             Assert.IsTrue(exception.Message == string.Format(PetProjectMessage.COUNTRY_CODE_EXISTS, _countryExpected.CountryCode));
@@ -180,7 +154,7 @@ namespace PetProject.TestBusiness
             _unitOfWork.Setup(s => s.SaveChangesAsync());
 
             //Act
-            var result = await _countryService.InsertCountryById(_user.UserName, countryModel);
+            var result = await _countryService.InsertCountryById(_user.UserName, _countryModel);
 
             //Assert
             Assert.IsNotNull(result);

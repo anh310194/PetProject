@@ -25,5 +25,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient(typeof(IUserRoleRepository), typeof(UserRoleRepository));
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        services.AddTransient<IStoreProcedureRepository, StoreProcedureRepository>();
     }
 }

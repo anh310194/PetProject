@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetProject.Business.Interfaces;
+using PetProject.Utilities;
 using PetProject.WebAPI.Interfaces;
 using PetProject.WebAPI.Models.Requestes;
 using PetProject.WebAPI.Models.Responses;
@@ -27,13 +28,13 @@ public class LoginController : ControllerBase
         }
         if (string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
         {
-            return BadRequest("the User Name or password don't not empty");
+            return BadRequest(PetProjectMessage.USER_NAME_PASSWORD_EMPTY);
         }
 
         var user = await _userService.Authenticate(model.UserName, model.Password);
         if (user == null)
         {
-            return BadRequest("the User Name or password invalid!");
+            return BadRequest(PetProjectMessage.LoginFail);
         }
         return _authenticationService.GetTokenModel(user);
     }

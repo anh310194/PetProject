@@ -13,6 +13,6 @@ public class UserTokenModel
     public List<long>? Roles { get; set; }
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
-    public string? UserType { get; set; }
+    public int UserType { get; set; }
     public string? IdentityId { get; set; }
 }

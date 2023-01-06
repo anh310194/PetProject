@@ -5,5 +5,6 @@ namespace PetProject.Domain.Interfaces
     public interface IUserRepository : IGenericRepository<User>
     {
         User? GetUserByUserName(string? userName);
+        Task<User?> GetUserByUserNameAsync(string? userName);
     }
 }

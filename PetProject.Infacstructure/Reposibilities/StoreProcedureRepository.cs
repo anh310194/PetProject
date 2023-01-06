@@ -1,0 +1,85 @@
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using PetProject.Infacstructure.Context;
+using System.Data.Common;
+using System.Data;
+using PetProject.Domain.Interfaces;
+using System.Transactions;
+
+namespace PetProject.Infacstructure.Reposibilities
+{
+    public class StoreProcedureRepository : IStoreProcedureRepository
+    {
+        private readonly PetProjectContext _dbContext;
+        public StoreProcedureRepository(PetProjectContext context)
+        {
+            _dbContext = context;
+        }
+        public async Task<long[]?> GetRolesBysUserId(long userId)
+        {
+            var paremeter = new SqlParameter("@UserId", System.Data.SqlDbType.BigInt) { Value = userId };
+            var roleIds = await ExecStoreProcedureAsync("GetFeaturesByUser", paremeter);
+            if (roleIds != null)
+            {
+                return roleIds.Select(s => (long)s.FirstOrDefault().Value).ToArray();
+            }
+            return null;
+        }
+
+        public virtual async Task<List<IEnumerable<IDictionary<string, object>>>> ExecCommandTextAsync(string query, CommandType commandType, params SqlParameter[] parameters)
+        {
+            var list = new List<IEnumerable<IDictionary<string, object>>>();
+            using (var reader = await ExecCommandText(query, commandType, parameters).ExecuteReaderAsync())
+            {
+                do
+                {
+                    list.Add(ReadToCollection(reader));
+                }
+                while (reader.NextResult());
+            }
+            return list;
+        }
+        private DbCommand ExecCommandText(string query, CommandType commandType, params SqlParameter[] parameters)
+        {
+            var command = _dbContext.Database.GetDbConnection().CreateCommand();
+            command.CommandText = query;
+            command.CommandType = commandType;
+
+            if (parameters != null && parameters.Length > 0)
+            {
+                command.Parameters.AddRange(parameters);
+            }
+
+            _dbContext.Database.OpenConnection();
+            return command;
+        }
+        private List<IDictionary<string, object>> ReadToCollection(DbDataReader reader)
+        {
+            List<IDictionary<string, object>> result = new List<IDictionary<string, object>>();
+            while (reader.Read())
+            {
+                IDictionary<string, object> row = new Dictionary<string, object>();
+                foreach (var column in reader.GetColumnSchema())
+                {
+                    row.Add(column.ColumnName, reader[column.ColumnName]);
+                }
+                result.Add(row);
+            }
+            return result;
+        }
+
+        public Task<List<IEnumerable<IDictionary<string, object>>>> ExecStoreProcedureReturnMutipleAsync(string query, params SqlParameter[] parameters)
+        {
+            return ExecCommandTextAsync(query, CommandType.StoredProcedure, parameters);
+        }
+
+        public Task<IEnumerable<IDictionary<string, object>>?> ExecStoreProcedureAsync(string query, params SqlParameter[] parameters)
+        {
+            return ExecCommandTextAsync(query, CommandType.StoredProcedure, parameters).ContinueWith(c =>
+            {
+                return c.Result.FirstOrDefault(); ;
+            });
+        }
+
+    }
+}

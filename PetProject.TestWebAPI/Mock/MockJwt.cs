@@ -19,7 +19,7 @@ namespace PetProject.TestWebAPI.Mock
                     FirstName = "system",
                     LastName = "administrator",
                     UserName = "sysadmin",
-                    UserType = "sysadmin",
+                    UserType = 1,
                     Roles = Enum.GetValues<FeatureEnum>().Select(s => (long)s).ToList(),
                 };
             }
@@ -50,7 +50,7 @@ namespace PetProject.TestWebAPI.Mock
             new Claim(nameof(userToken.FirstName), userToken.FirstName ?? ""),
             new Claim(nameof(userToken.LastName), userToken.LastName ?? ""),
             new Claim(nameof(userToken.UserName), userToken.UserName ?? ""),
-            new Claim(nameof(userToken.UserType), userToken.UserType ?? "")};
+            new Claim(nameof(userToken.UserType), userToken.UserType.ToString())};
 
             if (userToken.Roles != null)
             {

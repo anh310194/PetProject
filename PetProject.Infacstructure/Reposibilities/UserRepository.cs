@@ -2,6 +2,7 @@
 using PetProject.Infacstructure.Context;
 using PetProject.Domain.Interfaces;
 using PetProject.Repositories.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace PetProject.Infacstructure.Reposibilities
 {
@@ -14,7 +15,16 @@ namespace PetProject.Infacstructure.Reposibilities
 
         public User? GetUserByUserName(string? userName)
         {
-            return Queryable(p => !string.IsNullOrEmpty(userName) && p.UserName == userName).FirstOrDefault();
+            return QueryUserByUserName(userName).FirstOrDefault();
+        }
+        private IQueryable<User> QueryUserByUserName(string? userName)
+        {
+            return Queryable(p => !string.IsNullOrEmpty(userName) && p.UserName == userName);
+        }
+
+        public Task<User?> GetUserByUserNameAsync(string? userName)
+        {
+            return QueryUserByUserName(userName).FirstOrDefaultAsync();
         }
     }
 }
