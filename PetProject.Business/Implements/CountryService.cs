@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PetProject.Business.Common;
+﻿using PetProject.Business.Common;
 using PetProject.Models;
 using PetProject.Domain.Entities;
 using PetProject.Utilities.Exceptions;
