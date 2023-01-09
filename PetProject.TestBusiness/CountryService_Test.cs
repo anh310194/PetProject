@@ -34,7 +34,7 @@ namespace PetProject.TestBusiness
         [Test]
         [TestCase("")]
         [TestCase(null)]
-        public void UpdateCountryById_UserNameEmptyOrNull(string userName)
+        public void UpdateCountryById_UserNameEmptyOrNull_ThrowException(string userName)
         {
             //Arrange
             _unitOfWork.Reset();
@@ -48,7 +48,7 @@ namespace PetProject.TestBusiness
         }
 
         [Test]
-        public void UpdateCountryById_NotFoundUserName()
+        public void UpdateCountryById_NotFoundUserName_ThrowException()
         {
             //Arrange           
             _unitOfWork.Reset();
@@ -63,7 +63,7 @@ namespace PetProject.TestBusiness
         }
 
         [Test]
-        public void UpdateCountryById_NotFoundCountry()
+        public void UpdateCountryById_NotFoundCountry_ThrowException()
         {
             //Arrange
             _unitOfWork.Reset();
